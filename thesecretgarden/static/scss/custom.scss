@@ -1,8 +1,7 @@
 // Overriding Bootstrap
-//$primary: #5A9; // Example custom color for Bootstrap’s primary color
-//$font-family-base: 'Your Font Choice', sans-serif; // Example custom font
+
+@import 'typography';
+@import "layout";
 
 // Import Bootstrap after variable overrides
 @import '../../node_modules/bootstrap/scss/bootstrap';
-
-

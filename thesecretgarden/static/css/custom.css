@@ -1,4 +1,117 @@
 @charset "UTF-8";
+@import url("https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200..1000;1,200..1000&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Playfair+Display+SC:ital,wght@0,400;0,700;0,900;1,400;1,700;1,900&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Dancing+Script&display=swap");
+.main-page-title {
+  position: relative;
+  font-family: "Nunito", sans-serif;
+  font-weight: 200;
+  font-size: 4rem;
+  display: inline-block;
+}
+
+.main-page-title::before {
+  content: "The";
+  font-family: "Dancing Script", "cursive";
+  font-size: 1.5rem;
+  position: absolute;
+  top: 1rem;
+  left: -3rem;
+  opacity: 0.8;
+  color: inherit;
+}
+
+.fullscreen-bg {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.background-slide {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  opacity: 0;
+  animation: slideshow 36s infinite; /* Entire animation cycle */
+}
+
+@keyframes slideshow {
+  0% {
+    opacity: 1;
+    background-image: url("../images/joanna-kosinska-ToV0rS9nTYs-unsplash.jpg");
+  }
+  16.6% {
+    opacity: 0;
+  }
+  16.7% {
+    opacity: 1;
+    background-image: url("../images/shanon-palomino-salinas-pY90mtGnirw-unsplash.jpg");
+  }
+  33.2% {
+    opacity: 0;
+  }
+  33.3% {
+    opacity: 1;
+    background-image: url("../images/aziz-acharki-tLsOA0Vlvwk-unsplash.jpg");
+  }
+  49.8% {
+    opacity: 0;
+  }
+  49.9% {
+    opacity: 1;
+    background-image: url("../images/freddy-g-Z6rezzwhYFY-unsplash.jpg");
+  }
+  66.4% {
+    opacity: 0;
+  }
+  66.5% {
+    opacity: 1;
+    background-image: url("../images/judith-girard-marczak-QY7Px4mjUgU-unsplash.jpg");
+  }
+  83% {
+    opacity: 0;
+  }
+  83.1% {
+    opacity: 1;
+    background-image: url("../images/jehyun-sung-YeKUUkkOdFA-unsplash.jpg");
+  }
+  100% {
+    opacity: 0;
+  }
+}
+/* Font Color Animation */
+@keyframes colorFade {
+  0%, 16.6% {
+    color: black;
+  } /* Slide 1 */
+  16.7%, 33.2% {
+    color: white;
+  } /* Slide 2 */
+  33.3%, 49.8% {
+    color: white;
+  } /* Slide 3 */
+  49.9%, 66.4% {
+    color: black;
+  } /* Slide 4 */
+  66.5%, 83% {
+    color: white;
+  } /* Slide 5 */
+  83.1%, 100% {
+    color: black;
+  } /* Slide 6 */
+}
+.overlay-content {
+  position: relative;
+  z-index: 10;
+  animation: colorFade 36s infinite;
+}
+
 /*!
  * Bootstrap  v5.3.3 (https://getbootstrap.com/)
  * Copyright 2011-2024 The Bootstrap Authors
@@ -217,6 +330,7 @@ hr {
 h6, .h6, h5, .h5, h4, .h4, h3, .h3, h2, .h2, h1, .h1 {
   margin-top: 0;
   margin-bottom: 0.5rem;
+  font-family: "Plairfair Display";
   font-weight: 500;
   line-height: 1.2;
   color: var(--bs-heading-color);

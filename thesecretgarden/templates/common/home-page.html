@@ -1,4 +1,17 @@
 {% extends 'common/base.html' %}
 {% block content %}
-    <h1>Hi, I`m the home page</h1>
+    <div class="fullscreen-bg">
+        <div class="background-slide slide1"></div>
+        <div class="background-slide slide2"></div>
+        <div class="background-slide slide3"></div>
+
+        <!-- Centered content with d-flex and alignment classes -->
+        <div class="container text-center overlay-content d-flex justify-content-center align-items-center vh-100">
+            <div>
+                <p class="main-page-title">SECRET GARDEN</p>
+                <h3>BOUTIQUE FLOWER & EVENT SHOP</h3>
+                <p>Lorem ipsum dolor.</p>
+            </div>
+        </div>
+    </div>
 {% endblock %}
