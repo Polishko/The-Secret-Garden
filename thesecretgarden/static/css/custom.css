@@ -45,7 +45,7 @@
   /* First image fade in and out */
   0%, 20% {
     opacity: 1;
-    background-image: url("../images/joanna-kosinska-ToV0rS9nTYs-unsplash.jpg");
+    background-image: url("https://res.cloudinary.com/dissmiwiq/image/upload/v1730401574/joanna-kosinska-ToV0rS9nTYs-unsplash_rf9cxa.jpg");
   }
   20.1%, 24.9% {
     opacity: 0;
@@ -53,7 +53,7 @@
   /* Second image fade in and out */
   25%, 45% {
     opacity: 1;
-    background-image: url("../images/aziz-acharki-tLsOA0Vlvwk-unsplash.jpg");
+    background-image: url("https://res.cloudinary.com/dissmiwiq/image/upload/v1730401575/aziz-acharki-tLsOA0Vlvwk-unsplash_l5zkws.jpg");
   }
   45.1%, 49.9% {
     opacity: 0;
@@ -61,7 +61,7 @@
   /* Third image fade in and out */
   50%, 70% {
     opacity: 1;
-    background-image: url("../images/freddy-g-Z6rezzwhYFY-unsplash.jpg");
+    background-image: url("https://res.cloudinary.com/dissmiwiq/image/upload/v1730401575/freddy-g-Z6rezzwhYFY-unsplash_jiwuhc.jpg");
   }
   70.1%, 74.9% {
     opacity: 0;
@@ -69,7 +69,7 @@
   /* Fourth image fade in and out */
   75%, 95% {
     opacity: 1;
-    background-image: url("../images/jehyun-sung-YeKUUkkOdFA-unsplash.jpg");
+    background-image: url("https://res.cloudinary.com/dissmiwiq/image/upload/v1730401575/jehyun-sung-YeKUUkkOdFA-unsplash_ptyjj3.jpg");
   }
   95.1%, 99.9% {
     opacity: 0;
@@ -77,7 +77,7 @@
   /* Smooth fade-in for the first image to start the loop again */
   100% {
     opacity: 1;
-    background-image: url("../images/joanna-kosinska-ToV0rS9nTYs-unsplash.jpg");
+    background-image: url("https://res.cloudinary.com/dissmiwiq/image/upload/q_auto/v1234567890/background/joanna-kosinska-ToV0rS9nTYs-unsplash.jpg");
   }
 }
 /*!
