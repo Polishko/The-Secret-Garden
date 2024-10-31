@@ -15,41 +15,26 @@
     background-position: center;
     background-repeat: no-repeat;
     opacity: 0;
-    animation: slideshow 36s infinite; /* Entire animation cycle */
+    animation: slideshow 12s infinite; /* Updated duration for 4 images at 3 seconds each */
 }
 
 @keyframes slideshow {
-    0% { opacity: 1; background-image: url('../images/joanna-kosinska-ToV0rS9nTYs-unsplash.jpg'); }
-    16.6% { opacity: 0; }
+    /* First image fade in and out */
+    0%, 20% { opacity: 1; background-image: url('../images/joanna-kosinska-ToV0rS9nTYs-unsplash.jpg'); }
+    20.1%, 24.9% { opacity: 0; }
 
-    16.7% { opacity: 1; background-image: url('../images/shanon-palomino-salinas-pY90mtGnirw-unsplash.jpg'); }
-    33.2% { opacity: 0; }
+    /* Second image fade in and out */
+    25%, 45% { opacity: 1; background-image: url('../images/aziz-acharki-tLsOA0Vlvwk-unsplash.jpg'); }
+    45.1%, 49.9% { opacity: 0; }
 
-    33.3% { opacity: 1; background-image: url('../images/aziz-acharki-tLsOA0Vlvwk-unsplash.jpg'); }
-    49.8% { opacity: 0; }
+    /* Third image fade in and out */
+    50%, 70% { opacity: 1; background-image: url('../images/freddy-g-Z6rezzwhYFY-unsplash.jpg'); }
+    70.1%, 74.9% { opacity: 0; }
 
-    49.9% { opacity: 1; background-image: url('../images/freddy-g-Z6rezzwhYFY-unsplash.jpg'); }
-    66.4% { opacity: 0; }
+    /* Fourth image fade in and out */
+    75%, 95% { opacity: 1; background-image: url('../images/jehyun-sung-YeKUUkkOdFA-unsplash.jpg'); }
+    95.1%, 99.9% { opacity: 0; }
 
-    66.5% { opacity: 1; background-image: url('../images/judith-girard-marczak-QY7Px4mjUgU-unsplash.jpg'); }
-    83% { opacity: 0; }
-
-    83.1% { opacity: 1; background-image: url('../images/jehyun-sung-YeKUUkkOdFA-unsplash.jpg'); }
-    100% { opacity: 0; }
-}
-
-/* Font Color Animation */
-@keyframes colorFade {
-    0%, 16.6% { color: black; }        /* Slide 1 */
-    16.7%, 33.2% { color: white; }     /* Slide 2 */
-    33.3%, 49.8% { color: white; }     /* Slide 3 */
-    49.9%, 66.4% { color: black; }     /* Slide 4 */
-    66.5%, 83% { color: white; }       /* Slide 5 */
-    83.1%, 100% { color: black; }      /* Slide 6 */
-}
-
-.overlay-content {
-    position: relative;
-    z-index: 10;
-    animation: colorFade 36s infinite;
+    /* Smooth fade-in for the first image to start the loop again */
+    100% { opacity: 1; background-image: url('../images/joanna-kosinska-ToV0rS9nTYs-unsplash.jpg'); }
 }
