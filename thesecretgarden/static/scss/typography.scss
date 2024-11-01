@@ -6,11 +6,11 @@ $headings-font-family: 'Plairfair Display';
 $headings-family-base: 'Nunito';
 
 .main-page-title {
-  //color: #EBEBEA;
+  color: #FE83A9;
   position: relative;
   font-family: 'Nunito', sans-serif;
-  font-weight: 200;
-  font-size: 4rem;
+  font-weight: 400;
+  font-size: 4.5rem;
   display: inline-block;
 }
 
@@ -18,10 +18,14 @@ $headings-family-base: 'Nunito';
 .main-page-title::before {
     content: "The";
     font-family: 'Dancing Script', 'cursive';
-    font-size: 1.5rem;
+    font-size: 2rem;
     position: absolute;
     top: 1rem;
     left: -3rem;
     opacity: 0.8;
     color: inherit;
+}
+
+.main-page-heading {
+  color: #FA6957;
 }

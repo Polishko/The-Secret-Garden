@@ -3,17 +3,18 @@
 @import url("https://fonts.googleapis.com/css2?family=Playfair+Display+SC:ital,wght@0,400;0,700;0,900;1,400;1,700;1,900&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Dancing+Script&display=swap");
 .main-page-title {
+  color: #FE83A9;
   position: relative;
   font-family: "Nunito", sans-serif;
-  font-weight: 200;
-  font-size: 4rem;
+  font-weight: 400;
+  font-size: 4.5rem;
   display: inline-block;
 }
 
 .main-page-title::before {
   content: "The";
   font-family: "Dancing Script", "cursive";
-  font-size: 1.5rem;
+  font-size: 2rem;
   position: absolute;
   top: 1rem;
   left: -3rem;
@@ -21,63 +22,69 @@
   color: inherit;
 }
 
-.fullscreen-bg {
-  position: relative;
-  width: 100%;
-  height: 100vh;
-  overflow: hidden;
+.main-page-heading {
+  color: #FA6957;
 }
 
-.background-slide {
+.bg-fade-wrapper {
+  position: relative;
+  overflow: hidden;
+  height: 100vh;
+}
+
+.hero {
+  position: relative;
+  z-index: 10;
+}
+
+.bg-fade {
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
   opacity: 0;
-  animation: slideshow 12s infinite; /* Updated duration for 4 images at 3 seconds each */
+  animation-name: fade-zoom;
+  animation-duration: 18s;
+  animation-iteration-count: infinite;
+  z-index: 1;
 }
 
-@keyframes slideshow {
-  /* First image fade in and out */
-  0%, 20% {
-    opacity: 1;
-    background-image: url("https://res.cloudinary.com/dissmiwiq/image/upload/v1730401574/joanna-kosinska-ToV0rS9nTYs-unsplash_rf9cxa.jpg");
+.bg-fade img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.bg-fade:nth-child(2) {
+  animation-delay: 0s;
+}
+
+.bg-fade:nth-child(3) {
+  animation-delay: 6s;
+}
+
+.bg-fade:nth-child(4) {
+  animation-delay: 12s;
+}
+
+@keyframes fade-zoom {
+  0% {
+    opacity: 0;
+    transform: scale(100%);
   }
-  20.1%, 24.9% {
+  16.66% {
+    opacity: 1;
+  }
+  33.33% {
+    opacity: 1;
+  }
+  48.66% {
     opacity: 0;
   }
-  /* Second image fade in and out */
-  25%, 45% {
-    opacity: 1;
-    background-image: url("https://res.cloudinary.com/dissmiwiq/image/upload/v1730401575/aziz-acharki-tLsOA0Vlvwk-unsplash_l5zkws.jpg");
-  }
-  45.1%, 49.9% {
-    opacity: 0;
-  }
-  /* Third image fade in and out */
-  50%, 70% {
-    opacity: 1;
-    background-image: url("https://res.cloudinary.com/dissmiwiq/image/upload/v1730401575/freddy-g-Z6rezzwhYFY-unsplash_jiwuhc.jpg");
-  }
-  70.1%, 74.9% {
-    opacity: 0;
-  }
-  /* Fourth image fade in and out */
-  75%, 95% {
-    opacity: 1;
-    background-image: url("https://res.cloudinary.com/dissmiwiq/image/upload/v1730401575/jehyun-sung-YeKUUkkOdFA-unsplash_ptyjj3.jpg");
-  }
-  95.1%, 99.9% {
-    opacity: 0;
-  }
-  /* Smooth fade-in for the first image to start the loop again */
   100% {
-    opacity: 1;
-    background-image: url("https://res.cloudinary.com/dissmiwiq/image/upload/q_auto/v1234567890/background/joanna-kosinska-ToV0rS9nTYs-unsplash.jpg");
+    opacity: 0;
+    transform: scale(110%);
   }
 }
 /*!
