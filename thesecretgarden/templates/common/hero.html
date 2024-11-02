@@ -1,5 +1,6 @@
-{% load static %}
-<div class="hero container text-center overlay-content d-flex flex-column justify-content-center align-items-center vh-100">
-    <h1 class="main-page-title">SECRET GARDEN</h1>
-    <h3 class="main-page-heading">BOUTIQUE FLOWER & EVENT SHOP</h3>
-</div>
+<a href="{% url 'landing-page' %}" class="text-decoration-none">
+    <div class="hero container-fluid text-center overlay-content d-flex flex-column justify-content-center align-items-center {% if is_landing_page %}vh-100{% endif %}">
+        <h1 class="main-page-title">SECRET GARDEN</h1>
+        <h3 class="main-page-heading"><a class="text-decoration-none" href="{% url 'flowers-list' %}">FLOWERS</a>|GIFTS|EVENTS</h3>
+    </div>
+</a>

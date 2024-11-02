@@ -2,35 +2,35 @@
 @import url('https://fonts.googleapis.com/css2?family=Playfair+Display+SC:ital,wght@0,400;0,700;0,900;1,400;1,700;1,900&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Dancing+Script&display=swap');
 
-$headings-font-family: 'Plairfair Display';
-$headings-family-base: 'Nunito';
+
 
 .main-page-title {
-  color: #FE83A9;
+  color: #FA6957;
   position: relative;
   font-family: 'Nunito', sans-serif;
-  //font-weight: 200;
-  //font-size: 3rem;
   display: inline-block;
-}
-
-.landing-hero .main-page-title {
   font-weight: 400;
   font-size: 4.5rem;
 }
 
+.landing-hero .main-page-title {
+  color: #FE83A9;
+}
 
 .main-page-title::before {
     content: "The";
     font-family: 'Dancing Script', 'cursive';
-    font-size: 2rem;
     position: absolute;
-    top: 1rem;
-    left: -3rem;
+    font-size: 75%;
+    left: -12%;
     opacity: 0.8;
     color: inherit;
 }
 
 .main-page-heading {
-  color: #FA6957;
+  color: #9E9E9E;
 }
+
+//.landing .main-page-heading {
+//  color: #FA6957;
+//}
