@@ -4,7 +4,7 @@
     "bootstrap": "^5.3.3"
   },
   "scripts": {
-  "sass-build": "sass custom.scss custom.css"
+  "sass-build": "sass static/scss/custom.scss static/css/custom.css"
   }
 }
 

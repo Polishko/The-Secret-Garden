@@ -1,0 +1,13 @@
+{% extends 'common/base.html' %}
+{% block head %}
+    <link rel="preload" href="https://res.cloudinary.com/dissmiwiq/image/upload/v1730401574/joanna-kosinska-ToV0rS9nTYs-unsplash_rf9cxa.jpg" as="image">
+    <link rel="preload" href="https://res.cloudinary.com/dissmiwiq/image/upload/v1730486602/irina-HP9_dGIQEik-unsplash_ijtxvl.jpg" as="image">
+    <link rel="preload" href="https://res.cloudinary.com/dissmiwiq/image/upload/v1730486604/freestocks-k-Rp0V0XWWU-unsplash_jsziui.jpg" as="image">
+{% endblock %}
+
+{% block header %}
+    <div class="bg-fade-wrapper">
+        {% include 'common/hero.html' %}
+        {% include 'common/landing-background.html' %}
+    </div>
+{% endblock %}
