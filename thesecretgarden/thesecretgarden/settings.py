@@ -33,6 +33,10 @@ ALLOWED_HOSTS = []
 
 MY_APPS = [
     'thesecretgarden.common',
+    'thesecretgarden.flowers',
+]
+
+THIRD_PARTY_APPS = [
     'cloudinary',
     'cloudinary_storage',
 ]
@@ -44,7 +48,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-] + MY_APPS
+] + MY_APPS + THIRD_PARTY_APPS
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
