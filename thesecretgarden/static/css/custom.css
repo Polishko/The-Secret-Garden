@@ -6,9 +6,12 @@
   color: #FE83A9;
   position: relative;
   font-family: "Nunito", sans-serif;
+  display: inline-block;
+}
+
+.landing-hero .main-page-title {
   font-weight: 400;
   font-size: 4.5rem;
-  display: inline-block;
 }
 
 .main-page-title::before {
@@ -24,6 +27,18 @@
 
 .main-page-heading {
   color: #FA6957;
+}
+
+.page-wrapper {
+  border: 0.15em solid #AA377A;
+}
+
+.navbar {
+  align-items: center;
+}
+
+.navbar-brand {
+  margin-bottom: 1rem;
 }
 
 .bg-fade-wrapper {

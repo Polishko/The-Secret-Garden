@@ -1,3 +1,20 @@
+// General
+
+.page-wrapper {
+    border: 0.15em solid #AA377A;
+}
+
+// Navigation
+.navbar {
+    align-items: center;
+}
+
+.navbar-brand {
+    margin-bottom: 1rem;
+}
+
+// Landing page
+
 .bg-fade-wrapper {
     position: relative;
     overflow: hidden;
@@ -8,11 +25,6 @@
     position: relative;
     z-index: 10;
 }
-
-//.social {
-//    position: relative;
-//    z-index: 10;
-//}
 
 .bg-fade {
     position: absolute;

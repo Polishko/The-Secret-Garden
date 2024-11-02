@@ -9,9 +9,14 @@ $headings-family-base: 'Nunito';
   color: #FE83A9;
   position: relative;
   font-family: 'Nunito', sans-serif;
+  //font-weight: 200;
+  //font-size: 3rem;
+  display: inline-block;
+}
+
+.landing-hero .main-page-title {
   font-weight: 400;
   font-size: 4.5rem;
-  display: inline-block;
 }
 
 

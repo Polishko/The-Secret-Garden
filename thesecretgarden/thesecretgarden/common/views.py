@@ -1,6 +1,6 @@
 from django.shortcuts import render
 
 
-def show_home_page(request):
-    return render(request, 'common/landing-page.html')
+def landing_page(request):
+    return render(request, 'common/landing-page.html', {'is_landing_page': True})
 
