@@ -3,27 +3,42 @@
 @import url("https://fonts.googleapis.com/css2?family=Playfair+Display+SC:ital,wght@0,400;0,700;0,900;1,400;1,700;1,900&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Dancing+Script&display=swap");
 .main-page-title {
-  color: #FE83A9;
+  color: #FA6957;
   position: relative;
   font-family: "Nunito", sans-serif;
-  font-weight: 400;
-  font-size: 4.5rem;
   display: inline-block;
+  font-weight: 400;
+  font-size: 2rem;
+}
+
+.landing-hero {
+  color: #FE83A9;
 }
 
 .main-page-title::before {
   content: "The";
   font-family: "Dancing Script", "cursive";
-  font-size: 2rem;
   position: absolute;
-  top: 1rem;
-  left: -3rem;
+  font-size: 75%;
+  left: -12%;
   opacity: 0.8;
   color: inherit;
 }
 
 .main-page-heading {
-  color: #FA6957;
+  color: #9E9E9E;
+}
+
+.page-wrapper {
+  border: 0.15em solid #AA377A;
+}
+
+.navbar {
+  align-items: center;
+}
+
+.navbar-brand {
+  margin-bottom: 1rem;
 }
 
 .bg-fade-wrapper {
@@ -87,6 +102,14 @@
     transform: scale(110%);
   }
 }
+.flowers-section {
+  background-image: url("../images/jeena-paradies-FnqH9E5C2do-unsplash.jpg");
+  background-size: cover;
+  background-position: center;
+  color: #fff;
+  padding: 5rem 0;
+}
+
 /*!
  * Bootstrap  v5.3.3 (https://getbootstrap.com/)
  * Copyright 2011-2024 The Bootstrap Authors
@@ -181,11 +204,11 @@
   --bs-tertiary-bg: #f8f9fa;
   --bs-tertiary-bg-rgb: 248, 249, 250;
   --bs-heading-color: inherit;
-  --bs-link-color: #0d6efd;
-  --bs-link-color-rgb: 13, 110, 253;
-  --bs-link-decoration: underline;
-  --bs-link-hover-color: #0a58ca;
-  --bs-link-hover-color-rgb: 10, 88, 202;
+  --bs-link-color: #212529;
+  --bs-link-color-rgb: 33, 37, 41;
+  --bs-link-decoration: none;
+  --bs-link-hover-color: #1a1e21;
+  --bs-link-hover-color-rgb: 26, 30, 33;
   --bs-code-color: #d63384;
   --bs-highlight-color: #212529;
   --bs-highlight-bg: #fff3cd;
@@ -437,7 +460,7 @@ sup {
 
 a {
   color: rgba(var(--bs-link-color-rgb), var(--bs-link-opacity, 1));
-  text-decoration: underline;
+  text-decoration: none;
 }
 a:hover {
   --bs-link-color-rgb: var(--bs-link-hover-color-rgb);
@@ -3000,7 +3023,6 @@ textarea.form-control-lg {
   line-height: var(--bs-btn-line-height);
   color: var(--bs-btn-color);
   text-align: center;
-  text-decoration: none;
   vertical-align: middle;
   cursor: pointer;
   user-select: none;
@@ -3339,8 +3361,8 @@ textarea.form-control-lg {
   --bs-btn-disabled-color: #6c757d;
   --bs-btn-disabled-border-color: transparent;
   --bs-btn-box-shadow: 0 0 0 #000;
-  --bs-btn-focus-shadow-rgb: 49, 132, 253;
-  text-decoration: underline;
+  --bs-btn-focus-shadow-rgb: 66, 70, 73;
+  text-decoration: none;
 }
 .btn-link:focus-visible {
   color: var(--bs-btn-color);
@@ -3662,7 +3684,6 @@ textarea.form-control-lg {
   font-weight: 400;
   color: var(--bs-dropdown-link-color);
   text-align: inherit;
-  text-decoration: none;
   white-space: nowrap;
   background-color: transparent;
   border: 0;
@@ -3837,7 +3858,6 @@ textarea.form-control-lg {
   font-size: var(--bs-nav-link-font-size);
   font-weight: var(--bs-nav-link-font-weight);
   color: var(--bs-nav-link-color);
-  text-decoration: none;
   background: none;
   border: 0;
   transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out;
@@ -3998,7 +4018,6 @@ textarea.form-control-lg {
   margin-right: var(--bs-navbar-brand-margin-end);
   font-size: var(--bs-navbar-brand-font-size);
   color: var(--bs-navbar-brand-color);
-  text-decoration: none;
   white-space: nowrap;
 }
 .navbar-brand:hover, .navbar-brand:focus {
@@ -4768,7 +4787,6 @@ textarea.form-control-lg {
   padding: var(--bs-pagination-padding-y) var(--bs-pagination-padding-x);
   font-size: var(--bs-pagination-font-size);
   color: var(--bs-pagination-color);
-  text-decoration: none;
   background-color: var(--bs-pagination-bg);
   border: var(--bs-pagination-border-width) solid var(--bs-pagination-border-color);
   transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
@@ -5069,7 +5087,6 @@ textarea.form-control-lg {
   display: block;
   padding: var(--bs-list-group-item-padding-y) var(--bs-list-group-item-padding-x);
   color: var(--bs-list-group-color);
-  text-decoration: none;
   background-color: var(--bs-list-group-bg);
   border: var(--bs-list-group-border-width) solid var(--bs-list-group-border-color);
 }

@@ -8,10 +8,10 @@
   font-family: "Nunito", sans-serif;
   display: inline-block;
   font-weight: 400;
-  font-size: 4.5rem;
+  font-size: 2rem;
 }
 
-.landing-hero .main-page-title {
+.landing-hero {
   color: #FE83A9;
 }
 
@@ -103,11 +103,11 @@
   }
 }
 .flowers-section {
-  background-image: url("../images/jeena-paradies-FnqH9E5C2do-unsplash.jpg"); /* Add your image path here */
-  background-size: cover; /* Ensures the image covers the entire container */
-  background-position: center; /* Centers the image */
-  color: #fff; /* Change text color for readability on the background image */
-  padding: 5rem 0; /* Adds vertical padding for spacing */
+  background-image: url("../images/jeena-paradies-FnqH9E5C2do-unsplash.jpg");
+  background-size: cover;
+  background-position: center;
+  color: #fff;
+  padding: 5rem 0;
 }
 
 /*!

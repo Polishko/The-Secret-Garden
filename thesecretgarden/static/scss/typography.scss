@@ -10,11 +10,12 @@
   font-family: 'Nunito', sans-serif;
   display: inline-block;
   font-weight: 400;
-  font-size: 4.5rem;
+  font-size: 2rem;
 }
 
-.landing-hero .main-page-title {
+.landing-hero {
   color: #FE83A9;
+  //font-size: 4.5rem;
 }
 
 .main-page-title::before {
