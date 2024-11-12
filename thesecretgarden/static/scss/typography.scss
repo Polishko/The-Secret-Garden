@@ -1,37 +1,60 @@
-@import url('https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200..1000;1,200..1000&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200..1000&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Playfair+Display+SC:ital,wght@0,400;0,700;0,900;1,400;1,700;1,900&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Dancing+Script&display=swap');
 
-
+$main-color: #FA6957;
+$highlight-color: #FE83A9;
+$subheading-color: #9E9E9E;
 
 .main-page-title {
-  color: #FA6957;
+  color: $main-color;
   position: relative;
   font-family: 'Nunito', sans-serif;
   display: inline-block;
   font-weight: 400;
-  font-size: 2rem;
+  font-size: 3rem;
+  text-align: center;
+
+  &::before {
+    content: 'The';
+    font-family: 'Dancing Script', 'cursive';
+    position: absolute;
+    top: 0;
+    font-size: 50%;
+    opacity: 0.8;
+    color: inherit;
+  }
 }
 
 .landing-hero {
-  color: #FE83A9;
-  //font-size: 4.5rem;
-}
-
-.main-page-title::before {
-    content: "The";
-    font-family: 'Dancing Script', 'cursive';
-    position: absolute;
-    font-size: 75%;
-    left: -12%;
-    opacity: 0.8;
-    color: inherit;
+  color: $highlight-color;
+  font-size: 4rem;
 }
 
 .main-page-heading {
-  color: #9E9E9E;
+  color: $subheading-color;
 }
 
-//.landing .main-page-heading {
-//  color: #FA6957;
-//}
+@media (min-width: 375px) and (max-width: 699px) {
+  .main-page-title {
+    padding-left: 1em;
+    font-size: 2rem;
+
+    &::before {
+      left: -0.1em;
+      top: 0.2rem;
+    }
+  }
+
+  .landing-hero {
+    font-size: 3rem;
+    max-width: 80%;
+    padding: 0;
+  }
+}
+
+@media (min-width: 700px) {
+  .main-page-title::before {
+    left: -2em;
+  }
+}
