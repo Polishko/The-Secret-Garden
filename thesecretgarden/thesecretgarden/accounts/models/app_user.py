@@ -26,7 +26,7 @@ class AppUser(AbstractBaseUser, PermissionsMixin):
             MinLengthValidator(3),
             UsernameValidator(),
         ),
-        verbose_name='User Name',
+        verbose_name='Username',
     )
 
     email = models.EmailField(
