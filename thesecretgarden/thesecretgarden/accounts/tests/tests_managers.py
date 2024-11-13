@@ -12,7 +12,8 @@ class AppUserManagerTests(TestCase):
         self.assertFalse(user.is_superuser)
         self.assertEqual(user.username, 'testuser')
         self.assertEqual(user.email, 'testuser@example.com')
-        self.assertEqual(user.password, 'password123')
+
+        self.assertTrue(user.check_password('password123'))
 
     def test_create_superuser(self):
         admin_user = AppUser.objects.create_superuser(username='adminuser', email='adminuser@example.com',
