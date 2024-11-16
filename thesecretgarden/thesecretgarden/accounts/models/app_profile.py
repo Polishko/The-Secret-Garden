@@ -42,7 +42,14 @@ class Profile(models.Model):
         verbose_name='Last Name',
     )
 
-    created_at = models.DateTimeField(default=timezone.now, editable=False)
+    created_at = models.DateTimeField(
+        default=timezone.now,
+        editable=False
+    )
+
+    updated_at = models.DateTimeField(
+        auto_now=True,
+    )
 
     preferred_flower_type = models.CharField(
         max_length=10,
@@ -61,8 +68,11 @@ class Profile(models.Model):
         super().save(*args, **kwargs)
 
     def get_full_name(self):
-        return f'{self.first_name} {self.last_name}'
+        return f"{self.first_name or ''} {self.last_name or ''}".strip()
 
     class Meta:
         verbose_name = 'Profile'
         ordering = ['user']
+
+    def __str__(self):
+        return f"Profile of {self.user.username}"
