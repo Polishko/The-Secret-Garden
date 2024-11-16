@@ -40,7 +40,7 @@ class AppUser(AbstractBaseUser, PermissionsMixin):
         max_length=10,
         choices=ROLE_CHOICES,
         default='customer',
-        verbose_name = 'Role'
+        verbose_name = 'Role',
     )
 
     is_staff = models.BooleanField(
@@ -64,7 +64,11 @@ class AppUser(AbstractBaseUser, PermissionsMixin):
 
     EMAIL_FIELD = 'email'
 
-    REQUIRED_FIELDS = ['email']
+    REQUIRED_FIELDS = ['email', 'role']
+
+    class Meta:
+        verbose_name = 'User'
+        verbose_name_plural = 'Users'
 
     def __str__(self):
         return self.username
