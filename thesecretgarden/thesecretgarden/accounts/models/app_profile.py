@@ -64,6 +64,10 @@ class Profile(models.Model):
             raise ValidationError('First name and last name cannot be the same!')
 
     def save(self, *args, **kwargs):
+        if self.first_name:
+            self.first_name = self.first_name.strip().capitalize()
+        if self.last_name:
+            self.last_name = self.last_name.strip().capitalize()
         self.full_clean()
         super().save(*args, **kwargs)
 
