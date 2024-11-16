@@ -85,5 +85,13 @@ class ProfileModelTests(TestCase):
         except ValidationError:
             self.fail("clean method raised ValidationError unexpectedly!")
 
+    def test_name_formatting_on_save(self):
+        profile = Profile.objects.get(user=self.user)
+        profile.first_name = '  JOHN '
+        profile.last_name = 'doE  '
+        profile.save()
+        self.assertEqual(profile.first_name, 'John')
+        self.assertEqual(profile.last_name, 'Doe')
+
     def tearDown(self):
         self.user.delete()
