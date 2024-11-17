@@ -85,6 +85,19 @@ class ProfileModelTests(TestCase):
         except ValidationError:
             self.fail("clean method raised ValidationError unexpectedly!")
 
+    def test_clean_method_for_address_field(self):
+        profile = Profile.objects.get(user=self.user)
+        profile.address = ' 123 Amazing <script>console.log("Hi!")</script> St.  '
+
+        try:
+            profile.full_clean()
+        except ValidationError:
+            self.fail("clean method raised ValidationError unexpectedly!")
+
+        profile.save()
+
+        self.assertEqual(profile.address, '123 Amazing console.log("Hi!") St.')
+
     def test_name_formatting_on_save(self):
         profile = Profile.objects.get(user=self.user)
         profile.first_name = '  JOHN '
