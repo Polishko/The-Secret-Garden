@@ -26,7 +26,7 @@ class Plant(models.Model):
         validators=(
             PlantNameValidator(),
         ),
-        verbose_name='Type',
+        verbose_name='Name',
         help_text='Enter plant name (up to 3 words).'
     )
 
