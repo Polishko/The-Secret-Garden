@@ -33,8 +33,6 @@ class Plant(models.Model):
     slug = models.SlugField(
         unique=True,
         editable=False,
-        null=True,
-        blank=True,
     )
 
     type = models.CharField(
