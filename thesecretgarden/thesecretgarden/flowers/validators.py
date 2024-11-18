@@ -8,7 +8,7 @@ from django.utils.deconstruct import deconstructible
 class PlantNameValidator:
     def __init__(self, valid_characters=None, valid_length=None):
         self.valid_characters = valid_characters or 'Plant name must contain only letters or spaces!'
-        self.valid_length = valid_length or 'Plant name consist of no more than 3 words!'
+        self.valid_length = valid_length or 'Plant name should consist of no more than 3 words!'
 
     def __call__(self, value):
         if not re.match(r'^[a-zA-Z\s]+$', value):
@@ -31,7 +31,7 @@ class PlantDescriptionValidator:
 @deconstructible
 class PlantPriceValidator:
     def __init__(self, message=None):
-        self.message = message or 'Price must be a positive number!'
+        self.message = message or 'Price must be a greater than 0!'
 
     def __call__(self, value):
         if value <= 0:
