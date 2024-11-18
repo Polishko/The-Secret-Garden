@@ -34,7 +34,7 @@ class PlantNameValidatorTests(TestCase):
 
             self.assertEqual(
                 context.exception.message,
-                'Plant name consist of no more than 3 words!'
+                'Plant name should consist of no more than 3 words!'
             )
 
 

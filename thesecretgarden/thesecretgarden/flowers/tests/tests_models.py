@@ -31,6 +31,13 @@ class PlantModelTests(TestCase):
         self.assertTrue(self.plant.photo.name.startswith("images/flowers/test_image"))
         self.assertTrue(self.plant.photo.name.endswith(".jpg"))
 
+    def test_clean_raises_validation_error_on_invalid_type(self):
+        self.plant.type = 'bonbons'
+        with self.assertRaises(ValidationError) as context:
+            self.plant.full_clean()
+            self.assertIn(f'{self.plant.type} is not in listed gift type choices!',
+                             context.exception.message_dict)
+
     def test_slug_remains_unchanged_on_name_change(self):
         self.plant.name = 'Bright Pink Roses'
         self.plant.save()
