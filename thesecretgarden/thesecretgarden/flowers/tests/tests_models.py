@@ -1,7 +1,10 @@
 from decimal import Decimal
+from pydoc import plain
 from unittest import TestCase
 
+from django.core.exceptions import ValidationError
 from django.core.files.uploadedfile import SimpleUploadedFile
+from django.db import IntegrityError
 
 from thesecretgarden.flowers.models import Plant
 
@@ -15,7 +18,7 @@ class PlantModelTests(TestCase):
         )
 
         self.plant = Plant.objects.create(
-            name='Roses',
+            name='Pink Roses',
             type='floral',
             description='A simple and elegant rose bouquet prepared with our best roses.',
             price=Decimal('10.99'),
@@ -24,10 +27,65 @@ class PlantModelTests(TestCase):
         )
 
     def test_create_plant_with_photo(self):
-        self.assertEqual(self.plant.name, 'Roses')
+        self.assertEqual(self.plant.name, 'Pink Roses')
         self.assertEqual(self.plant.type, 'floral')
+        self.assertEqual(self.plant.slug, 'pink-roses')
         self.assertTrue(self.plant.photo.name.startswith("images/flowers/test_image"))
         self.assertTrue(self.plant.photo.name.endswith(".jpg"))
+
+    def test_slug_remains_unchanged_on_name_change(self):
+        self.plant.name = 'Bright Pink Roses'
+        self.plant.save()
+        self.assertEqual(self.plant.slug, 'pink-roses')
+
+    def test_name_correctly_capitalized(self):
+        self.plant.name = 'bright pink RoSes'
+        self.plant.save()
+        self.assertEqual(self.plant.name, 'Bright Pink Roses')
+
+    def test_tags_in_description_removed(self):
+        self.plant.description = 'A very romantic present for <script>console.log(Hello there!)</script> for loved ones.'
+        self.plant.save()
+        self.assertEqual(self.plant.description, 'A very romantic present for console.log(Hello there!) for loved ones.')
+
+    def test_duplicate_name_not_allowed(self):
+        Plant.objects.create(
+            name='Bright Pink Roses',
+            type='floral',
+            description='A bright pink rose plant.',
+            price=Decimal('10.99'),
+            stock=10,
+            photo=self.mock_photo
+        )
+
+        with self.assertRaises(ValidationError) as context:
+            Plant.objects.create(
+                name='Bright Pink Roses',
+                type='floral',
+                description='Another bright pink rose plant.',
+                price=Decimal('12.99'),
+                stock=5,
+                photo=self.mock_photo
+            )
+
+        self.assertIn('name', context.exception.message_dict)
+        self.assertIn('slug', context.exception.message_dict)
+
+    def test_type_max_length_constraint_applied(self):
+        with self.assertRaises(ValidationError):
+            self.plant.type = 'Green house plant'
+            self.plant.save()
+
+    def test_price_max_digits_constraint_applied(self):
+        with self.assertRaises(ValidationError):
+            Plant.objects.create(
+                name='Blue Orchid',
+                type='floral',
+                description='Amazing blue hues.',
+                price=Decimal('13.99589'),
+                stock=15,
+                photo=self.mock_photo
+            )
 
     def tearDown(self):
         if hasattr(self, 'plant') and self.plant.photo:
