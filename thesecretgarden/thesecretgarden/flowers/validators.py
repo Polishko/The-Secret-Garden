@@ -21,7 +21,7 @@ class PlantNameValidator:
 @deconstructible
 class PlantDescriptionValidator:
     def __init__(self, message=None):
-        self.message = message or 'Description contains invalid characters.'
+        self.message = message or 'Description cannot contain invalid characters like < or >.'
 
     def __call__(self, value):
         if re.search(r'[<>]', value):
