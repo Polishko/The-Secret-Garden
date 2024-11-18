@@ -1,5 +1,6 @@
 from decimal import Decimal
 
+from django.core.exceptions import ValidationError
 from django.core.validators import MinLengthValidator, MaxLengthValidator
 from django.db import models
 from django.utils.html import strip_tags
@@ -13,7 +14,7 @@ class Plant(models.Model):
     PLANT_CHOICES = [
         ('non-floral', 'Non Floral Plants'),
         ('floral', 'Floral Plants'),
-        ('cactus', 'Cactuses'),
+        ('cactus', 'Cactus'),
     ]
 
     MAX_FILE_SIZE = 5
@@ -33,6 +34,7 @@ class Plant(models.Model):
     slug = models.SlugField(
         unique=True,
         editable=False,
+        verbose_name='Slug',
     )
 
     type = models.CharField(
@@ -83,6 +85,13 @@ class Plant(models.Model):
         null=False,
         blank=False,
     )
+
+    def clean(self):
+        super().clean()
+        valid_types = [gift_type[0] for gift_type in self.PLANT_CHOICES]
+
+        if self.type not in valid_types:
+            raise ValidationError(f'{self.type} is not in listed gift type choices!')
 
     def save(self, *args, **kwargs):
         if self.description:
