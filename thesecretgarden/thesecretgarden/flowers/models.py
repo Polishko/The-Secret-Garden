@@ -21,7 +21,7 @@ class Plant(models.Model):
     name = models.CharField(
         null=False,
         blank=False,
-        max_length=100,
+        max_length=50,
         unique=True,
         validators=(
             PlantNameValidator(),
@@ -65,7 +65,7 @@ class Plant(models.Model):
             PlantPriceValidator(),
         ),
         decimal_places=2,
-        max_digits=6,
+        max_digits=7,
         verbose_name='Price',
         help_text='Provide plant price.'
     )
@@ -91,7 +91,7 @@ class Plant(models.Model):
             self.description = ' '.join(strip_tags(self.description).split())
 
         if self.name:
-            self.name = ' '.join(word.capitalize() for word in self.name.split())
+            self.name = ' '.join(word.title() for word in self.name.split())
 
         if not self.slug:
             self.slug = slugify(self.name.lower())
