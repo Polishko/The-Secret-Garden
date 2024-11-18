@@ -92,6 +92,10 @@ class FileSizeValidatorTests(TestCase):
             content_type='image/jpeg'
         )
 
+    def tearDown(self):
+        if self.mock_photo:
+            self.mock_photo.close()
+
     def test_valid_file_size(self):
         self.mock_photo.size = 5 * 1024 * 1024
         try:
