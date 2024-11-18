@@ -24,7 +24,7 @@ class AppUserAdmin(UserAdmin):
 
     fieldsets = (
         (None, {'fields': ('username', 'password')}),
-        ('Personal Info', {'fields': ('email', 'uuid')}),  # Profile fields removed
+        ('Personal Info', {'fields': ('email',)}),
         ('Permissions', {'fields': ('role', 'is_staff', 'is_active', 'is_superuser')}),
     )
 
@@ -37,11 +37,11 @@ class AppUserAdmin(UserAdmin):
 
     def get_readonly_fields(self, request, obj=None):
         """
-        No one can edit uuid, users other than superusers cannot edit email, username, role.
+        Users other than superusers cannot edit email, username, role.
         """
         if not request.user.is_superuser:
             return ['role', 'username', 'email']
-        return ['uuid']
+        return []
 
     def update_permissions_based_on_role(self, obj):
         """

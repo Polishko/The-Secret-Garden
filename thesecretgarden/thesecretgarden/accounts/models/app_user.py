@@ -9,8 +9,6 @@ from django.utils.translation import gettext_lazy as _
 from thesecretgarden.accounts.managers import AppUserManager
 from thesecretgarden.accounts.validators import UsernameValidator
 
-import uuid
-
 
 class AppUser(AbstractBaseUser, PermissionsMixin):
     ROLE_CHOICES = (
@@ -36,12 +34,6 @@ class AppUser(AbstractBaseUser, PermissionsMixin):
         null=False,
         blank=False,
         verbose_name='Email',
-    )
-
-    uuid = models.UUIDField(
-        default=uuid.uuid4,
-        editable=False,
-        unique=True,
     )
 
     role = models.CharField(
@@ -79,4 +71,4 @@ class AppUser(AbstractBaseUser, PermissionsMixin):
         verbose_name_plural = 'Users'
 
     def __str__(self):
-        return f'{self.username} {self.uuid}'
+        return f'{self.username}'
