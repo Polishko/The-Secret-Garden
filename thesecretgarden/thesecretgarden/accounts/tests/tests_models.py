@@ -1,8 +1,7 @@
-from unittest import TestCase
-
 from django.contrib.auth import get_user_model
 from django.core.exceptions import ValidationError
 from django.db import IntegrityError
+from django.test import TestCase
 
 from thesecretgarden.accounts.models import Profile
 
@@ -23,10 +22,11 @@ class AppUserModelTests(TestCase):
         self.assertTrue(user.is_active)
         self.assertFalse(user.is_staff)
         self.assertEqual(user.role, 'customer')
+        self.assertEqual(user.slug, self.user_data['username'])
 
     def test_create_user_with_duplicate_username(self):
         UserModel.objects.create_user(**self.user_data)
-        with self.assertRaises(IntegrityError):
+        with self.assertRaises(ValidationError):
             UserModel.objects.create_user(
                 username='testuser',
                 email='newemail@example.com',
@@ -35,7 +35,7 @@ class AppUserModelTests(TestCase):
 
     def test_create_user_with_duplicate_email(self):
         UserModel.objects.create_user(**self.user_data)
-        with self.assertRaises(IntegrityError):
+        with self.assertRaises(ValidationError):
             UserModel.objects.create_user(
                 username='newuser',
                 email='test@example.com',
@@ -67,20 +67,14 @@ class ProfileModelTests(TestCase):
         try:
             profile.full_clean()
         except ValidationError:
-            self.fail("clean method raised ValidationError unexpectedly!")
+            self.fail('Clean method raised ValidationError unexpectedly!')
 
     def test_clean_method_for_address_field(self):
         profile = Profile.objects.get(user=self.user)
         profile.address = ' 123 Amazing <script>console.log("Hi!")</script> St.  '
 
-        try:
+        with self.assertRaises(ValidationError):
             profile.full_clean()
-        except ValidationError:
-            self.fail("clean method raised ValidationError unexpectedly!")
-
-        profile.save()
-
-        self.assertEqual(profile.address, '123 Amazing console.log("Hi!") St.')
 
     def test_name_formatting_on_save(self):
         profile = Profile.objects.get(user=self.user)
@@ -91,4 +85,4 @@ class ProfileModelTests(TestCase):
         self.assertEqual(profile.last_name, 'Doe')
 
     def tearDown(self):
-        self.user.delete()
+        UserModel.objects.all().delete()
