@@ -94,6 +94,8 @@ class Profile(models.Model):
     )
 
     def clean(self):
+        super().clean()
+
         if self.first_name == self.last_name:
             raise ValidationError('First name and last name cannot be the same!')
 
