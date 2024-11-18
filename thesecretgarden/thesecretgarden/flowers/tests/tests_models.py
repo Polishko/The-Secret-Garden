@@ -1,10 +1,8 @@
 from decimal import Decimal
-from pydoc import plain
 from unittest import TestCase
 
 from django.core.exceptions import ValidationError
 from django.core.files.uploadedfile import SimpleUploadedFile
-from django.db import IntegrityError
 
 from thesecretgarden.flowers.models import Plant
 
