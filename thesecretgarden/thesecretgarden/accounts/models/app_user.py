@@ -3,6 +3,7 @@ from django.contrib.auth.models import PermissionsMixin
 from django.core.validators import MinLengthValidator
 
 from django.db import models
+from django.utils.text import slugify
 
 from django.utils.translation import gettext_lazy as _
 
@@ -27,6 +28,11 @@ class AppUser(AbstractBaseUser, PermissionsMixin):
             UsernameValidator(),
         ),
         verbose_name='Username',
+    )
+
+    slug = models.SlugField(
+        unique=True,
+        editable=False,
     )
 
     email = models.EmailField(
@@ -65,6 +71,19 @@ class AppUser(AbstractBaseUser, PermissionsMixin):
     EMAIL_FIELD = 'email'
 
     REQUIRED_FIELDS = ['email']
+
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            slug_base = slugify(self.username.lower())
+            slug = slug_base
+            counter = 1
+            while AppUser.objects.filter(slug=slug).exists():
+                slug = f"{slug_base}-{counter}"
+                counter += 1
+            self.slug = slug
+
+        self.full_clean()
+        super().save(*args, **kwargs)
 
     class Meta:
         verbose_name = 'User'
