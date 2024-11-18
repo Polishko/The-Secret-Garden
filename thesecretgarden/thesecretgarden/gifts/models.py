@@ -10,7 +10,7 @@ from thesecretgarden.gifts.validators import GiftPriceValidator, FileSizeValidat
 
 class Gift(models.Model):
     GIFT_CHOICES = [
-        ('red wine', 'Red Vine'),
+        ('red wine', 'Red Wine'),
         ('chocolate', 'Chocolate'),
         ('candle', 'Candle'),
     ]
