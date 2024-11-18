@@ -1,15 +1,11 @@
 from django.contrib import admin
 
 from thesecretgarden.flowers.models import Plant
-
-
-@admin.action(description='Mark as out of stock')
-def mark_as_out_of_stock(model, request, queryset):
-    queryset.update(stock=0)
+from thesecretgarden.mixins import StockManagementAdminMixin
 
 
 @admin.register(Plant)
-class PlantAdmin(admin.ModelAdmin):
+class PlantAdmin(admin.ModelAdmin, StockManagementAdminMixin):
 
     list_display = ('name', 'type', 'price', 'stock', 'slug')
     list_filter = ('type', 'price', 'stock')
@@ -22,4 +18,4 @@ class PlantAdmin(admin.ModelAdmin):
         ('Details', {'fields': ('description', 'price', 'stock', 'photo')}),
     )
 
-    actions = [mark_as_out_of_stock]
+    actions = ['mark_as_out_of_stock']
