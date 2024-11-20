@@ -7,6 +7,8 @@
     
     <div class="container-fluid my-5 p-0">
         <div class="row">
+            {% for plant in plants %}
+                
             <!-- Flower Card 1 -->
             <div class="col-md-4 mb-4">
                 <div class="card">
@@ -17,6 +19,9 @@
                     </div>
                 </div>
             </div>
+                {% empty %}
+                <h1>We are sorry, there are no plants in our stock at the moment! </h1>
+            {% endfor %}
     
             <!-- Flower Card 2 -->
             <div class="col-md-4 mb-4">
