@@ -33,9 +33,10 @@ ALLOWED_HOSTS = []
 
 MY_APPS = [
     'thesecretgarden.common',
+    'thesecretgarden.accounts',
     'thesecretgarden.flowers',
     'thesecretgarden.gifts',
-    'thesecretgarden.accounts',
+    'thesecretgarden.orders',
 ]
 
 THIRD_PARTY_APPS = [
