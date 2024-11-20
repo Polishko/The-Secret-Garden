@@ -42,6 +42,7 @@ class Plant(models.Model):
         null=False,
         blank=False,
         choices=PLANT_CHOICES,
+        default='floral',
         verbose_name='Type',
         help_text='Provide plant type.'
     )
@@ -89,9 +90,10 @@ class Plant(models.Model):
     def clean(self):
         super().clean()
         valid_types = [gift_type[0] for gift_type in self.PLANT_CHOICES]
-
+        if not self.type:
+            raise ValidationError({'type': 'You must select a type!'})
         if self.type not in valid_types:
-            raise ValidationError(f'{self.type} is not in listed gift type choices!')
+            raise ValidationError({'type': f'{self.type} is not in listed gift type choices!'})
 
     def save(self, *args, **kwargs):
         if self.description:
