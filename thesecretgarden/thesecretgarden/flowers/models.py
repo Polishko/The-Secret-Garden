@@ -7,7 +7,7 @@ from django.utils.html import strip_tags
 from django.utils.text import slugify
 
 from thesecretgarden.flowers.validators import PlantNameValidator, PlantPriceValidator, \
-    FileSizeValidator, PlantDescriptionValidator
+    FileSizeValidator, PlantDescriptionValidator, PlantStockValidator
 
 
 class Plant(models.Model):
@@ -66,7 +66,7 @@ class Plant(models.Model):
             PlantPriceValidator(),
         ),
         decimal_places=2,
-        max_digits=7,
+        max_digits=5,
         verbose_name='Price',
         help_text='Provide plant price.'
     )
@@ -74,6 +74,9 @@ class Plant(models.Model):
     stock = models.PositiveIntegerField(
         null=False,
         blank=False,
+        validators=(
+            PlantStockValidator(),
+        ),
         verbose_name='Stock',
         help_text='Provide stock amount.'
     )
