@@ -30,11 +30,25 @@ class PlantDescriptionValidator:
 
 @deconstructible
 class PlantPriceValidator:
-    def __init__(self, message=None):
-        self.message = message or 'Price must be a greater than 0!'
+    def __init__(self, min_value_message=None, max_value_message=None):
+        self.min_value_message = min_value_message or 'Price must be a greater than 0!'
+        self.max_value_message = max_value_message or 'Maximum price is 999.99!'
 
     def __call__(self, value):
         if value <= 0:
+            raise ValidationError(self.min_value_message)
+
+        if value > 999.99:
+            raise ValidationError(self.max_value_message)
+
+
+@deconstructible
+class PlantStockValidator:
+    def __init__(self, message=None):
+        self.message = message or 'Max stock capacity is 100!'
+
+    def __call__(self, value):
+        if value > 100:
             raise ValidationError(self.message)
 
 
