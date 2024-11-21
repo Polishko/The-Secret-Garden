@@ -59,6 +59,7 @@ class Gift(models.Model):
         blank=False,
         choices=GIFT_CHOICES,
         verbose_name='Type',
+        default='red wine',
         help_text='Provide gift type.'
     )
 
