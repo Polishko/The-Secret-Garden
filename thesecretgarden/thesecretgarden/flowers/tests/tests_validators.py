@@ -6,7 +6,7 @@ from django.test import TestCase
 from django.core.exceptions import ValidationError
 
 from thesecretgarden.flowers.validators import PlantNameValidator, PlantDescriptionValidator, PlantPriceValidator, \
-    FileSizeValidator
+    FileSizeValidator, PlantStockValidator
 
 
 class PlantNameValidatorTests(TestCase):
@@ -64,7 +64,7 @@ class PlantPriceValidatorTests(TestCase):
 
     def test_valid_price(self):
         try:
-            self.validator(Decimal(12.5567))
+            self.validator(Decimal(12.56))
         except ValidationError:
             self.fail('PlantPriceValidator raised ValidationError unexpectedly!')
 
@@ -80,6 +80,25 @@ class PlantPriceValidatorTests(TestCase):
     def test_invalid_price_2(self):
         with self.assertRaises(ValidationError):
             self.validator(-1.22)
+
+    def test_invalid_price_3(self):
+        with self.assertRaises(ValidationError):
+            self.validator(1000)
+
+
+class PlantStockValidatorTests(TestCase):
+    def setUp(self):
+        self.validator = PlantStockValidator()
+
+    def test_valid_stock(self):
+        try:
+            self.validator(100)
+        except ValidationError:
+            self.fail('PlantStockValidator raised ValidationError unexpectedly!')
+
+    def test_invalid_stock_1(self):
+        with self.assertRaises(ValidationError):
+            self.validator(101)
 
 
 class FileSizeValidatorTests(TestCase):
