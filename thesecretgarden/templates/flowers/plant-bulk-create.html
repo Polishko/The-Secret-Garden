@@ -1,20 +1,37 @@
 {% extends 'common/base.html' %}
 {% load static %}
+{% load form_tags %}
 
 {% block content %}
 
-    <h1>Block Create Plants</h1>
+    <h1>Add Flowers to Stock</h1>
     <form method="post" enctype="multipart/form-data">
         {% csrf_token %}
         {{ formset.management_form }}
 
         <div class="formset-container">
             {% for form in formset %}
-                <div class="form-row">
+                <div class="form-row formset-entry">
                     {% for field in form %}
                         <div class="form-group">
-                            {{ field.label_tag }}
-                            {{ field }}
+                            {% if field.name == 'DELETE' %}
+                                <label for="{{ field.id_for_label }}">Disable form if not needed</label>
+                                {{ field }}
+                            {% else %}
+                                {{ field.label_tag }}
+
+                                {% if field.name == 'name' %}
+                                    {{ field|placeholder:"Enter name" }}
+                                {% elif field.name == 'price' %}
+                                    {{ field|placeholder:"Enter price" }}
+                                {% elif field.name == 'stock' %}
+                                    {{ field|placeholder:"Enter stock" }}
+                                {% elif field.name == 'description' %}
+                                    {{ field|placeholder:"Enter description" }}
+                                {% else %}
+                                    {{ field }}
+                                {% endif %}
+                            {% endif %}
                             {% if field.errors %}
                                 <ul class="text-danger">
                                     {% for error in field.errors %}
@@ -30,4 +47,78 @@
 
         <button type="submit" class="btn btn-primary">Save Plants</button>
     </form>
+    <script>
+    {#  Get all elements that have attr ending with Delete (Django adds this dynamically to formsets  #}
+    {#  Add event listener: if change disable closest formset fields except the checkbox  #}
+        document.querySelectorAll('input[name$="-DELETE"]').forEach((checkbox) => {
+            checkbox.addEventListener('change', (event) => {
+                const formsetEntry = event.target.closest('.formset-entry');
+                const formFields = formsetEntry.querySelectorAll('input, select, textarea');
+
+                formFields.forEach(field => {
+                    if (field !== event.target) {
+                        field.disabled = event.target.checked;
+                    }
+                });
+            });
+        });
+
+    {# Prevent user entering more than necessary digits and set cursor correctly #}
+        document.addEventListener('DOMContentLoaded', () => {
+            const numberInputs = document.querySelectorAll('input[type="number"]');
+
+            numberInputs.forEach(input => {
+                const fieldName = input.name;
+
+                input.addEventListener('input', (event) => {
+                    const value = event.target.value;
+                    const cursorPosition = event.target.selectionStart;
+
+                    let newValue;
+
+                    if (fieldName.includes('price')) {
+                        let parts = value.split('.');
+
+                        if (parts[0].length > 3) {
+                            parts[0] = parts[0].slice(0, 3);
+                        }
+
+                        if (parts.length > 1) {
+                            parts[1] = parts[1].slice(0, 2); // Restrict to 2 decimal places
+                        }
+
+                        newValue = parts.join('.');
+                    } else if (fieldName.includes('stock')) {
+                        // Allow only integers, no decimal point
+                        newValue = value.replace(/[^0-9]/g, ''); // Remove all non-numeric characters
+
+                        if (newValue.length > 3) {
+                            newValue = newValue.slice(0, 3); // Restrict to 3 digits
+                        }
+                    } else {
+                    // Default behavior for other fields
+                    newValue = value;
+                    }
+
+                    if (newValue !== value) {
+                        event.target.value = newValue;
+
+                        // Restore cursor position
+                        const adjustment = value.length - newValue.length;
+                        const newCursorPosition = Math.max(cursorPosition - adjustment, 0);
+                        event.target.setSelectionRange(newCursorPosition, newCursorPosition);
+                    }
+                });
+                    // Prevent "." at the keypress/keydown level for stock fields
+                if (fieldName.includes('stock')) {
+                    input.addEventListener('keydown', (event) => {
+                        if (event.key === '.') {
+                            event.preventDefault(); // Block the "." key
+                        }
+                    });
+                }
+            });
+        });
+
+    </script>
 {% endblock %}
