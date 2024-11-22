@@ -15,8 +15,6 @@ class PlantsListView(ListView):
     context_object_name = 'plants'
 
 
-
-
 class BulkCreatePlantView(FormView):
     template_name = 'flowers/plant-bulk-create.html'
     success_url = reverse_lazy('plants-list')
