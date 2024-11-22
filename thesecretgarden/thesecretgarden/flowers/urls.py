@@ -1,9 +1,8 @@
-from django.urls import path, include
+from django.urls import path
 
-from thesecretgarden.flowers.views import show_flowers_list, BulkCreatePlantView
+from thesecretgarden.flowers.views import BulkCreatePlantView, PlantsListView
 
 urlpatterns = [
-    # path('', FlowersListView.as_view(), name='flowers-list'),
-    path('', show_flowers_list, name='plants-list'),
+    path('', PlantsListView.as_view(), name='plants-list'),
     path('bulk-create/', BulkCreatePlantView.as_view(), name='plant-bulk-create'),
 ]
