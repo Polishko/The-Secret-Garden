@@ -9,13 +9,12 @@ from thesecretgarden.flowers.forms import PlantBulkCreateForm
 from thesecretgarden.flowers.models import Plant
 
 
-def show_flowers_list(request):
-    return render(request, 'flowers/plants-list.html')
-
 class PlantsListView(ListView):
     model = Plant
     template_name = 'flowers/plants-list.html'
     context_object_name = 'plants'
+
+
 
 
 class BulkCreatePlantView(FormView):
