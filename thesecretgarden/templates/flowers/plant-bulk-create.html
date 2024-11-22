@@ -60,20 +60,40 @@
     </div>
 
     <script>
-    {#  Get all elements that have attr ending with Delete (Django adds this dynamically to formsets  #}
-    {#  Add event listener: if change disable closest formset fields except the checkbox  #}
-        document.querySelectorAll('input[name$="-DELETE"]').forEach((checkbox) => {
-            checkbox.addEventListener('change', (event) => {
-                const formsetEntry = event.target.closest('.formset-entry');
-                const formFields = formsetEntry.querySelectorAll('input, select, textarea');
 
-                formFields.forEach(field => {
-                    if (field !== event.target) {
-                        field.disabled = event.target.checked;
+        document.addEventListener('DOMContentLoaded', () => {
+            // Function to handle disabling fields for DELETE checkboxes
+            const handleDeleteCheckboxes = () => {
+                document.querySelectorAll('input[name$="-DELETE"]').forEach((checkbox) => {
+                    const formsetEntry = checkbox.closest('.formset-entry');
+                    const formFields = formsetEntry.querySelectorAll('input, select, textarea');
+
+                    // Disable fields if the DELETE checkbox is pre-checked
+                    if (checkbox.checked) {
+                        formFields.forEach(field => {
+                            if (field !== checkbox) {
+                                field.disabled = true;
+                            }
+                        });
                     }
+
+                    // Add event listener for real-time changes
+                    checkbox.addEventListener('change', (event) => {
+                        const isChecked = event.target.checked;
+
+                        formFields.forEach(field => {
+                            if (field !== event.target) {
+                                field.disabled = isChecked;
+                            }
+                        });
+                    });
                 });
-            });
+            };
+
+            // Call the function on page load
+            handleDeleteCheckboxes();
         });
+
 
     {# Prevent user entering more than necessary digits and set cursor correctly #}
         document.addEventListener('DOMContentLoaded', () => {
@@ -83,12 +103,14 @@
                 const fieldName = input.name;
 
                 input.addEventListener('input', (event) => {
-                    const value = event.target.value;
+                    let value = event.target.value;
+
                     const cursorPosition = event.target.selectionStart;
 
                     let newValue;
 
                     if (fieldName.includes('price')) {
+
                         let parts = value.split('.');
 
                         if (parts[0].length > 3) {
@@ -121,10 +143,19 @@
                         event.target.setSelectionRange(newCursorPosition, newCursorPosition);
                     }
                 });
-                    // Prevent "." at the keypress/keydown level for stock fields
+
+                 // Prevent "-" at the keypress/keydown level for price fields
+                if (fieldName.includes('price')) {
+                    input.addEventListener('keydown', (event) => {
+                        if (event.key === '-') {
+                            event.preventDefault(); // Block the "-" key
+                        }
+                    });
+                }
+                    // Prevent "." and "-" at the keypress/keydown level for stock fields
                 if (fieldName.includes('stock')) {
                     input.addEventListener('keydown', (event) => {
-                        if (event.key === '.') {
+                        if (event.key === '.' || event.key === '-') {
                             event.preventDefault(); // Block the "." key
                         }
                     });
