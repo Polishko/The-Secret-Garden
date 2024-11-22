@@ -4,49 +4,61 @@
 
 {% block content %}
 
-    <h1>Add Flowers to Stock</h1>
-    <form method="post" enctype="multipart/form-data">
-        {% csrf_token %}
-        {{ formset.management_form }}
+    <div class="container my-5">
+        <h1 class="text-center mb-5">Add Plants to Stock</h1>
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            {{ formset.management_form }}
 
-        <div class="formset-container">
-            {% for form in formset %}
-                <div class="form-row formset-entry">
-                    {% for field in form %}
-                        <div class="form-group">
-                            {% if field.name == 'DELETE' %}
-                                <label for="{{ field.id_for_label }}">Disable form if not needed</label>
-                                {{ field }}
-                            {% else %}
-                                {{ field.label_tag }}
-
-                                {% if field.name == 'name' %}
-                                    {{ field|placeholder:"Enter name" }}
-                                {% elif field.name == 'price' %}
-                                    {{ field|placeholder:"Enter price" }}
-                                {% elif field.name == 'stock' %}
-                                    {{ field|placeholder:"Enter stock" }}
-                                {% elif field.name == 'description' %}
-                                    {{ field|placeholder:"Enter description" }}
+            <div class="formset-container">
+                {% for form in formset %}
+                    <div class="form-row formset-entry row g-3 mb-3 p-2 border border-danger">
+                        {% for field in form %}
+                            <div class="d-flex align-items-center justify-content-center form-group">
+                                {% if field.name == 'DELETE' %}
+                                    <div class="p-3 border rounded bg-primary bg-opacity-10 p-3 border rounded bg-primary bg-opacity-10">
+                                        {{ field }}
+                                        <label for="{{ field.id_for_label }}" class="ms-2 fw-bold mb-0">
+                                            Disable form if not needed
+                                        </label>
+                                    </div>
                                 {% else %}
-                                    {{ field }}
-                                {% endif %}
-                            {% endif %}
-                            {% if field.errors %}
-                                <ul class="text-danger">
-                                    {% for error in field.errors %}
-                                        <li>{{ error }}</li>
-                                    {% endfor %}
-                                </ul>
-                            {% endif %}
-                        </div>
-                    {% endfor %}
-                </div>
-            {% endfor %}
-        </div>
+                                    <label for="{{ field.id_for_label }}" class="form-label">
+                                        {{ field.label }}
+                                    </label>
 
-        <button type="submit" class="btn btn-primary">Save Plants</button>
-    </form>
+                                    {% if field.name == 'name' %}
+                                        {{ field|placeholder:"Enter name" }}
+                                    {% elif field.name == 'price' %}
+                                        {{ field|placeholder:"Enter price" }}
+                                    {% elif field.name == 'stock' %}
+                                        {{ field|placeholder:"Enter stock" }}
+                                    {% elif field.name == 'description' %}
+                                        {{ field|placeholder:"Enter description" }}
+                                    {% else %}
+                                        {{ field }}
+                                    {% endif %}
+                                {% endif %}
+                                {% if field.errors %}
+                                    <ul class="text-danger mt-1">
+                                        {% for error in field.errors %}
+                                            <li>{{ error }}</li>
+                                        {% endfor %}
+                                    </ul>
+                                {% endif %}
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% endfor %}
+            </div>
+
+            <div class="container mt-5">
+                <button type="submit" class="btn btn-primary btn-lg mx-auto d-block">Save Plants</button>
+            </div>
+
+        </form>
+    </div>
+
     <script>
     {#  Get all elements that have attr ending with Delete (Django adds this dynamically to formsets  #}
     {#  Add event listener: if change disable closest formset fields except the checkbox  #}
