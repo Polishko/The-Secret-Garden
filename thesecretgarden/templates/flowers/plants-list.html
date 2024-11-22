@@ -5,79 +5,25 @@
         <h1>FLOWERS</h1>
     </div>
     
-    <div class="container-fluid my-5 p-0">
-        <div class="row">
-            {% for plant in plants %}
-                
-            <!-- Flower Card 1 -->
-            <div class="col-md-4 mb-4">
-                <div class="card">
-                    <img src="{% static 'images/alex-seinet-8dmtbpJJJ7k-unsplash.jpg' %}" class="card-img-top" alt="Flower Image">
-                    <div class="card-body">
-                        <h5 class="card-title">Flower Name 1</h5>
-                        <p class="card-text">A short description of the flower.</p>
-                    </div>
+   <div class="container-fluid my-5 p-0">
+    <div class="row g-4">
+        {% for plant in plants %}
+        <div class="col-md-4">
+            <div class="card shadow-sm border-0 h-100">
+                <div class="ratio" style="aspect-ratio: 3 / 4;">
+                    <img src="{{ plant.photo.url }}" class="card-img-top" alt="Flower Image" style="object-fit: cover;">
+                </div>
+                <div class="card-body">
+                    <h5 class="card-title text-center fw-semibold">{{ plant.name }}</h5>
+                    <p class="card-text">{{ plant.description }}</p>
                 </div>
             </div>
-                {% empty %}
-                <h1>We are sorry, there are no plants in our stock at the moment! </h1>
-            {% endfor %}
-    
-            <!-- Flower Card 2 -->
-            <div class="col-md-4 mb-4">
-                <div class="card">
-                    <img src="{% static 'images/alex-seinet-8dmtbpJJJ7k-unsplash.jpg' %}" class="card-img-top" alt="Flower Image">
-                    <div class="card-body">
-                        <h5 class="card-title">Flower Name 2</h5>
-                        <p class="card-text">A short description of the flower.</p>
-                    </div>
-                </div>
-            </div>
-    
-            <!-- Flower Card 3 -->
-            <div class="col-md-4 mb-4">
-                <div class="card">
-                    <img src="{% static 'images/alex-seinet-8dmtbpJJJ7k-unsplash.jpg' %}" class="card-img-top" alt="Flower Image">
-                    <div class="card-body">
-                        <h5 class="card-title">Flower Name 3</h5>
-                        <p class="card-text">A short description of the flower.</p>
-                    </div>
-                </div>
-            </div>
-    
-            <!-- Flower Card 4 -->
-            <div class="col-md-4 mb-4">
-                <div class="card">
-                    <img src="{% static 'images/alex-seinet-8dmtbpJJJ7k-unsplash.jpg' %}" class="card-img-top" alt="Flower Image">
-                    <div class="card-body">
-                        <h5 class="card-title">Flower Name 4</h5>
-                        <p class="card-text">A short description of the flower.</p>
-                    </div>
-                </div>
-            </div>
-    
-            <!-- Flower Card 5 -->
-            <div class="col-md-4 mb-4">
-                <div class="card">
-                    <img src="{% static 'images/alex-seinet-8dmtbpJJJ7k-unsplash.jpg' %}" class="card-img-top" alt="Flower Image">
-                    <div class="card-body">
-                        <h5 class="card-title">Flower Name 5</h5>
-                        <p class="card-text">A short description of the flower.</p>
-                    </div>
-                </div>
-            </div>
-    
-            <!-- Flower Card 6 -->
-            <div class="col-md-4 mb-4">
-                <div class="card">
-                    <img src="{% static 'images/alex-seinet-8dmtbpJJJ7k-unsplash.jpg' %}" class="card-img-top" alt="Flower Image">
-                    <div class="card-body">
-                        <h5 class="card-title">Flower Name 6</h5>
-                        <p class="card-text">A short description of the flower.</p>
-                    </div>
-                </div>
-            </div>
+        </div>
+        {% empty %}
+        <h1>We are sorry, there are no plants in our stock at the moment!</h1>
+        {% endfor %}
     </div>
 </div>
+
 
 {% endblock %}
