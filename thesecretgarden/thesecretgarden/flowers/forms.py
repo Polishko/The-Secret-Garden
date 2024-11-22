@@ -33,7 +33,7 @@ class PlantBaseForm(forms.ModelForm):
         name = self.cleaned_data.get('name')
 
         if Plant.objects.filter(name=name).exclude(pk=self.instance.pk).exists():
-            raise ValidationError({'A plant with this name already exists.'})
+            raise ValidationError('A plant with this name already exists.')
 
         return name
 
