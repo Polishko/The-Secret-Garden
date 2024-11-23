@@ -165,3 +165,4 @@ venv/
 .idea/
 node_modules/
 thesecretgarden/~$image_mappings.xls
+db_data.csv
