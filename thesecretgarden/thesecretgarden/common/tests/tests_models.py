@@ -2,7 +2,9 @@ from decimal import Decimal
 from django.core.exceptions import ValidationError
 from django.core.files.uploadedfile import SimpleUploadedFile
 from django.test import TestCase
-from thesecretgarden.common.models import Product
+
+from thesecretgarden.flowers.models import Plant
+
 
 class ProductModelTests(TestCase):
     def setUp(self):
@@ -11,8 +13,10 @@ class ProductModelTests(TestCase):
             content=b'sample image content',
             content_type='image/jpeg'
         )
-        self.product = Product(
+        self.product = Plant.objects.create(
             name='Test Product',
+            type='floral',
+            description='A description for the product',
             price=Decimal('10.99'),
             stock=50,
             photo=self.mock_photo
@@ -35,7 +39,7 @@ class ProductModelTests(TestCase):
 
     def test_duplicate_name_not_allowed(self):
         with self.assertRaises(ValidationError) as context:
-            Product.objects.create(
+            Plant.objects.create(
                 name='Test product',
                 type='floral',
                 description='Another test product.',
@@ -49,7 +53,7 @@ class ProductModelTests(TestCase):
 
     def test_price_max_digits_constraint_applied(self):
         with self.assertRaises(ValidationError):
-            Product.objects.create(
+            Plant.objects.create(
                 name='Test product',
                 type='floral',
                 description='Amazing blue hues.',
