@@ -89,11 +89,25 @@ class Product(models.Model):
                 raise ValidationError({'type': f'{self.type} is not a valid type.'})
 
     def save(self, *args, **kwargs):
-        if self.name:
-            self.name = ' '.join(word.title() for word in self.name.split())
+        if hasattr(self, 'name') and self.name:
+            self.name = self.clean_name_field(self.name)
+
+        if hasattr(self, 'brand_name') and self.brand_name:
+            self.brand_name = self.clean_name_field(self.brand_name)
+
+        if hasattr(self, 'short_name') and self.short_name:
+            self.short_name = self.clean_name_field(self.short_name)
+
+        if hasattr(self, 'short_description') and self.short_description:
+            self.short_description = self.clean_name_field(self.short_description)
 
         if not self.slug:
-            self.slug = slugify(self.name.lower())
+            if hasattr(self, 'name') and self.name:
+                self.slug = slugify(self.name.lower())
+
+            elif hasattr(self, 'brand_name') and hasattr(self, 'short_name'):
+                gift_name_to_slugify = f"{self.brand_name or ''} {self.short_name or ''}".strip()
+                self.slug = slugify(gift_name_to_slugify.lower())
 
         if self.price and not isinstance(self.price, Decimal):
             self.price = Decimal(self.price).quantize(Decimal('0.01'))
