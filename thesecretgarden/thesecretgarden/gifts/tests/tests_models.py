@@ -25,7 +25,7 @@ class GiftModelTests(TestCase):
             photo=self.mock_photo
         )
 
-    def test_create_plant_with_photo(self):
+    def test_create_gift_with_photo(self):
         self.assertEqual(self.gift.brand_name, 'Katarzyna')
         self.assertEqual(self.gift.short_name, 'Contemplations')
         self.assertEqual(self.gift.short_description, 'Malbec & Merlot, 2023')
