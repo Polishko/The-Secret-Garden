@@ -54,19 +54,6 @@ class Gift(Product):
         if is_same_gift_in_stock:
             raise ValidationError('This product is already registered in stock!')
 
-    def save(self, *args, **kwargs):
-        if self.brand_name:
-            self.brand_name = self.clean_name_field(self.brand_name)
-
-        if self.short_name:
-            self.short_name = ' '.join(word.title() for word in self.short_name.split())
-
-        if self.short_description:
-            self.short_description = ' '.join(word.title() for word in self.short_description.split())
-
-        self.full_clean()
-        super().save(*args, **kwargs)
-
     class Meta:
         verbose_name = 'Gift'
 
