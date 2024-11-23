@@ -15,7 +15,7 @@
                 </div>
                 <div class="card-body">
                     <h5 class="card-title text-center fw-semibold">{{ plant.name }}</h5>
-                    <p class="card-text">{{ plant.description }}</p>
+                    <p class="card-text">{{ plant.description|truncatewords:3 }}</p>
                 </div>
             </div>
         </div>
