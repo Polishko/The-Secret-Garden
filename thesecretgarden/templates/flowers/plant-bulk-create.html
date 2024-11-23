@@ -62,37 +62,22 @@
     <script>
 
         document.addEventListener('DOMContentLoaded', () => {
-            // Function to handle disabling fields for DELETE checkboxes
-            const handleDeleteCheckboxes = () => {
-                document.querySelectorAll('input[name$="-DELETE"]').forEach((checkbox) => {
-                    const formsetEntry = checkbox.closest('.formset-entry');
-                    const formFields = formsetEntry.querySelectorAll('input, select, textarea');
+    // Add event listener to handle real-time changes for DELETE checkboxes
+    document.querySelectorAll('input[name$="-DELETE"]').forEach((checkbox) => {
+        checkbox.addEventListener('change', (event) => {
+            const formsetEntry = checkbox.closest('.formset-entry');
+            const formFields = formsetEntry.querySelectorAll('input, select, textarea');
+            const isChecked = event.target.checked;
 
-                    // Disable fields if the DELETE checkbox is pre-checked
-                    if (checkbox.checked) {
-                        formFields.forEach(field => {
-                            if (field !== checkbox) {
-                                field.disabled = true;
-                            }
-                        });
-                    }
-
-                    // Add event listener for real-time changes
-                    checkbox.addEventListener('change', (event) => {
-                        const isChecked = event.target.checked;
-
-                        formFields.forEach(field => {
-                            if (field !== event.target) {
-                                field.disabled = isChecked;
-                            }
-                        });
-                    });
-                });
-            };
-
-            // Call the function on page load
-            handleDeleteCheckboxes();
+            // Disable or enable fields based on the checkbox state
+            formFields.forEach(field => {
+                if (field !== event.target) {
+                    field.disabled = isChecked;
+                }
+            });
         });
+    });
+});
 
 
     {# Prevent user entering more than necessary digits and set cursor correctly #}
