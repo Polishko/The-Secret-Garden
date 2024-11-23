@@ -38,7 +38,7 @@ class BulkCreatePlantView(FormView):
         for form in formset:
             if form.is_valid():
                 if form.cleaned_data.get('DELETE', False):
-                    continue
+                    continue  # Skip delete-marked forms
 
                 # Try to save valid forms
                 try:
@@ -48,6 +48,7 @@ class BulkCreatePlantView(FormView):
                     # Handle model-level validation errors
                     has_error = True
                     forms_with_errors.append(form)
+
                     for field, errors in e.message_dict.items():
                         if field in form.fields:
                             for error in errors:
@@ -65,33 +66,22 @@ class BulkCreatePlantView(FormView):
                 has_error = True
                 forms_with_errors.append(form)
 
-        if not has_error:
+            # Debug information
+            print(f"Saved Forms: {len(saved_forms)}")
+            print(f"Forms with Errors: {len(forms_with_errors)}")
+            print(f"Has Error: {has_error}")
+
+        if not has_error and saved_forms:
             return redirect(self.success_url)
 
-        # Clear data for successfully saved forms
-        for form in saved_forms:
-            form.cleaned_data = {}
-            form.data = form.data.copy()
-            for field_name, field in form.fields.items():
-                if field.widget.attrs.get('name'):
-                    form.data[field.widget.attrs['name']] = ''
-                if isinstance(field, forms.ImageField) and field_name in form.files:
-                    form.files.pop(field_name, None)
-
-        # Ensure delete-selected forms are not marked invalid
+        updated_forms = []
         for form in formset:
             if form.cleaned_data.get('DELETE', False):
-                form.errors.clear()
+                continue  # Exclude deleted forms
+            updated_forms.append(form)
 
-        # Recreate the formset and retain errors for invalid forms
-        recreated_formset = self.get_formset(initial=None)
-        for index, form in enumerate(recreated_formset):
-            if index < len(forms_with_errors):
-                # Replace new form with the original invalid form
-                recreated_formset.forms[index] = forms_with_errors[index]
+        recreated_formset = self.get_formset(data=None, files=None)
+        for i, form in enumerate(updated_forms):
+            recreated_formset.forms[i] = form
 
-        formset = recreated_formset
-
-        return self.render_to_response({'formset': formset})
-
-
+        return self.render_to_response({'formset': recreated_formset})
