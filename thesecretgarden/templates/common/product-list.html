@@ -1,0 +1,63 @@
+{% extends 'common/base.html' %}
+{% load static %}
+{% load pass_query %}
+
+{% block content %}
+    <div class="container flowers-section text-center">
+        <h1>{{ entity_name|upper }}</h1>
+    </div>
+    
+   <div class="container-fluid my-5 p-0">
+    <div class="row g-4">
+        {% for item in items %}
+        <div class="col-md-4">
+            <div class="card shadow-sm border-0 h-100">
+                <div class="ratio" style="aspect-ratio: 3 / 4;">
+                    <img src="{{ item.photo.url }}" class="card-img-top" alt="Item Image" style="object-fit: cover;">
+                </div>
+                <div class="card-body">
+                    <h5 class="card-title text-center fw-semibold">{{ plant.name }}</h5>
+                    {% if item.description %}
+                        <p class="card-text">{{ item.description|truncatewords:3 }}</p>
+                    {% elif item.short_description %}
+                        <p class="card-text">{{ item.short_description|truncatewords:3 }}</p>
+                    {% else %}
+                        <p class="card-text text-muted">No description available.</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+           
+        {% empty %}
+        <h1>We are sorry, there are no {{ items|lower }} in our stock at the moment!</h1>
+        {% endfor %}
+        
+    <!-- Start Pagination -->
+            <div class="pagination">
+                <span class="current">
+                    Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
+                </span>
+            
+                <span class="step-links-buttons">
+                
+                    <!-- If there are previous and next photos -->
+                    {% if page_obj.has_previous %}
+                        <a href="?{% url_replace request 'page' page_obj.previous_page_number %}">
+                            <i class="fa-solid fa-arrow-left"></i>
+                        </a>
+                    {% endif %}
+
+                    {% if page_obj.has_next %}
+                        <a href="?{% url_replace request 'page' page_obj.next_page_number %}">
+                            <i class="fa-solid fa-arrow-right"></i>
+                        </a>
+                    {% endif %}
+                
+                </span>
+            </div>
+            <!-- End Pagination -->
+    </div>
+</div>
+
+
+{% endblock %}
