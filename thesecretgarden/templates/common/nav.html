@@ -16,7 +16,7 @@
           <a class="nav-link fs-4 fs-sm-5 fs-md-6 {% if '/flowers/' in request.path %}active{% endif %}" href="{% url 'plants-list' %}">Flowers</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link fs-4 fs-sm-5 fs-md-6" href="/thesecretgarden/gifts">Gifts</a>
+          <a class="nav-link fs-4 fs-sm-5 fs-md-6 {% if '/gifts/' in request.path %}active{% endif %}" href="{% url 'gifts-list' %}">Gifts</a>
         </li>
         <li class="nav-item">
           <a class="nav-link fs-4 fs-sm-5 fs-md-6" href="/events">Events</a>
