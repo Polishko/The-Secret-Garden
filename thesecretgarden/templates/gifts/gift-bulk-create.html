@@ -1,0 +1,22 @@
+{% extends 'common/product-bulk-create.html' %}
+{% load form_tags %}
+
+{% block product-header %}
+    <h1 class="text-center mb-5">Add Gifts to Stock</h1>
+{% endblock %}
+
+{%  block product-info %}
+    {% if field.name == "brand_name" %}
+        {{ field|placeholder:"Enter brand name" }}
+    {% elif field.name == 'short_name' %}
+        {{ field|placeholder:"Enter brand name" }}
+    {% elif field.name == "price" %}
+        {{ field|placeholder:"Enter price" }}
+    {% elif field.name == "stock" %}
+        {{ field|placeholder:"Enter stock" }}
+    {% elif field.name == "short_description" %}
+        {{ field|placeholder:"Enter short description" }}
+    {% else %}
+        {{ field }}
+    {% endif %}
+{% endblock %}
