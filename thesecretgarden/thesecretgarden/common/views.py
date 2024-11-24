@@ -66,9 +66,11 @@ class BaseBulkCreateView(FormView):
             # print(f"Saved Forms: {len(saved_forms)}")
             # print(f"Forms with Errors: {len(forms_with_errors)}")
             # print(f"Has Error: {has_error}")
+        print(f"Saved Forms Count: {len(saved_forms)}")
+        print(f"Errors Found: {has_error}")
 
-        if not has_error and saved_forms:
-            return redirect(self.success_url)
+        if saved_forms or all(form.cleaned_data.get('DELETE', False) for form in formset):
+            return redirect(self.get_success_url())
 
         updated_forms = []
         for form in formset:
