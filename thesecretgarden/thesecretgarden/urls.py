@@ -25,7 +25,7 @@ urlpatterns = [
     path('', include('thesecretgarden.common.urls')),
     # path('accounts/', include('thesecretgarden.accounts.urls')),
     path('flowers/', include('thesecretgarden.flowers.urls')),
-    # path('gifts/', include('thesecretgarden.gifts.urls')),
+    path('gifts/', include('thesecretgarden.gifts.urls')),
 ]
 
 
