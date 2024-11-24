@@ -77,11 +77,18 @@
     }
 }
 
-// Flowers list
-.flowers-section {
-    background-image: url('../images/jeena-paradies-FnqH9E5C2do-unsplash.jpg');
+// Products list
+.products-section {
     background-size: cover;
     background-position: center;
     color: #fff;
     padding: 5rem 0;
+
+    &.flowers {
+        background-image: url('../images/flowers-nav-background.jpg');
+    }
+
+    &.gifts {
+        background-image: url('../images/gifts-nav-background.jpg');
+    }
 }
