@@ -1,3 +1,5 @@
+from dataclasses import field
+
 from django.contrib import admin
 
 
@@ -20,3 +22,11 @@ class PlaceHolderMixin:
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.add_placeholder()
+
+
+class HideHelpTextMixin:
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        if hasattr(self, 'fields'):
+            for field in self.fields.values():
+                field.help_text = None
