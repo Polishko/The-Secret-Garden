@@ -1,5 +1,6 @@
 from django import forms
 
+
 class ProductBaseForm(forms.ModelForm):
     class Meta:
         exclude = ('slug',)
