@@ -2,7 +2,7 @@ from django.contrib import admin
 from django.contrib.auth import get_user_model
 from django.contrib.auth.admin import UserAdmin
 
-from thesecretgarden.accounts.forms import AppUserChangeForm, AppUserForm
+from thesecretgarden.accounts.forms import AppUserChangeForm, AppUserCreateForm
 
 UserModel = get_user_model()
 
@@ -14,20 +14,22 @@ class AppUserAdmin(UserAdmin):
         'admin': {'is_staff': True, 'is_superuser': True},
     }
 
-    add_form = AppUserForm
+    add_form = AppUserCreateForm
     form = AppUserChangeForm
 
-    list_display = ('username', 'email', 'role', 'is_staff', 'is_active', 'last_login',)
+    list_display = ('username', 'email', 'role', 'is_staff', 'is_active', 'last_login',) # visualized fields
     list_filter = ('role', 'is_staff', 'is_active')
     search_fields = ('username', 'email')
     ordering = ('username',)
 
+    # visualization categories
     fieldsets = (
         (None, {'fields': ('username', 'password')}),
         ('Personal Info', {'fields': ('email',)}),
-        ('Permissions', {'fields': ('role', 'is_staff', 'is_active', 'is_superuser')}),
+        ('Permissions', {'fields': ('role', 'is_staff', 'is_active', 'is_superuser', 'groups', 'user_permissions')}),
     )
 
+    # what fields to show when creating a user
     add_fieldsets = (
         (None, {
             'classes': ('wide',),
