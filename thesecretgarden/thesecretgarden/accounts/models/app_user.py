@@ -67,9 +67,7 @@ class AppUser(AbstractBaseUser, PermissionsMixin):
     objects = AppUserManager()
 
     USERNAME_FIELD = 'username'
-
     EMAIL_FIELD = 'email'
-
     REQUIRED_FIELDS = ['email']
 
     def save(self, *args, **kwargs):
