@@ -11,7 +11,7 @@
                 {% if user.is_authenticated %}
                     <div class="dropdown me-3">
                         <a href="#" class="dropdown-toggle text-decoration-none text-dark fs-5 d-flex align-items-center py-2 px-3" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            <i class="fa-solid fa-user fs-5 me-2"></i> {{ user.username }}
+                            <i class="fa-solid fa-user fs-5 me-2"></i> {{ user.username|upper }}
                         </a>
                         <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
                             <li><a class="dropdown-item" href="{% url 'profile-details' slug=user.slug %}">My Profile</a></li>
