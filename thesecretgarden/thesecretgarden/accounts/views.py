@@ -2,9 +2,9 @@ from django.contrib.auth import get_user_model, login
 from django.contrib.auth.views import LoginView
 from django.shortcuts import redirect, get_object_or_404
 from django.urls import reverse_lazy
-from django.views.generic import CreateView, DetailView
+from django.views.generic import CreateView, DetailView, UpdateView
 
-from thesecretgarden.accounts.forms import AppUserCreateForm, AppUserLoginForm
+from thesecretgarden.accounts.forms import AppUserCreateForm, AppUserLoginForm, ProfileEditForm
 from thesecretgarden.accounts.models import Profile
 
 UserModel = get_user_model()
@@ -56,3 +56,15 @@ class ProfileDetailsView(DetailView):
 
     def get_object(self, queryset=None):
         return get_object_or_404(Profile, user__slug=self.kwargs['slug'])
+
+
+class ProfileEditView(UpdateView):
+    model = Profile
+    form_class = ProfileEditForm
+    template_name = 'accounts/profile-edit.html'
+
+    def get_object(self, queryset=None):
+        return get_object_or_404(Profile, user__slug=self.kwargs['slug'])
+
+    def get_success_url(self):
+        return reverse_lazy('profile-details', kwargs={'slug': self.object.user.slug})
