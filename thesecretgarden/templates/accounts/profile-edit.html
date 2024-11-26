@@ -1,0 +1,59 @@
+{% extends 'common/base.html' %}
+{% load static %}
+{% load custom_tags %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <h3 class="card-title mb-4">Edit Profile</h3>
+
+                    <!-- Display form errors at the top -->
+                    {% if form.non_field_errors %}
+                        <div class="alert alert-danger" role="alert">
+                            {{ form.non_field_errors }}
+                        </div>
+                    {% endif %}
+
+                    <form method="post" class="needs-validation" novalidate>
+                        {% csrf_token %}
+                        
+                        {% for field in form %}
+                            <div class="mb-3">
+                                <label for="{{ field.id_for_label }}" class="form-label">{{ field.label }}</label>
+                                {% if field.errors %}
+                                    {{ field|add_class:"form-control is-invalid" }}
+                                {% else %}
+                                    {{ field|add_class:"form-control" }}
+                                {% endif %}
+                                {% if field.help_text %}
+                                    <small class="form-text text-muted">{{ field.help_text }}</small>
+                                {% endif %}
+                                {% for error in field.errors %}
+                                    <div class="invalid-feedback">
+                                        {{ error }}
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        {% endfor %}
+                        
+                        <div class="d-flex justify-content-between">
+                            <button type="submit" class="btn btn-primary">Save Changes</button>
+                            <a href="{% url 'profile-details' slug=user.slug %}" class="btn btn-outline-secondary">Cancel</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+    <script>
+        document.getElementById('id_first_name').addEventListener('keypress', function(e) {
+            if (!/[a-zA-Z\s]/.test(e.key)) {
+            e.preventDefault();
+            }
+        });
+    </script>
+{% endblock %}
