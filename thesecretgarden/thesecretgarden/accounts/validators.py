@@ -41,7 +41,7 @@ class PhoneNumberValidator:
 @deconstructible
 class AddressValidator:
     def __init__(self, message=None):
-        self.message = message or 'Address contains invalid characters.'
+        self.message = message or 'Invalid address.'
 
     def __call__(self, value):
         if re.search(r'[<>]', value):
