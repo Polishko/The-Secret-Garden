@@ -74,7 +74,7 @@ class Product(models.Model):
 
     class Meta:
         abstract = True
-        ordering = ['created_at']
+        ordering = ['-created_at']
 
     def clean_name_field(self, field_value):
         if field_value:
