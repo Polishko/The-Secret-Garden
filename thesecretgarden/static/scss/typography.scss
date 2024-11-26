@@ -5,6 +5,7 @@
 $main-color: #FA6957;
 $highlight-color: #FE83A9;
 $subheading-color: #9E9E9E;
+$button-color: #AA377A;
 
 .main-page-title {
   color: $main-color;
@@ -34,6 +35,35 @@ $subheading-color: #9E9E9E;
 .main-page-heading {
   color: $subheading-color;
 }
+
+.user-options .register {
+    background-color: $button-color;
+    color: #fff;
+    border: none;
+    font-weight: bold;
+
+    &:hover {
+        background-color: lighten($button-color, 15%);
+        color: #fff;
+        border: none;
+        font-weight: bold;
+    }
+}
+
+.user-options .login,
+.search-bar .search-btn {
+    color: $button-color;
+    border: solid 1px $button-color;
+    font-weight: bold;
+
+    &:hover {
+        background-color: $button-color;
+        color: #fff;
+        border: solid 1px $button-color;
+        font-weight: bold;
+    }
+}
+
 
 @media (min-width: 375px) and (max-width: 699px) {
   .main-page-title {
