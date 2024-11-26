@@ -30,6 +30,10 @@
   color: #9E9E9E;
 }
 
+.bg-custom {
+  background-color: #E7B2AE !important;
+}
+
 .user-options .register {
   background-color: #AA377A;
   color: #fff;
