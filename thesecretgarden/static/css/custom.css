@@ -30,6 +30,33 @@
   color: #9E9E9E;
 }
 
+.user-options .register {
+  background-color: #AA377A;
+  color: #fff;
+  border: none;
+  font-weight: bold;
+}
+.user-options .register:hover {
+  background-color: #cc61a0;
+  color: #fff;
+  border: none;
+  font-weight: bold;
+}
+
+.user-options .login,
+.search-bar .search-btn {
+  color: #AA377A;
+  border: solid 1px #AA377A;
+  font-weight: bold;
+}
+.user-options .login:hover,
+.search-bar .search-btn:hover {
+  background-color: #AA377A;
+  color: #fff;
+  border: solid 1px #AA377A;
+  font-weight: bold;
+}
+
 @media (min-width: 375px) and (max-width: 699px) {
   .main-page-title {
     padding-left: 1em;
