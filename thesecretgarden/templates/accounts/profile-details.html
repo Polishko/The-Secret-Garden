@@ -11,8 +11,7 @@
                     <h5 class="card-title">Navigation</h5>
                     <ul class="list-group list-group-flush">
                         <li class="list-group-item">
-                            <a href="" class="text-decoration-none">Update Profile</a>
-{#                            <a href="{% url 'profile-edit' %}" class="text-decoration-none">Update Profile</a>#}
+                            <a href="{% url 'profile-edit' slug=user.slug %}" class="text-decoration-none">Update Profile</a>
                         </li>
                         <li class="list-group-item">
                             <a href="" class="text-decoration-none">Previous Orders</a>
@@ -31,8 +30,7 @@
                         <h3 class="card-title">Welcome, {{ profile.get_full_name }}!</h3>
                     {% else %}
                         <h3 class="card-title text-warning">Your profile is incomplete!</h3>
-                        <p class="text-muted">Please <a href="" class="text-decoration-none">update your profile</a> to enjoy full features.</p>
-{#                        <p class="text-muted">Please <a href="{% url 'profile-edit' %}" class="text-decoration-none">update your profile</a> to enjoy full features.</p>#}
+                        <p class="text-muted">Please <a href="{% url 'profile-edit' slug=user.slug %}" class="text-decoration-none">update your profile</a> to enjoy full features.</p>
                     {% endif %}
 
                     <h5 class="mt-4">Profile Details</h5>
