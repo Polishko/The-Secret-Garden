@@ -1,7 +1,13 @@
+from datetime import date
+
 from django import forms
 from django.contrib.auth import get_user_model
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm, AuthenticationForm
 from django.core.exceptions import ValidationError
+from django.forms import DateInput
+
+from thesecretgarden.accounts.models import Profile
+from thesecretgarden.mixins import PlaceHolderMixin
 
 UserModel = get_user_model()
 
@@ -81,3 +87,14 @@ class AppUserLoginForm(AuthenticationForm):
         }),
         label="Password",
     )
+
+class ProfileEditForm(PlaceHolderMixin, forms.ModelForm):
+    class Meta:
+        model = Profile
+        fields = ['first_name', 'last_name', 'preferred_flower_type', 'address', 'phone', 'birthday']
+        widgets = {
+            'birthday': DateInput(attrs={
+                'type': 'date',
+                'max': date.today().isoformat(),
+            }),
+        }
