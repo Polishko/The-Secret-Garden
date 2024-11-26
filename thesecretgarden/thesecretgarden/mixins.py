@@ -11,13 +11,11 @@ class StockManagementAdminMixin:
 
 class PlaceHolderMixin:
     def add_placeholder(self):
-        if hasattr(self, 'fields'):
+        if hasattr(self, 'fields') and hasattr(self, 'initial'):
             for field_name, field in self.fields.items():
-                help_text = getattr(field, 'help_text', None)
-                if help_text:
-                    field.widget.attrs.update({
-                        'placeholder': help_text,
-                    })
+                value = self.initial.get(field_name, '')
+                if not value:
+                    field.widget.attrs.setdefault('placeholder', f"Enter your {field_name.replace('_', ' ')}")
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
