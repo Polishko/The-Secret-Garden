@@ -5,7 +5,8 @@
 $main-color: #FA6957;
 $highlight-color: #FE83A9;
 $subheading-color: #9E9E9E;
-$button-color: #AA377A;
+$bg-color-dark-red: #AA377A;
+$bg-color-powder-pink: #E7B2AE;
 
 .main-page-title {
   color: $main-color;
@@ -36,14 +37,18 @@ $button-color: #AA377A;
   color: $subheading-color;
 }
 
+.bg-custom {
+  background-color: $bg-color-powder-pink !important;
+}
+
 .user-options .register {
-    background-color: $button-color;
+    background-color: $bg-color-dark-red;
     color: #fff;
     border: none;
     font-weight: bold;
 
     &:hover {
-        background-color: lighten($button-color, 15%);
+        background-color: lighten($bg-color-dark-red, 15%);
         color: #fff;
         border: none;
         font-weight: bold;
@@ -52,14 +57,14 @@ $button-color: #AA377A;
 
 .user-options .login,
 .search-bar .search-btn {
-    color: $button-color;
-    border: solid 1px $button-color;
+    color: $bg-color-dark-red;
+    border: solid 1px $bg-color-dark-red;
     font-weight: bold;
 
     &:hover {
-        background-color: $button-color;
+        background-color: $bg-color-dark-red;
         color: #fff;
-        border: solid 1px $button-color;
+        border: solid 1px $bg-color-dark-red;
         font-weight: bold;
     }
 }
