@@ -1,29 +1,68 @@
+<nav class="navbar navbar-expand-lg navbar-light flex-column container p-0">
+    <div class="navbar-brand p-3">
+        {% include 'common/hero.html' %}
+    </div>
 
-<nav class="navbar navbar-expand-lg navbar-light flex-column container p=0">
-      <div class="navbar-brand p-3">
-          {% include 'common/hero.html' %}
-      </div>
+    {% if not exclude_user_options %}
+        <!-- Search bar and user options -->
+        <div class="d-flex flex-wrap justify-content-center align-items-center my-3">
+            <!-- User Options -->
+            <div class="user-options d-flex align-items-center mb-5">
+                {% if user.is_authenticated %}
+                    <div class="dropdown me-3">
+                        <a href="#" class="dropdown-toggle text-decoration-none text-dark fs-5 d-flex align-items-center py-2 px-3" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="fa-solid fa-user fs-5 me-2"></i> {{ user.username }}
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+                            <li><a class="dropdown-item" href="">My Profile</a></li>
+    {#                        <li><a class="dropdown-item" href="{% url 'profile-details' %}">My Profile</a></li>#}
+                            <li><hr class="dropdown-divider"></li>
+                            <li>
+                                <form method="post" action="{% url 'logout' %}" class="d-inline">
+                                    {% csrf_token %}
+                                    <button type="submit" class="dropdown-item text-danger">Logout</button>
+                                </form>
+                            </li>
+                        </ul>
+                    </div>
+                {% else %}
+                    <div class="d-flex justify-content-center">
+                        <a href="{% url 'login' %}" class="login btn btn-outline-primary me-2 fs-6">Login</a>
+                        <a href="{% url 'register' %}" class="register btn btn-primary fs-6">Register</a>
+                    </div>
+                {% endif %}
+            </div>
+    
+        <!-- Centered Search Bar -->
+            <div class="search-bar col-lg-12 col-md-10 col-sm-12 mx-auto">
+                <form class="d-flex align-items-center">
+                    <input class="form-control me-2" type="search" placeholder="Search..." aria-label="Search">
+                    <button class="search-btn btn btn-outline-primary" type="submit">Search</button>
+                </form>
+            </div>
+        </div>
+    {% endif %}
 
     <!-- Toggle button for mobile views -->
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
+        <span class="navbar-toggler-icon"></span>
     </button>
 
     <!-- Navbar links -->
     <div class="collapse navbar-collapse" id="navbarNav">
-      <ul class="navbar-nav ms-auto">
-        <li class="nav-item">
-          <a class="nav-link fs-4 fs-sm-5 fs-md-6 {% if '/flowers/' in request.path %}active{% endif %}" href="{% url 'plants-list' %}">Flowers</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link fs-4 fs-sm-5 fs-md-6 {% if '/gifts/' in request.path %}active{% endif %}" href="{% url 'gifts-list' %}">Gifts</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link fs-4 fs-sm-5 fs-md-6" href="/events">Events</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link fs-4 fs-sm-5 fs-md-6" href="/about">About Us</a>
-        </li>
-      </ul>
+        <ul class="navbar-nav ms-auto">
+            <li class="nav-item">
+                <a class="nav-link fs-5 {% if '/flowers/' in request.path %}active{% endif %}" href="{% url 'plants-list' %}">Flowers</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link fs-5 {% if '/gifts/' in request.path %}active{% endif %}" href="{% url 'gifts-list' %}">Gifts</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link fs-5" href="/events">Events</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link fs-5" href="/about">About Us</a>
+            </li>
+        </ul>
     </div>
 </nav>
