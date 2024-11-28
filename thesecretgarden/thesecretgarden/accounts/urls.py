@@ -1,8 +1,8 @@
 from django.contrib.auth.views import LogoutView
 from django.urls import path, include
 
-from thesecretgarden.accounts.forms import ProfileEditForm
-from thesecretgarden.accounts.views import AppUserRegisterView, AppUserLoginView, ProfileDetailsView, ProfileEditView
+from thesecretgarden.accounts.views import AppUserRegisterView, AppUserLoginView, ProfileDetailsView, ProfileEditView, \
+    ProfileDeactivateView
 
 urlpatterns = [
     path('register/', AppUserRegisterView.as_view(), name='register'),
@@ -11,5 +11,6 @@ urlpatterns = [
     path('<slug:slug>/', include([
         path('', ProfileDetailsView.as_view(), name='profile-details'),
         path('edit/', ProfileEditView.as_view(), name='profile-edit'),
+        path('deactivate/', ProfileDeactivateView.as_view(), name='profile-deactivate'),
     ])),
 ]
