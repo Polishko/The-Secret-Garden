@@ -1,0 +1,30 @@
+
+            <div class="container mt-4 mb-3">
+                <div class="row justify-content-center">
+                    <div class="col-lg-8 col-md-10">
+                        <div class="card shadow-sm border-0">
+                            <div class="card-header text-center bg-custom text-white">
+                                <h3 class="mb-0">Recommended for You</h3>
+                            </div>
+                            <div class="card-body">
+                                <!-- Sliding container -->
+                                <div class="slider-container overflow-hidden">
+                                    <ul class="slider">
+                                        {% for plant in recommended_plants %}
+                                            <li class="slider-item">
+                                                <div class="d-flex justify-content-center align-items-center">
+                                                    <span class="me-3">{{ plant.name }}</span>
+                                                    <img src="{{ plant.photo.url }}" alt="{{ plant.name }}"
+                                                         class="img-thumbnail me-3"
+                                                         style="width: 50px; height: 50px; object-fit: cover;">
+                                                    <span class="badge bg-success">{{ plant.price|floatformat:2 }} EUR</span>
+                                                </div>
+                                            </li>
+                                        {% endfor %}
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
