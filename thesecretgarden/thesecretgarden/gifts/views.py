@@ -16,6 +16,7 @@ class GiftsListView(ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['entity_name'] = 'Gifts'
+        context['detail_url_name'] = 'gift-detail'
         return context
 
 
