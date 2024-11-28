@@ -23,7 +23,7 @@
             {% endblock %}
         </div>
     
-        {% if recommended_plants and user.is_authenticated %}
+        {% if recommended_plants and user.is_authenticated and entity_name %}
             {% include 'common/recommended-products.html' %}
         {% endif %}
     
