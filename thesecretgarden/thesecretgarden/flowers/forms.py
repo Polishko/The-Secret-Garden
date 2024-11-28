@@ -2,6 +2,7 @@ from django.core.exceptions import ValidationError
 
 from thesecretgarden.common.forms import ProductBaseForm
 from thesecretgarden.flowers.models import Plant
+from thesecretgarden.mixins import DisableFieldMixin
 
 
 class PlantBaseForm(ProductBaseForm):
@@ -25,4 +26,13 @@ class PlantBaseForm(ProductBaseForm):
 
 class PlantBulkCreateForm(PlantBaseForm):
     pass
+
+class PlantCreateForm(PlantBaseForm):
+    pass
+
+class PlantEditForm(PlantBaseForm):
+    pass
+
+class PlantDeleteForm(DisableFieldMixin, PlantBaseForm):
+    readonly_fields = ['name', 'price', 'type', 'stock', 'description', 'photo']
 
