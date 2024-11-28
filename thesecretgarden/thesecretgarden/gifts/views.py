@@ -1,3 +1,4 @@
+from django.contrib.auth.mixins import UserPassesTestMixin
 from django.urls import reverse_lazy
 from django.views.generic import ListView
 
@@ -18,10 +19,13 @@ class GiftsListView(ListView):
         return context
 
 
-class GiftBulkCreateView(BaseBulkCreateView):
+class GiftBulkCreateView(BaseBulkCreateView, UserPassesTestMixin):
     template_name = 'gifts/gift-bulk-create.html'
     form_class = GiftBulkCreateForm
     model = Gift
+
+    def test_func(self):
+        return self.request.user.is_staff or self.request.user.is_superuser
 
     def get_success_url(self):
         return reverse_lazy('gifts-list')
