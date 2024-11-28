@@ -1,5 +1,8 @@
+import logging
+
 from django.contrib.auth.base_user import AbstractBaseUser
-from django.contrib.auth.models import PermissionsMixin
+from django.contrib.auth.models import PermissionsMixin, Group
+from django.core.exceptions import ValidationError
 from django.core.validators import MinLengthValidator
 
 from django.db import models
@@ -70,6 +73,11 @@ class AppUser(AbstractBaseUser, PermissionsMixin):
     EMAIL_FIELD = 'email'
     REQUIRED_FIELDS = ['email']
 
+    def clean(self):
+        super().clean()
+        if self.role == 'admin' and not self.is_superuser:
+            raise ValidationError("Admin role requires the user to be a superuser.")
+
     def save(self, *args, **kwargs):
         if not self.slug:
             slug_base = slugify(self.username.lower())
@@ -79,6 +87,15 @@ class AppUser(AbstractBaseUser, PermissionsMixin):
                 slug = f"{slug_base}-{counter}"
                 counter += 1
             self.slug = slug
+
+        logger = logging.getLogger(__name__)
+        try:
+            if self.role == 'staff':
+                staff_group, _ = Group.objects.get_or_create(name='Staff')
+                self.groups.clear()
+                self.groups.add(staff_group)
+        except Exception as e:
+            logger.error(f"Error assigning Staff group: {e}")
 
         self.full_clean()
         super().save(*args, **kwargs)
