@@ -1,3 +1,4 @@
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.exceptions import ValidationError
 from django.forms import formset_factory
 from django.shortcuts import render, redirect
@@ -8,7 +9,7 @@ from django.views.generic import FormView
 def landing_page(request):
     return render(request, 'common/landing-page.html', {'is_landing_page': True})
 
-class BaseBulkCreateView(FormView):
+class BaseBulkCreateView(LoginRequiredMixin, FormView):
     template_name = ''
     form_class = None
     model = None
