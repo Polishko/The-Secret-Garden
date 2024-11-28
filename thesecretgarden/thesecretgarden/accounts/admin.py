@@ -44,9 +44,10 @@ class AppUserAdmin(UserAdmin):
         """
         Users other than superusers cannot edit email, username, role.
         """
+        readonly_fields = super().get_readonly_fields(request, obj)
         if not request.user.is_superuser:
-            return ['role', 'username', 'email']
-        return []
+            return readonly_fields + ('role', 'username', 'email')
+        return readonly_fields
 
     def update_permissions_based_on_role(self, obj):
         """
