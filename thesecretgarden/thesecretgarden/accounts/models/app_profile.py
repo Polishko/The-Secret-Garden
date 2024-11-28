@@ -93,6 +93,10 @@ class Profile(models.Model):
         help_text='Optional. Enter your birthdate for promotions.'
     )
 
+    is_active = models.BooleanField(
+        default=True
+    )
+
     def is_complete(self):
         return (self.first_name != 'Anonymous' and self.last_name != 'User')
 
