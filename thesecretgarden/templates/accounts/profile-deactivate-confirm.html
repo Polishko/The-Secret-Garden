@@ -4,7 +4,16 @@
 {% block content %}
     <form method="post" action="{% url 'profile-deactivate' slug=slug %}">
         {% csrf_token %}
-        <p>Are you sure you want to deactivate your profile?</p>
-        <button type="submit" class="btn btn-danger">Deactivate</button>
+        {% if profile.user.role == 'admin' %}
+            <p class="text-danger">You are deactivating an admin profile! Are you sure?</p>
+        {% elif profile.user.role == 'staff' %}
+            <p class="text-danger">You are deactivating a staff profile! Are you sure?</p>    
+        {% else %}
+            <p>Are you sure you want to deactivate your profile?</p>
+        {% endif %}
+        <div class="d-flex gap-2">
+            <button type="submit" class="btn btn-danger">Deactivate</button>
+            <a href="{% url 'profile-details' slug=slug %}" class="btn btn-secondary">Cancel</a>
+        </div>
     </form>
 {% endblock %}
