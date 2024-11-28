@@ -1,3 +1,5 @@
+{% load custom_tags %}
+
 <nav class="navbar navbar-expand-lg navbar-light flex-column container p-0">
     <div class="navbar-brand p-3">
         {% include 'common/hero.html' %}
@@ -15,6 +17,14 @@
                         </a>
                         <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
                             <li><a class="dropdown-item" href="{% url 'profile-details' slug=user.slug %}">My Profile</a></li>
+                            
+                            {% if user.is_superuser or user|in_group:'Staff' %}
+                                <li><a class="dropdown-item" href="{% url 'plant-bulk-create' %}">Bulk Add Plants</a></li>
+                                <li><a class="dropdown-item" href="{% url 'gift-bulk-create' %}">Bulk Add Gifts</a></li>
+                                <li><a class="dropdown-item" href="{% url 'plant-create-edit' %}">Add Plant</a></li>
+{#                                <li><a class="dropdown-item" href="{% url 'gift-create-edit' %}"></a>Add Gift</li>#}
+                            {% endif %}
+                            
                             <li><hr class="dropdown-divider"></li>
                             <li>
                                 <form method="post" action="{% url 'logout' %}" class="d-inline">
@@ -31,6 +41,7 @@
                     </div>
                 {% endif %}
             </div>
+
     
         <!-- Centered Search Bar -->
             <div class="search-bar col-lg-12 col-md-10 col-sm-12 mx-auto">
