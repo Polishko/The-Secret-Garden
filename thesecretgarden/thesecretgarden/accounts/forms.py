@@ -1,7 +1,7 @@
 from datetime import date
 
 from django import forms
-from django.contrib.auth import get_user_model
+from django.contrib.auth import get_user_model, authenticate
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm, AuthenticationForm
 from django.core.exceptions import ValidationError
 from django.forms import DateInput
@@ -88,6 +88,33 @@ class AppUserLoginForm(AuthenticationForm):
         label="Password",
     )
 
+    error_messages = {
+        'invalid_login': "Please enter a correct username and password. Note that both fields may be case-sensitive.",
+        'inactive': "This account is inactive. Please contact support.",
+    }
+
+    def clean(self):
+        username = self.cleaned_data.get('username')
+        password = self.cleaned_data.get('password')
+
+        try:
+            user = UserModel.objects.get(username=username)
+        except UserModel.DoesNotExist:
+            user = None
+
+        if user and not user.is_active:
+            raise forms.ValidationError(
+                self.error_messages['inactive'],
+                code='inactive',
+            )
+
+        self.user_cache = authenticate(self.request, username=username, password=password)
+        if self.user_cache is None:
+            raise self.get_invalid_login_error()
+
+        return self.cleaned_data
+
+
 class ProfileEditForm(PlaceHolderMixin, forms.ModelForm):
     class Meta:
         model = Profile
@@ -98,3 +125,4 @@ class ProfileEditForm(PlaceHolderMixin, forms.ModelForm):
                 'max': date.today().isoformat(),
             }),
         }
+
