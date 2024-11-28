@@ -3,72 +3,88 @@
 
 {% block content %}
 <div class="container mt-5">
-    <div class="row">
-        <!-- Left Navigation -->
-        <div class="col-lg-3 mb-4">
-            <div class="card shadow-sm">
-                <div class="card-body">
-                    <h5 class="card-title">Navigation</h5>
-                    <ul class="list-group list-group-flush">
-                        <li class="list-group-item">
-                            <a href="{% url 'profile-edit' slug=user.slug %}" class="text-decoration-none">Update Profile</a>
-                        </li>
-                        <li class="list-group-item">
-                            <a href="" class="text-decoration-none">Previous Orders</a>
-{#                            <a href="{% url 'orders-history' %}" class="text-decoration-none">Previous Orders</a>#}
-                        </li>
-                    </ul>
+    {% if user.profile.is_active %}
+        <div class="row">
+            <!-- Left Navigation -->
+            <div class="col-lg-3 mb-4">
+                <div class="card shadow-sm">
+                    <div class="card-body">
+                        <h5 class="card-title">Navigation</h5>
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item">
+                                <a href="{% url 'profile-edit' slug=user.slug %}" class="text-decoration-none">Update Profile</a>
+                            </li>
+                            <li class="list-group-item">
+                                <a href="" class="text-decoration-none">Previous Orders</a>
+    {#                            <a href="{% url 'orders-history' %}" class="text-decoration-none">Previous Orders</a>#}
+                            </li>
+                            <li style="list-style-type: none; ">
+                                <form method="get" action="{% url 'profile-deactivate' slug=user.slug %}" style="display: inline;">
+    <button type="submit" 
+            style="color: #dc3545; background-color: #f8d7da;
+            border:none;
+            padding: 0.2em; text-align: center">
+        Deactivate Profile <i class="fa-solid fa-bolt"></i>
+    </button>
+</form>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+    
+            <!-- Right Content -->
+            <div class="col-lg-9">
+                <div class="card shadow-sm">
+                    <div class="card-body">
+                        {% if profile.is_complete %}
+                            <h3 class="card-title">Welcome, {{ profile.get_full_name }}!</h3>
+                        {% else %}
+                            <h3 class="card-title text-warning">Your profile is incomplete!</h3>
+                            <p class="text-muted">Please <a href="{% url 'profile-edit' slug=user.slug %}" class="text-decoration-none">update your profile</a> to enjoy full features.</p>
+                        {% endif %}
+    
+                        <h5 class="mt-4">Profile Details</h5>
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item">
+                                <strong>Email:</strong> {{ profile.user.email }}
+                            </li>
+                            <li class="list-group-item">
+                                <strong>Username:</strong> {{ profile.user.username }}
+                            </li>
+                            <li class="list-group-item">
+                                <strong>First Name:</strong> {{ profile.first_name }}
+                            </li>
+                            <li class="list-group-item">
+                                <strong>Last Name:</strong> {{ profile.last_name }}
+                            </li>
+                            <li class="list-group-item">
+                                <strong>Preferred Flower Type:</strong> {{ profile.get_preferred_flower_type_display|default:"Not set" }}
+                            </li>
+                            <li class="list-group-item">
+                                <strong>Address:</strong> {{ profile.address|default:"Not provided" }}
+                            </li>
+                            <li class="list-group-item">
+                                <strong>Phone:</strong> {{ profile.phone|default:"Not provided" }}
+                            </li>
+                            <li class="list-group-item">
+                                <strong>Date of Birth:</strong> {{ profile.birthday|date:"d M Y"|default:"Not provided" }}
+                            </li>
+                            <li class="list-group-item">
+                                <strong>Profile Created At:</strong> {{ profile.created_at|date:"d M Y H:i" }}
+                            </li>
+                            <li class="list-group-item">
+                                <strong>Last Updated:</strong> {{ profile.updated_at|date:"d M Y H:i" }}
+                            </li>
+                        </ul>
+                    </div>
                 </div>
             </div>
         </div>
-
-        <!-- Right Content -->
-        <div class="col-lg-9">
-            <div class="card shadow-sm">
-                <div class="card-body">
-                    {% if profile.is_complete %}
-                        <h3 class="card-title">Welcome, {{ profile.get_full_name }}!</h3>
-                    {% else %}
-                        <h3 class="card-title text-warning">Your profile is incomplete!</h3>
-                        <p class="text-muted">Please <a href="{% url 'profile-edit' slug=user.slug %}" class="text-decoration-none">update your profile</a> to enjoy full features.</p>
-                    {% endif %}
-
-                    <h5 class="mt-4">Profile Details</h5>
-                    <ul class="list-group list-group-flush">
-                        <li class="list-group-item">
-                            <strong>Email:</strong> {{ profile.user.email }}
-                        </li>
-                        <li class="list-group-item">
-                            <strong>Username:</strong> {{ profile.user.username }}
-                        </li>
-                        <li class="list-group-item">
-                            <strong>First Name:</strong> {{ profile.first_name }}
-                        </li>
-                        <li class="list-group-item">
-                            <strong>Last Name:</strong> {{ profile.last_name }}
-                        </li>
-                        <li class="list-group-item">
-                            <strong>Preferred Flower Type:</strong> {{ profile.get_preferred_flower_type_display|default:"Not set" }}
-                        </li>
-                        <li class="list-group-item">
-                            <strong>Address:</strong> {{ profile.address|default:"Not provided" }}
-                        </li>
-                        <li class="list-group-item">
-                            <strong>Phone:</strong> {{ profile.phone|default:"Not provided" }}
-                        </li>
-                        <li class="list-group-item">
-                            <strong>Date of Birth:</strong> {{ profile.birthday|date:"d M Y"|default:"Not provided" }}
-                        </li>
-                        <li class="list-group-item">
-                            <strong>Profile Created At:</strong> {{ profile.created_at|date:"d M Y H:i" }}
-                        </li>
-                        <li class="list-group-item">
-                            <strong>Last Updated:</strong> {{ profile.updated_at|date:"d M Y H:i" }}
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-    </div>
+    {% else %}
+        <li class="list-group-item text-muted">
+            Your profile is deactivated.
+        </li>
+    {% endif %}
 </div>
 {% endblock %}
