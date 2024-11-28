@@ -8,7 +8,6 @@ from django.views.generic import CreateView, DetailView, UpdateView, View
 
 from thesecretgarden.accounts.forms import AppUserCreateForm, AppUserLoginForm, ProfileEditForm
 from thesecretgarden.accounts.models import Profile
-# from thesecretgarden.mixins import ActiveProfileRequiredMixin
 
 UserModel = get_user_model()
 
@@ -47,19 +46,25 @@ class AppUserRegisterView(CreateView):
         return redirect(self.get_success_url())
 
 
-class ProfileDetailsView(LoginRequiredMixin, DetailView):
+class ProfileDetailsView(LoginRequiredMixin, UserPassesTestMixin, DetailView):
     model = Profile
     template_name = 'accounts/profile-details.html'
+
+    def test_func(self):
+        return self.request.user.slug == self.kwargs['slug']
 
     def get_object(self, queryset=None):
         profile = get_object_or_404(Profile, user__slug=self.kwargs['slug'], is_active=True)
         return profile
 
 
-class ProfileEditView(LoginRequiredMixin, UpdateView):
+class ProfileEditView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     model = Profile
     form_class = ProfileEditForm
     template_name = 'accounts/profile-edit.html'
+
+    def test_func(self):
+        return self.request.user.slug == self.kwargs['slug']
 
     def get_object(self, queryset=None):
         profile = get_object_or_404(Profile, user__slug=self.kwargs['slug'], is_active=True)
@@ -69,7 +74,10 @@ class ProfileEditView(LoginRequiredMixin, UpdateView):
         return reverse_lazy('profile-details', kwargs={'slug': self.object.user.slug})
 
 
-class ProfileDeactivateView(LoginRequiredMixin, View):
+class ProfileDeactivateView(LoginRequiredMixin, UserPassesTestMixin, View):
+    def test_func(self):
+        return self.request.user.slug == self.kwargs['slug']
+
     def get_object(self, queryset=None):
         return get_object_or_404(Profile, user__slug=self.kwargs['slug'])
 
@@ -83,4 +91,3 @@ class ProfileDeactivateView(LoginRequiredMixin, View):
         profile.is_active = False
         profile.save()
         return HttpResponseRedirect(reverse_lazy('login'))
-
