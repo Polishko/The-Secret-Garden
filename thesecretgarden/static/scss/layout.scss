@@ -92,3 +92,19 @@
         background-image: url('../images/gifts-nav-background.jpg');
     }
 }
+
+// Images in product detail
+
+.product-image-container {
+    height: 100%; /* Ensures it fills the height of its column */
+    display: flex; /* Centers the image */
+    justify-content: center;
+    align-items: center;
+    overflow: hidden; /* Ensures no part of the image overflows */
+}
+
+.product-image-container img {
+    width: 100%; /* Adjusts width to the container */
+    height: 100%; /* Fills height */
+    object-fit: cover; /* Ensures the image covers the container proportionally */
+}

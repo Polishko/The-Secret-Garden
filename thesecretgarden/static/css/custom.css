@@ -167,6 +167,20 @@
   background-image: url("../images/gifts-nav-background.jpg");
 }
 
+.product-image-container {
+  height: 100%; /* Ensures it fills the height of its column */
+  display: flex; /* Centers the image */
+  justify-content: center;
+  align-items: center;
+  overflow: hidden; /* Ensures no part of the image overflows */
+}
+
+.product-image-container img {
+  width: 100%; /* Adjusts width to the container */
+  height: 100%; /* Fills height */
+  object-fit: cover; /* Ensures the image covers the container proportionally */
+}
+
 .slider-container {
   position: relative;
   width: 100%;
@@ -219,6 +233,42 @@
     font-size: 80%;
   }
 }
+a.btn-warning-subtle {
+  background-color: #fff3cd !important;
+  border-color: #ffeeba !important;
+  color: #856404 !important;
+}
+
+a.btn-warning-subtle:hover {
+  background-color: #ffeeba !important;
+  border-color: #ffd994 !important;
+  color: #654d03 !important;
+}
+
+.btn-danger-subtle {
+  background-color: #f8d7da !important;
+  border-color: #f5c2c7 !important;
+  color: #842029 !important;
+}
+
+.btn-danger-subtle:hover {
+  background-color: #f5c2c7 !important;
+  border-color: #f1aeb5 !important;
+  color: #6a1d25 !important;
+}
+
+.btn-primary-subtle {
+  background-color: #d1e7dd !important;
+  border-color: #badbcc !important;
+  color: #0f5132 !important;
+}
+
+.btn-primary-subtle:hover {
+  background-color: #badbcc !important;
+  border-color: #92c8b5 !important;
+  color: #0b3c26 !important;
+}
+
 /*!
  * Bootstrap  v5.3.3 (https://getbootstrap.com/)
  * Copyright 2011-2024 The Bootstrap Authors
