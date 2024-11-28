@@ -23,6 +23,7 @@ class Profile(models.Model):
         to=UserModel,
         on_delete=models.CASCADE,
         primary_key=True,
+        related_name='profile'
     )
 
     first_name = models.CharField(
@@ -94,6 +95,8 @@ class Profile(models.Model):
     )
 
     is_active = models.BooleanField(
+        null=False,
+        blank=False,
         default=True
     )
 
