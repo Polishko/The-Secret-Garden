@@ -23,7 +23,7 @@
             {% endblock %}
         </div>
 
-        {% if recommended_plants %}
+        {% if recommended_plants and user.is_authenticated %}
             <div class="container mt-4 mb-3">
                 <div class="row justify-content-center">
                     <div class="col-lg-8 col-md-10">
