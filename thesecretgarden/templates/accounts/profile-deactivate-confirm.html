@@ -1,0 +1,10 @@
+{% extends 'common/base.html' %}
+{% load static %}
+
+{% block content %}
+    <form method="post" action="{% url 'profile-deactivate' slug=slug %}">
+        {% csrf_token %}
+        <p>Are you sure you want to deactivate your profile?</p>
+        <button type="submit" class="btn btn-danger">Deactivate</button>
+    </form>
+{% endblock %}
