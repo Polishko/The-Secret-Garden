@@ -69,18 +69,18 @@ class ProfileEditView(LoginRequiredMixin, UpdateView):
         return reverse_lazy('profile-details', kwargs={'slug': self.object.user.slug})
 
 
-class ProfileDeactivateView(LoginRequiredMixin, UserPassesTestMixin, View):
-    def test_func(self):
-        return getattr(self.request.user, 'role', None) == 'customer'
-
+class ProfileDeactivateView(LoginRequiredMixin, View):
     def get_object(self, queryset=None):
         return get_object_or_404(Profile, user__slug=self.kwargs['slug'])
 
     def get(self, request, *args, **kwargs):
-        return render(request, 'accounts/profile-deactivate-confirm.html', {'slug': self.kwargs['slug']})
+        profile = self.get_object()
+        return render(request, 'accounts/profile-deactivate-confirm.html',
+                      {'slug': self.kwargs['slug'], 'profile': profile})
 
     def post(self, request, *args, **kwargs):
         profile = self.get_object()
         profile.is_active = False
         profile.save()
         return HttpResponseRedirect(reverse_lazy('login'))
+
