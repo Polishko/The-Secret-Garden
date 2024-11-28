@@ -1,0 +1,52 @@
+{% extends 'common/base.html' %}
+{% load static %}
+{% load custom_tags %}
+
+{% block content %}
+<div class="container my-5">
+    <div class="row justify-content-center">
+        <!-- Card Container -->
+        <div class="col-md-8">
+            <div class="card shadow-sm">
+                <div class="row g-0 d-flex align-items-stretch">
+                    <!-- Plant Image -->
+                    <div class="col-md-4 d-flex align-items-stretch">
+                        <div class="product-image-container w-100">
+                            <img src="{{ plant.photo.url }}" class="img-fluid rounded-start h-100" alt="{{ plant.name }}" style="object-fit: cover;"> <!-- Changed here -->
+                        </div>
+                    </div>
+                    <!-- Plant Information -->
+                    <div class="col-md-8 d-flex align-items-stretch">
+                        <div class="card-body d-flex flex-column justify-content-between">
+                            <h3 class="card-title text-primary">{{ plant.name }}</h3>
+                            <p class="card-text">
+                                <strong>Type:</strong> {{ plant.get_type_display }}<br>
+                                <strong>Price:</strong> <span class="text-success">{{ plant.price|floatformat:2 }} EUR</span><br>
+                                <strong>Stock:</strong> {{ plant.stock }}
+                            </p>
+                            <p class="card-text">{{ plant.description }}</p>
+                            <div class="d-flex justify-content-between align-items-end"> 
+                                <!-- Add to Cart Button -->
+                                <button class="btn btn-primary-subtle btn-lg fs-6">
+                                    <i class="fa-solid fa-cart-plus"></i> Add to Cart
+                                </button>
+
+                                <!-- Edit and Delete Buttons -->
+                                {% if user.is_superuser or user|in_group:'Staff' %}
+                                    <a href="{% url 'plant-create-edit' slug=plant.slug %}" class="btn btn-warning-subtle btn-lg fs-6">
+                                        <i class="fa-solid fa-edit"></i> Edit
+                                    </a>
+
+                                    <a href="{% url 'plant-delete' slug=plant.slug %}" class="btn btn-danger-subtle btn-lg fs-6">
+                                        <i class="fa-solid fa-trash"></i> Delete
+                                   </a>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
