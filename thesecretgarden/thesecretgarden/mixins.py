@@ -26,3 +26,17 @@ class HideHelpTextMixin:
         if hasattr(self, 'fields'):
             for field in self.fields.values():
                 field.help_text = None
+
+
+class DisableFieldMixin:
+    def make_fields_readonly(self):
+        readonly_fields = getattr(self, 'readonly_fields', [])
+
+        if hasattr(self, 'fields'):
+            for field_name in self.fields.keys():
+                if field_name in readonly_fields:
+                    self.fields[field_name].widget.attrs['disabled'] = True
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.make_fields_readonly()
