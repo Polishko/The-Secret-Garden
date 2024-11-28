@@ -82,3 +82,4 @@ class BaseBulkCreateView(LoginRequiredMixin, FormView):
             recreated_formset.forms[i] = form
 
         return self.render_to_response({'formset': recreated_formset})
+
