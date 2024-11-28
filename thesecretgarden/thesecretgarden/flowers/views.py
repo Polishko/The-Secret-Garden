@@ -1,3 +1,4 @@
+from django.contrib.auth.mixins import UserPassesTestMixin
 from django.urls import reverse_lazy
 from django.views.generic import ListView
 
@@ -18,10 +19,13 @@ class PlantsListView(ListView):
         return context
 
 
-class PlantBulkCreateView(BaseBulkCreateView):
+class PlantBulkCreateView(BaseBulkCreateView, UserPassesTestMixin):
     template_name = 'flowers/plant-bulk-create.html'
     form_class = PlantBulkCreateForm
     model = Plant
+
+    def test_func(self):
+        return self.request.user.is_staff or self.request.user.is_superuser
 
     def get_success_url(self):
         return reverse_lazy('plants-list')
