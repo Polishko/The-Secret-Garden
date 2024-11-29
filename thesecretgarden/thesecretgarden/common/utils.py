@@ -1,5 +1,5 @@
 """
-Callable that uploads photo to specific destination based on product model
+Callable that uploads photo to specific local destination based on product model
 """
 
 def dynamic_upload_to(instance, filename):
@@ -10,3 +10,8 @@ def dynamic_upload_to(instance, filename):
     elif isinstance(instance, Gift):
         return f'images/gifts/{filename}'
     return f'images/other/{filename}'
+
+
+
+
+
