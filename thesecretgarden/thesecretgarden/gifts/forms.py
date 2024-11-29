@@ -2,6 +2,7 @@ from django.core.exceptions import ValidationError
 
 from thesecretgarden.common.forms import ProductBaseForm
 from thesecretgarden.gifts.models import Gift
+from thesecretgarden.mixins import DisableFieldMixin
 
 
 class GiftBaseForm(ProductBaseForm):
@@ -26,3 +27,13 @@ class GiftBaseForm(ProductBaseForm):
 
 class GiftBulkCreateForm(GiftBaseForm):
     pass
+
+
+class GiftCreateForm(GiftBaseForm):
+    pass
+
+class GiftEditForm(GiftBaseForm):
+    pass
+
+class GiftDeleteForm(DisableFieldMixin, GiftBaseForm):
+    readonly_fields = ['brand_name', 'short_name', 'photo', 'price', 'stock', 'short_description']
