@@ -12,7 +12,7 @@
             <div class="user-options d-flex align-items-center mb-5">
                 {% if user.is_authenticated %}
                     <div class="dropdown me-3">
-                        <a href="#" class="dropdown-toggle text-decoration-none text-dark fs-5 d-flex align-items-center py-2 px-3" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <a href="javascript:void(0);" class="dropdown-toggle text-decoration-none text-dark fs-5 d-flex align-items-center py-2 px-3" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                             <i class="fa-solid fa-user fs-5 me-2"></i> {{ user.username|upper }}
                         </a>
                         <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
@@ -22,7 +22,7 @@
                                 <li><a class="dropdown-item" href="{% url 'plant-bulk-create' %}">Bulk Add Plants</a></li>
                                 <li><a class="dropdown-item" href="{% url 'gift-bulk-create' %}">Bulk Add Gifts</a></li>
                                 <li><a class="dropdown-item" href="{% url 'plant-create-edit' %}">Add Plant</a></li>
-{#                                <li><a class="dropdown-item" href="{% url 'gift-create-edit' %}"></a>Add Gift</li>#}
+                                <li><a class="dropdown-item" href="{% url 'gift-create-edit' %}">Add Gift</a></li>
                             {% endif %}
                             
                             <li><hr class="dropdown-divider"></li>
