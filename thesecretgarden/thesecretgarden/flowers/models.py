@@ -1,3 +1,7 @@
+import cloudinary.uploader
+from cloudinary.uploader import upload
+from django.core.files.uploadedfile import InMemoryUploadedFile
+
 from django.core.validators import MinLengthValidator, MaxLengthValidator
 from django.db import models
 from django.utils.html import strip_tags
@@ -39,6 +43,12 @@ class Plant(Product):
         if self.description:
             self.description = ' '.join(strip_tags(self.description).split())
 
+        if self.photo and isinstance(self.photo.file, InMemoryUploadedFile):
+            upload_result = upload(
+                self.photo.file,  # Pass the file to Cloudinary
+            )
+            # Assign the public_id to the CloudinaryField
+            self.photo = upload_result['public_id']
 
         self.full_clean()
         super().save(*args, **kwargs)

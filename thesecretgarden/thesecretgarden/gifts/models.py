@@ -1,4 +1,7 @@
+from cloudinary.uploader import upload
+
 from django.core.exceptions import ValidationError
+from django.core.files.uploadedfile import InMemoryUploadedFile
 from django.core.validators import MinLengthValidator
 from django.db import models
 
@@ -54,6 +57,15 @@ class Gift(Product):
 
         if is_same_gift_in_stock:
             raise ValidationError('This product is already registered in stock!')
+
+    def save(self, *args, **kwargs):
+        if self.photo and isinstance(self.photo.file, InMemoryUploadedFile):
+            upload_result = upload(
+                self.photo.file,  # Pass the file to Cloudinary
+            )
+            # Assign the public_id to the CloudinaryField
+            self.photo = upload_result['public_id']
+        super().save(*args, **kwargs)
 
     class Meta:
         verbose_name = 'Gift'
