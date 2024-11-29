@@ -167,6 +167,11 @@
   background-image: url("../images/gifts-nav-background.jpg");
 }
 
+@media (max-width: 615px) {
+  .no-products-img {
+    max-width: 80% !important;
+  }
+}
 .product-image-container {
   height: 100%; /* Ensures it fills the height of its column */
   display: flex; /* Centers the image */
