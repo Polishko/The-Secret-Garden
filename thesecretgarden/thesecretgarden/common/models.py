@@ -1,12 +1,12 @@
 from decimal import Decimal
+
+from cloudinary.models import CloudinaryField
 from django.core.exceptions import ValidationError
 
 from django.db import models
 from django.utils.text import slugify
 
-from thesecretgarden.common.validators import ProductNameValidator, ProductPriceValidator, ProductStockValidator, \
-    FileSizeValidator
-from thesecretgarden.common.utils import dynamic_upload_to
+from thesecretgarden.common.validators import ProductNameValidator, ProductPriceValidator, ProductStockValidator
 
 
 class Product(models.Model):
@@ -60,11 +60,10 @@ class Product(models.Model):
         help_text='Specify the product type.',
     )
 
-    photo = models.ImageField(
-        upload_to=dynamic_upload_to,
+    photo = CloudinaryField(
+        'image',
         null=False,
         blank=False,
-        validators=[FileSizeValidator(MAX_FILE_SIZE)],
         help_text='Upload an image for the product.',
     )
 
