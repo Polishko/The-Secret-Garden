@@ -109,14 +109,3 @@ class ProfileAdmin(admin.ModelAdmin):
         # Fallback to the default delete view if the profile is not found
         return super().delete_view(request, object_id, extra_context)
 
-    def has_add_permission(self, request):
-        """
-        Disable add permission for profiles in the admin panel.
-        """
-        return False
-
-    def has_delete_permission(self, request, obj=None):
-        """
-        Disable delete permission for profiles in the admin panel.
-        """
-        return False
