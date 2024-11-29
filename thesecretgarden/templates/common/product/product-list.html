@@ -3,8 +3,8 @@
 {% load pass_query %}
 
 {% block content %}
-        <div class="container products-section {{ entity_name|lower }} text-center">
-            <h1>{{ entity_name|upper }}</h1>
+        <div class="container products-section {{ product|lower }} text-center">
+            <h1>{{ product|upper }}</h1>
         </div>
         
    <div class="container-fluid my-5 p-0">
@@ -31,7 +31,7 @@
         </div>
            
         {% empty %}
-            <h1>We are sorry, there are no {{ entity_name|lower }} in our stock at the moment!</h1>
+            <h1>We are sorry, there are no {{ product|lower }} in our stock at the moment!</h1>
         {% endfor %}
         
     <!-- Start Pagination -->
