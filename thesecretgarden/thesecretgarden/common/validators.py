@@ -42,12 +42,13 @@ class ProductStockValidator:
             raise ValidationError(self.message)
 
 
-@deconstructible
-class FileSizeValidator:
-    def __init__(self, file_size_mb, message=None):
-        self.file_size_mb = file_size_mb
-        self.message = message or f'File size must be below or equal to {self.file_size_mb}MB.'
-
-    def __call__(self, value):
-        if value.size > self.file_size_mb * 1024 * 1024:
-            raise ValidationError(self.message)
+# Used for local storage uploading
+# @deconstructible
+# class FileSizeValidator:
+#     def __init__(self, file_size_mb, message=None):
+#         self.file_size_mb = file_size_mb
+#         self.message = message or f'File size must be below or equal to {self.file_size_mb}MB.'
+#
+#     def __call__(self, value):
+#         if value.size > self.file_size_mb * 1024 * 1024:
+#             raise ValidationError(self.message)
