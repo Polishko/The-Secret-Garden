@@ -8,7 +8,7 @@ from thesecretgarden.mixins import DisableFieldMixin
 class GiftBaseForm(ProductBaseForm):
     class Meta(ProductBaseForm.Meta):
         model = Gift
-        fields = ['brand_name', 'short_name', 'photo', 'price', 'stock', 'short_description']
+        fields = ['brand_name', 'short_name', 'type', 'photo', 'price', 'stock', 'short_description']
         error_messages = {
             'type': {
                 'invalid_choice': 'Please select a valid type!',
@@ -36,4 +36,4 @@ class GiftEditForm(GiftBaseForm):
     pass
 
 class GiftDeleteForm(DisableFieldMixin, GiftBaseForm):
-    readonly_fields = ['brand_name', 'short_name', 'photo', 'price', 'stock', 'short_description']
+    readonly_fields = ['brand_name', 'short_name', 'type', 'photo', 'price', 'stock', 'short_description']
