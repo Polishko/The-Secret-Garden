@@ -13,6 +13,7 @@ class Gift(Product):
 
     name = None
     brand_name = Product._meta.get_field('name').clone()
+    brand_name.verbose_name = "Brand Name"
 
     short_name = models.CharField(
         null=False,
