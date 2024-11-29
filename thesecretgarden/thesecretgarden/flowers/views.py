@@ -15,7 +15,7 @@ class PlantsListView(ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['entity_name'] = 'Flowers'
+        context['product'] = 'Flowers'
         context['detail_url_name'] = 'plant-detail'
         return context
 
@@ -41,6 +41,12 @@ class PlantCreateView(CreateView, UserPassesTestMixin):
     def test_func(self):
         return self.request.user.is_staff or self.request.user.is_superuser
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['product'] = 'Plant'
+        context['cancel_return_view'] = reverse_lazy('plants-list')
+        return context
+
 
 class PlantDetailView(DetailView):
     model = Plant
@@ -62,6 +68,8 @@ class PlantEditView(UpdateView, UserPassesTestMixin):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['is_edit'] = True
+        context['item'] = 'Plant'
+        context['cancel_return_view'] =  reverse_lazy('plant-detail', kwargs={'slug': self.object.slug})
         return context
 
     def get_success_url(self):
@@ -82,4 +90,6 @@ class PLantDeleteView(DeleteView, UserPassesTestMixin):
         context = super().get_context_data(**kwargs)
         context['form'] = PlantDeleteForm(instance=self.object)
         context['is_delete'] = True
+        context['product'] = 'Plant'
+        context['cancel_return_view'] = reverse_lazy('plant-detail', kwargs={'slug': self.object.slug})
         return context
