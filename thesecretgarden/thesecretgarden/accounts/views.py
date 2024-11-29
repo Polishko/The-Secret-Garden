@@ -38,7 +38,7 @@ class AppUserRegisterView(CreateView):
         if profile.is_complete():
             return reverse_lazy('plants-list')
         else:
-            return reverse_lazy('profile-edit')
+            return reverse_lazy('profile-edit', kwargs={'slug': self.object.slug})
 
     def form_valid(self, form):
         super().form_valid(form)
