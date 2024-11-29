@@ -93,6 +93,12 @@
     }
 }
 
+@media (max-width: 615px) {
+    .no-products-img {
+        max-width: 80% !important;
+    }
+}
+
 // Images in product detail
 
 .product-image-container {
