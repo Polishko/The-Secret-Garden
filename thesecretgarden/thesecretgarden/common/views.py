@@ -68,12 +68,26 @@ class BaseBulkCreateView(LoginRequiredMixin, FormView):
             # print(f"Forms with Errors: {len(forms_with_errors)}")
             # print(f"Has Error: {has_error}")
 
-        if saved_forms or all(form.cleaned_data.get('DELETE', False) for form in formset):
+        # if saved_forms or all(form.cleaned_data.get('DELETE', False) for form in formset):
+        #     return redirect(self.get_success_url())
+
+        if has_error:
+            # Check if there are any "real errors" (not marked for deletion)
+            real_errors_exist = any(
+                not form.cleaned_data.get('DELETE', False) for form in forms_with_errors
+            )
+
+            if not real_errors_exist and (
+                    saved_forms or all(form.cleaned_data.get('DELETE', False) for form in formset)):
+                # If no real errors exist, and there are saved forms or all forms are delete-marked
+                return redirect(self.get_success_url())
+
+        if not has_error and len(saved_forms) == len(formset):
             return redirect(self.get_success_url())
 
         updated_forms = []
         for form in formset:
-            if form.cleaned_data.get('DELETE', False):
+            if form.cleaned_data.get('DELETE', False) or form in saved_forms:
                 continue  # Exclude deleted forms
             updated_forms.append(form)
 
