@@ -30,9 +30,17 @@
             </a>
         </div>
            
-        {% empty %}
-            <h1>We are sorry, there are no {{ product|lower }} in our stock at the moment!</h1>
-        {% endfor %}
+       {% empty %}
+            <div class="text-center my-5 p-4 shadow-lg rounded bg-light">
+                <img src="https://res.cloudinary.com/dissmiwiq/image/upload/v1732906199/sorry_no_products_sfbvhs.jpg" 
+                     alt="No products available"
+                     class="img-fluid mb-4 no-products-img"
+                     style="max-width: 400px; border-radius: 10px;">
+                <h1 class="h4 text-muted">
+                    We are sorry, there are no {{ product|lower }} in our stock at the moment!
+                </h1>
+            </div>
+        {% endfor%}
         
     <!-- Start Pagination -->
             <div class="pagination">
