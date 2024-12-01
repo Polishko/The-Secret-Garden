@@ -1,0 +1,10 @@
+
+<a href="{% url 'plant-create-edit' slug=plant.slug %}"
+   class="btn btn-warning-subtle btn-lg fs-6">
+    <i class="fa-solid fa-edit"></i> Edit
+</a>
+
+<a href="{% url 'plant-delete' slug=plant.slug %}"
+   class="btn btn-danger-subtle btn-lg fs-6">
+    <i class="fa-solid fa-trash"></i> Delete
+</a>
