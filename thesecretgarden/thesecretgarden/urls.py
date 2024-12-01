@@ -26,6 +26,7 @@ urlpatterns = [
     path('accounts/', include('thesecretgarden.accounts.urls')),
     path('flowers/', include('thesecretgarden.flowers.urls')),
     path('gifts/', include('thesecretgarden.gifts.urls')),
+    path('orders/', include('thesecretgarden.orders.urls')),
 ]
 
 
