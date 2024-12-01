@@ -34,11 +34,19 @@
                             <p class="card-text">{{ gift.short_description }}</p>
                             <div class="d-flex justify-content-center align-items-end gap-3">
                                 <!-- Add to Cart Button -->
-                                {% if user|in_group:'Customer'%}
-                                <button class="btn btn-primary-subtle btn-lg fs-6"
-                                        {% if gift.stock <= 0 %}disabled{% endif %}>
-                                    <i class="fa-solid fa-cart-plus"></i> Add to Cart
-                                </button>
+                                {% if user|in_group:'Customer' %}
+                                    <form action="{% url 'add-to-cart' 'gift' gift.id %}" method="post">
+                                        {% csrf_token %}
+                                        <div class="input-group mb-3">
+                                            <input type="number" name="quantity" class="form-control" placeholder="Quantity" 
+                                                   min="1" max="{{ gift.get_available_stock }}" value="1" 
+                                                   {% if gift.get_available_stock <= 0 %}disabled{% endif %}>
+                                            <button class="btn btn-primary-subtle btn-lg fs-6" type="submit" 
+                                                    {% if gift.get_available_stock <= 0 %}disabled{% endif %}>
+                                                <i class="fa-solid fa-cart-plus"></i> Add to Cart
+                                            </button>
+                                        </div>
+                                    </form>
                                 {% endif %}
 
                                 <!-- Edit and Delete Buttons -->
