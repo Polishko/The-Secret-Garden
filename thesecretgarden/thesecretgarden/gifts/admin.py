@@ -1,4 +1,7 @@
-from django.contrib import admin
+from django.contrib import admin, messages
+from django.db import IntegrityError
+from django.shortcuts import redirect
+
 
 from thesecretgarden.gifts.models import Gift
 from thesecretgarden.mixins import StockManagementAdminMixin
@@ -19,3 +22,10 @@ class GiftAdmin(admin.ModelAdmin, StockManagementAdminMixin):
     )
 
     actions = ['mark_as_out_of_stock']
+
+    def delete_model(self, request, obj):
+        try:
+            obj.delete()
+        except IntegrityError:
+            messages.error(request, "This gift cannot be deleted as it is associated with an order.")
+            return redirect('admin:gifts_gift_changelist')  # Redirect to the Gift list in admin
