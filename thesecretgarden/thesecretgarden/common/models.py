@@ -1,12 +1,14 @@
 from decimal import Decimal
 
 from cloudinary.models import CloudinaryField
+from django.contrib.contenttypes.models import ContentType
 from django.core.exceptions import ValidationError
 
 from django.db import models
 from django.utils.text import slugify
 
 from thesecretgarden.common.validators import ProductNameValidator, ProductPriceValidator, ProductStockValidator
+from thesecretgarden.orders.models import OrderItem
 
 
 class Product(models.Model):
@@ -74,6 +76,23 @@ class Product(models.Model):
     class Meta:
         abstract = True
         ordering = ['-created_at']
+
+    def get_available_stock(self):
+        """
+            Provides stock snapshot based on currently placed orders and stock status
+        """
+
+        product_content_type = ContentType.objects.get_for_model(self)
+
+        reserved_stock = sum(
+            item.quantity for item in OrderItem.objects.filter(
+                content_type=product_content_type,
+                object_id=self.pk,
+                order__status='pending'
+            )
+        )
+
+        return self.stock - reserved_stock
 
     def clean_name_field(self, field_value):
         if field_value:
