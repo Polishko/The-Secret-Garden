@@ -88,15 +88,6 @@ class AppUser(AbstractBaseUser, PermissionsMixin):
                 counter += 1
             self.slug = slug
 
-        logger = logging.getLogger(__name__)
-        try:
-            if self.role == 'staff':
-                staff_group, _ = Group.objects.get_or_create(name='Staff')
-                self.groups.clear()
-                self.groups.add(staff_group)
-        except Exception as e:
-            logger.error(f"Error assigning Staff group: {e}")
-
         self.full_clean()
         super().save(*args, **kwargs)
 
