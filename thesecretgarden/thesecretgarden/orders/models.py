@@ -15,9 +15,9 @@ class Order(models.Model):
     """
 
     STATUS_CHOICES = [
-        ('Pending', 'pending'),
-        ('Completed', 'completed'),
-        ('Canceled', 'canceled'),
+        ('pending', 'Pending'),
+        ('completed', 'Completed'),
+        ('canceled', 'Canceled'),
     ]
 
     user = models.ForeignKey(
@@ -51,6 +51,9 @@ class Order(models.Model):
         return f"Order #{self.id} by {self.user.username}"
 
     def calculate_total(self):
+        """
+            Calculates and updates the total price for the order.
+        """
         self.total_price = sum(
             item.total_price for item in self.order_items.all()
         )
@@ -65,7 +68,7 @@ class Order(models.Model):
 
     def complete_order(self):
         """
-           Completes the order and deducts stock for all items in a single transaction.
+           Completes the order and deducts stock for all items atomically.
         """
 
         with transaction.atomic():
@@ -87,14 +90,18 @@ class OrderItem(models.Model):
         It keeps track of the quantity and price for each item.
     """
 
-    content_type = models.ForeignKey( # track model type
+    content_type = models.ForeignKey(
         ContentType,
         on_delete=models.PROTECT,
+        verbose_name='Content Type',
+        help_text="The type of the product (e.g., plant, gift).",
     )
 
-    object_id = models.PositiveIntegerField() # track PK of referenced obj.
+    object_id = models.PositiveIntegerField(
+        help_text="The ID of the product being referenced.",
+    )
 
-    product = GenericForeignKey( # product refers to any obj.
+    product = GenericForeignKey(
         'content_type',
         'object_id')
 
@@ -134,23 +141,62 @@ class OrderItem(models.Model):
         help_text='The total price for this item.',
     )
 
+    # def clean(self):
+    #     """
+    #         Validates that the requested quantity does not exceed available stock.
+    #     """
+    #     super().clean()
+    #
+    #     if not self.product:
+    #         raise ValidationError('The referenced product does not exist.')
+    #
+    #     if hasattr(self.product, 'get_available_stock'):
+    #         # Get available stock from product
+    #         available_stock = self.product.get_available_stock()
+    #
+    #         # Adjust available stock only for existing items
+    #         if self.pk and self.quantity > 0:
+    #             available_stock += self.quantity  # Add back the current item's reserved quantity
+    #
+    #         print(f"Quantity being checked: {self.quantity}")
+    #         print(f"Adjusted available stock: {available_stock}")
+    #
+    #         if self.quantity > available_stock:
+    #             raise ValidationError({
+    #                 'quantity': f"Requested quantity exceeds available stock ({available_stock} items available)."
+    #             })
+
     def clean(self):
+        """
+        Validates that the requested quantity does not exceed available stock.
+        """
         super().clean()
+
         if not self.product:
             raise ValidationError('The referenced product does not exist.')
 
         if hasattr(self.product, 'get_available_stock'):
-            available_stock = self.product.get_available_stock()
+            # Exclude the current item from the available stock calculation
+            available_stock = self.product.get_available_stock(exclude_order_item=self)
+
+            print(f"Quantity being checked: {self.quantity}")
+            print(f"Adjusted available stock: {available_stock}")
+
             if self.quantity > available_stock:
                 raise ValidationError({
                     'quantity': f"Requested quantity exceeds available stock ({available_stock} items available)."
                 })
 
     def save(self, *args, **kwargs):
-        self.full_clean()
+        """
+            Calculates total price during save.
+        """
         if not self.pk:  # Get price during creation only
             self.price_per_unit = self.product.price
             self.current_stock = self.product.stock
 
         self.total_price = self.quantity * self.price_per_unit
+
+        self.full_clean()
+
         super().save(*args, **kwargs)
