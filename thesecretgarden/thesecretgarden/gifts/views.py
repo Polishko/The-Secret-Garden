@@ -101,5 +101,5 @@ class GiftDeleteView(DeleteView, UserPassesTestMixin):
         try:
             return super().delete(request, *args, **kwargs)
         except IntegrityError:
-            messages.error(request, 'This plant cannot be deleted as it is associated with an order.')
-            return redirect(reverse_lazy('plant-detail', kwargs={'slug': self.object.slug}))
+            messages.error(request, 'This gift cannot be deleted as it is associated with an order.')
+            return redirect(reverse_lazy('gift-detail', kwargs={'slug': self.object.slug}))
