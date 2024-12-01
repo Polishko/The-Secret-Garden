@@ -68,6 +68,7 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
                 'thesecretgarden.flowers.context_processors.recommended_products',
+                'thesecretgarden.orders.context_processors.cart_item_count',
             ],
         },
     },
