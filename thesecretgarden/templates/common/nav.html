@@ -73,6 +73,17 @@
             <li class="nav-item">
                 <a class="nav-link fs-5" href="/about">About Us</a>
             </li>
+            <!-- Shopping Card Info -->
+            {% if user.is_authenticated and user|in_group:'Customer' %}
+                <li class="nav-item">
+{#                    <a class="nav-link fs-5" href="{% url 'cart-view' %}">#}
+                      <a class="nav-link fs-5" href="">
+                        <i class="fa-solid fa-cart-shopping"></i> 
+                        Cart 
+                        <span class="badge bg-primary">{{ cart_item_count }}</span>
+                    </a>
+                </li>
+            {% endif %}
         </ul>
     </div>
 </nav>
