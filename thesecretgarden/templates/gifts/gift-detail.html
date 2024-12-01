@@ -4,6 +4,7 @@
 
 {% block content %}
 <div class="container my-5">
+    {% include 'common/error-messages.html' %}
     <div class="row justify-content-center">
         <!-- Card Container -->
         <div class="col-md-8">
@@ -35,15 +36,7 @@
 
                                 <!-- Edit and Delete Buttons -->
                                 {% if user.is_superuser or user|in_group:'Staff' %}
-                                    <a href="{% url 'gift-create-edit' slug=gift.slug %}"
-                                       class="btn btn-warning-subtle btn-lg fs-6">
-                                        <i class="fa-solid fa-edit"></i> Edit
-                                    </a>
-
-                                    <a href="{% url 'gift-delete' slug=gift.slug %}"
-                                       class="btn btn-danger-subtle btn-lg fs-6">
-                                        <i class="fa-solid fa-trash"></i> Delete
-                                   </a>
+                                    {% include 'common/edit-delete-product-buttons.html' %}
                                 {% endif %}
                             </div>
                         </div>
