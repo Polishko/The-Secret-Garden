@@ -25,18 +25,33 @@
                                 <strong>Type:</strong> {{ gift.get_type_display }}<br>
                                 <strong>Price:</strong>
                                     <span class="text-success">{{ gift.price|floatformat:2 }} EUR</span><br>
-                                <strong>Stock:</strong> {{ gift.stock }}
+                                {% if gift.get_available_stock > 0 %}
+                                    <strong>Stock:</strong> {{ gift.get_available_stock }}
+                                {% else %}
+                                    <em>Out of stock!</em>
+                                {% endif %}
                             </p>
                             <p class="card-text">{{ gift.short_description }}</p>
-                            <div class="d-flex justify-content-between align-items-end">
+                            <div class="d-flex justify-content-center align-items-end gap-3">
                                 <!-- Add to Cart Button -->
-                                <button class="btn btn-primary-subtle btn-lg fs-6">
+                                {% if user|in_group:'Customer'%}
+                                <button class="btn btn-primary-subtle btn-lg fs-6"
+                                        {% if gift.stock <= 0 %}disabled{% endif %}>
                                     <i class="fa-solid fa-cart-plus"></i> Add to Cart
                                 </button>
+                                {% endif %}
 
                                 <!-- Edit and Delete Buttons -->
                                 {% if user.is_superuser or user|in_group:'Staff' %}
-                                    {% include 'common/edit-delete-product-buttons.html' %}
+                                    <a href="{% url 'gift-create-edit' slug=gift.slug %}"
+                                       class="btn btn-warning-subtle btn-lg fs-6">
+                                        <i class="fa-solid fa-edit"></i> Edit
+                                    </a>
+                                    
+                                    <a href="{% url 'gift-delete' slug=gift.slug %}"
+                                       class="btn btn-danger-subtle btn-lg fs-6">
+                                        <i class="fa-solid fa-trash"></i> Delete
+                                    </a>
                                 {% endif %}
                             </div>
                         </div>

@@ -25,19 +25,34 @@
                                 <strong>Type:</strong> {{ plant.get_type_display }}<br>
                                 <strong>Price:</strong>
                                     <span class="text-success">{{ plant.price|floatformat:2 }} EUR</span><br>
-                                <strong>Stock:</strong> {{ plant.stock }}
+                                {% if plant.get_available_stock > 0 %}
+                                    <strong>Stock:</strong> {{ plant.get_available_stock }}
+                                {% else %}
+                                    <em>Out of stock!</em>
+                                {% endif %}
                             </p>
                             <p class="card-text">{{ plant.description }}</p>
-                            <div class="d-flex justify-content-between align-items-end">
+                            <div class="d-flex justify-content-center align-items-end gap-3">
                                 <!-- Add to Cart Button -->
+                                {% if user|in_group:'Customer'%}
                                 <button class="btn btn-primary-subtle btn-lg fs-6"
-                                        {% if plant.stock <= 0 %}disabled{% endif %}>
+                                        {% if gift.stock <= 0 %}disabled{% endif %}>
                                     <i class="fa-solid fa-cart-plus"></i> Add to Cart
                                 </button>
+                                {% endif %}
+
 
                                 <!-- Edit and Delete Buttons -->
                                 {% if user.is_superuser or user|in_group:'Staff' %}
-                                    {% include 'common/edit-delete-product-buttons.html' %}
+                                    <a href="{% url 'plant-create-edit' slug=plant.slug %}"
+                                       class="btn btn-warning-subtle btn-lg fs-6">
+                                        <i class="fa-solid fa-edit"></i> Edit
+                                    </a>
+                                    
+                                    <a href="{% url 'plant-delete' slug=plant.slug %}"
+                                       class="btn btn-danger-subtle btn-lg fs-6">
+                                        <i class="fa-solid fa-trash"></i> Delete
+                                    </a>
                                 {% endif %}
                             </div>
                         </div>
