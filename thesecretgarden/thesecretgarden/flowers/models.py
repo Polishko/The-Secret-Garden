@@ -1,5 +1,5 @@
-import cloudinary.uploader
 from cloudinary.uploader import upload
+
 from django.core.files.uploadedfile import InMemoryUploadedFile
 
 from django.core.validators import MinLengthValidator, MaxLengthValidator
