@@ -1,4 +1,8 @@
 from django.contrib.auth.mixins import UserPassesTestMixin
+from django.contrib.messages.context_processors import messages
+from django.contrib import messages
+from django.db import IntegrityError
+from django.shortcuts import redirect
 from django.urls import reverse_lazy
 from django.views.generic import ListView, CreateView, UpdateView, DetailView, DeleteView
 
@@ -93,3 +97,10 @@ class PLantDeleteView(DeleteView, UserPassesTestMixin):
         context['product'] = 'Plant'
         context['cancel_return_view'] = reverse_lazy('plant-detail', kwargs={'slug': self.object.slug})
         return context
+
+    def delete(self, request, *args, **kwargs):
+        try:
+            return super().delete(request, *args, **kwargs)
+        except IntegrityError:
+            messages.error(request, 'This plant cannot be deleted as it is associated with an order.')
+            return redirect(reverse_lazy('plant-detail', kwargs={'slug': self.object.slug}))
