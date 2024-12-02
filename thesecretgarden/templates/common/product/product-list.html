@@ -42,30 +42,45 @@
             </div>
         {% endfor%}
         
-    <!-- Start Pagination -->
-            <div class="pagination">
-                <span class="current">
-                    Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
-                </span>
-            
-                <span class="step-links-buttons">
-                
-                    <!-- If there are previous and next photos -->
-                    {% if page_obj.has_previous %}
-                        <a href="?{% url_replace request 'page' page_obj.previous_page_number %}">
-                            <i class="fa-solid fa-arrow-left"></i>
-                        </a>
-                    {% endif %}
+        <!-- Start Pagination -->
+        <div class="pagination d-flex justify-content-center align-items-center my-4">
+            <!-- Pagination Info -->
+            <span class="current me-3">
+                Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
+            </span>
+        
+            <span class="step-links-buttons">
+                <!-- Link to First Page -->
+                {% if page_obj.number > 1 %}
+                    <a href="?{% url_replace request 'page' 1 %}" class="btn btn-sm btn-outline-success me-1">
+                        <i class="fa-solid fa-angles-left"></i> First
+                    </a>
+                {% endif %}
+        
+                <!-- Link to Previous Page -->
+                {% if page_obj.has_previous %}
+                    <a href="?{% url_replace request 'page' page_obj.previous_page_number %}" class="btn btn-sm btn-outline-success me-1">
+                        <i class="fa-solid fa-arrow-left"></i> Previous
+                    </a>
+                {% endif %}
+        
+                <!-- Link to Next Page -->
+                {% if page_obj.has_next %}
+                    <a href="?{% url_replace request 'page' page_obj.next_page_number %}" class="btn btn-sm btn-outline-danger me-1">
+                        Next <i class="fa-solid fa-arrow-right"></i>
+                    </a>
+                {% endif %}
+        
+                <!-- Link to Last Page -->
+                {% if page_obj.number < page_obj.paginator.num_pages %}
+                    <a href="?{% url_replace request 'page' page_obj.paginator.num_pages %}" class="btn btn-sm btn-outline-danger">
+                        Last <i class="fa-solid fa-angles-right"></i>
+                    </a>
+                {% endif %}
+            </span>
+        </div>
+        <!-- End Pagination -->
 
-                    {% if page_obj.has_next %}
-                        <a href="?{% url_replace request 'page' page_obj.next_page_number %}">
-                            <i class="fa-solid fa-arrow-right"></i>
-                        </a>
-                    {% endif %}
-                
-                </span>
-            </div>
-            <!-- End Pagination -->
     </div>
 </div>
 
