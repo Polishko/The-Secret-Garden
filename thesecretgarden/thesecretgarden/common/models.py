@@ -78,20 +78,18 @@ class Product(models.Model):
         ordering = ['-created_at']
 
 
-    def get_available_stock(self, exclude_order_item=None):
+    def get_available_stock(self):
         """
         Provides stock snapshot based on currently placed orders and stock status.
-        Optionally exclude a specific OrderItem from the calculation.
         """
         product_content_type = ContentType.objects.get_for_model(self)
 
-        # Filter OrderItems for pending orders
         reserved_stock = sum(
             item.quantity for item in OrderItem.objects.filter(
                 content_type=product_content_type,
                 object_id=self.pk,
                 order__status='pending'
-            ).exclude(pk=exclude_order_item.pk if exclude_order_item else None)
+            )
         )
 
         return self.stock - reserved_stock
