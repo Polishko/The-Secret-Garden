@@ -15,6 +15,17 @@
     {% endblock %}
 </head>
 <body>
+<!-- Message Consumer -->
+    {% if messages %}
+        <div id="messages-container">
+            {% for message in messages %}
+                <div class="alert {% if message.tags %}alert-{{ message.tags }}{% else %}alert-info{% endif %}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+    
     <div class="{{ is_landing_page|default:False|yesno:'container-fluid,container p-lg-5 mt-5 page-wrapper' }}">
         
         <div class="{{ is_landing_page|default:False|yesno:'container-fluid p-0,container p-0' }}">
