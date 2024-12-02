@@ -1,9 +1,12 @@
+from lib2to3.fixes.fix_input import context
+
 from django.contrib.messages.context_processors import messages
 from django.contrib import messages
 from django.db import IntegrityError
 from django.shortcuts import redirect
 from django.urls import reverse_lazy
 from django.views.generic import ListView, CreateView, UpdateView, DetailView, DeleteView
+from psycopg2 import connect
 
 from thesecretgarden.common.views import BaseBulkCreateView
 from thesecretgarden.flowers.forms import PlantBulkCreateForm, PlantCreateForm, PlantEditForm, PlantDeleteForm
@@ -47,6 +50,7 @@ class PlantCreateView(CreateView, CustomPermissionMixin):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+
         context['product'] = 'Plant'
         context['cancel_return_view'] = reverse_lazy('plants-list')
         return context
@@ -57,6 +61,13 @@ class PlantDetailView(DetailView):
     template_name = 'flowers/plant-detail.html'
     slug_field = 'slug'
     slug_url_kwarg = 'slug'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        is_reserved = self.object.get_available_stock != self.object.stock
+        context['is_reserved'] = is_reserved
+        return context
 
 
 class PlantEditView(UpdateView, CustomPermissionMixin):
