@@ -69,7 +69,7 @@ class StockManagementAdminMixin:
                 item_name = getattr(obj, 'brand_name', getattr(obj, 'name', 'this item'))
                 self.message_user(
                     request,
-                    f"Reminder: {item_name} cannot be deleted as it is reserved.",
+                    f'Reminder: {item_name} cannot be deleted as it is reserved. Remove order item first',
                     messages.ERROR
                 )
                 return False
