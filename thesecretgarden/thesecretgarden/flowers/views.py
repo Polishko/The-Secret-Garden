@@ -1,4 +1,3 @@
-from django.contrib.auth.mixins import UserPassesTestMixin
 from django.contrib.messages.context_processors import messages
 from django.contrib import messages
 from django.db import IntegrityError
@@ -72,8 +71,13 @@ class PlantEditView(UpdateView, CustomPermissionMixin):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        available_stock = self.object.get_available_stock()
+        reserved_stock = self.object.stock - available_stock
+
         context['is_edit'] = True
         context['item'] = 'Plant'
+        context['available_stock'] = available_stock
+        context['reserved_stock'] = reserved_stock
         context['cancel_return_view'] =  reverse_lazy('plant-detail', kwargs={'slug': self.object.slug})
         return context
 
