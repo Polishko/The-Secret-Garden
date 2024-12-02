@@ -48,20 +48,26 @@
                                         </div>
                                     </form>
                                 {% endif %}
-                                
-
-
+                            
                                 <!-- Edit and Delete Buttons -->
                                 {% if user.is_superuser or user|in_group:'Staff' %}
-                                    <a href="{% url 'plant-create-edit' slug=plant.slug %}"
-                                       class="btn btn-warning-subtle btn-lg fs-6">
-                                        <i class="fa-solid fa-edit"></i> Edit
-                                    </a>
-                                    
-                                    <a href="{% url 'plant-delete' slug=plant.slug %}"
-                                       class="btn btn-danger-subtle btn-lg fs-6">
-                                        <i class="fa-solid fa-trash"></i> Delete
-                                    </a>
+                                    <div class="d-flex flex-wrap justify-content-center align-items-start gap-3">
+                                        {% if is_reserved %}
+                                            <p class="text-center text-danger mt-2 w-100">
+                                                <i class="fa-solid fa-exclamation-circle"></i>
+                                                This product is reserved and cannot be deleted.
+                                            </p>
+                                        {% endif %}
+                                        
+                                        <a href="{% url 'plant-create-edit' slug=plant.slug %}" class="btn btn-warning-subtle btn-lg fs-6">
+                                            <i class="fa-solid fa-edit"></i> Edit
+                                        </a>
+                                        
+                                        <a href="{% url 'plant-delete' slug=plant.slug %}" 
+                                           class="btn btn-danger-subtle btn-lg fs-6 {% if is_reserved %}disabled{% endif %}">
+                                           <i class="fa-solid fa-trash"></i> Delete
+                                        </a>
+                                    </div>
                                 {% endif %}
                             </div>
                         </div>
