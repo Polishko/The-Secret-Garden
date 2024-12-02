@@ -38,10 +38,10 @@
                                     <form action="{% url 'add-to-cart' 'plant' plant.id %}" method="post">
                                         {% csrf_token %}
                                         <div class="input-group mb-3">
-                                            <input type="number" name="quantity" class="form-control" placeholder="Quantity" 
-                                                   min="1" max="{{ plant.get_available_stock }}" value="1" 
+                                            <input type="number" name="quantity" class="form-control" placeholder="Quantity"
+                                                   min="1" max="{{ plant.get_available_stock }}" value="1"
                                                    {% if plant.get_available_stock <= 0 %}disabled{% endif %}>
-                                            <button class="btn btn-primary-subtle btn-lg fs-6" type="submit" 
+                                            <button class="btn btn-primary-subtle btn-lg fs-6" type="submit"
                                                     {% if plant.get_available_stock <= 0 %}disabled{% endif %}>
                                                 <i class="fa-solid fa-cart-plus"></i> Add to Cart
                                             </button>
