@@ -32,6 +32,13 @@ class PlantBulkCreateView(BaseBulkCreateView, UserPassesTestMixin):
     def test_func(self):
         return self.request.user.is_staff or self.request.user.is_superuser
 
+    def handle_no_permission(self):
+        """
+        Customizes the behavior for unauthorized access.
+        """
+        messages.error(self.request, 'You do not have permission to perform this action.')
+        return redirect('plants-list')
+
     def get_success_url(self):
         return reverse_lazy('plants-list')
 
@@ -44,6 +51,13 @@ class PlantCreateView(CreateView, UserPassesTestMixin):
 
     def test_func(self):
         return self.request.user.is_staff or self.request.user.is_superuser
+
+    def handle_no_permission(self):
+        """
+        Customizes the behavior for unauthorized access.
+        """
+        messages.error(self.request, 'You do not have permission to perform this action.')
+        return redirect('plants-list')
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -69,6 +83,13 @@ class PlantEditView(UpdateView, UserPassesTestMixin):
     def test_func(self):
         return self.request.user.is_staff or self.request.user.is_superuser
 
+    def handle_no_permission(self):
+        """
+        Customizes the behavior for unauthorized access.
+        """
+        messages.error(self.request, 'You do not have permission to perform this action.')
+        return redirect('plants-list')
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['is_edit'] = True
@@ -89,6 +110,13 @@ class PLantDeleteView(DeleteView, UserPassesTestMixin):
 
     def test_func(self):
         return self.request.user.is_staff or self.request.user.is_superuser
+
+    def handle_no_permission(self):
+        """
+        Customizes the behavior for unauthorized access.
+        """
+        messages.error(self.request, 'You do not have permission to perform this action.')
+        return redirect('plants-list')
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)

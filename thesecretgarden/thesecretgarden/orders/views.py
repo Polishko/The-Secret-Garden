@@ -1,7 +1,8 @@
 from django.contrib import messages
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.contrib.contenttypes.models import ContentType
 from django.core.exceptions import ValidationError
-from django.shortcuts import redirect, get_object_or_404
+from django.shortcuts import redirect
 from django.views.generic import View
 
 from thesecretgarden.flowers.models import Plant
@@ -9,7 +10,7 @@ from thesecretgarden.gifts.models import Gift
 from thesecretgarden.orders.models import Order, OrderItem
 
 
-class AddToCardView(View):
+class AddToCardView(LoginRequiredMixin, UserPassesTestMixin, View):
     def post(self, request, *args, **kwargs):
         """
         Handles adding items to the cart (pending orders).
@@ -31,14 +32,26 @@ class AddToCardView(View):
             defaults={'quantity': 0, 'price_per_unit': product.price}
         )
 
-        # Update the quantity
         order_item.quantity += quantity
 
         try:
-            order_item.save()  # Let the model's clean handle validation
+            order_item.save()
         except ValidationError as e:
             messages.error(request, e.message_dict.get('quantity', 'An error occurred.'))
             return redirect(request.META.get('HTTP_REFERER', 'plants-list'))
 
-        messages.success(request, f"Added {quantity} units to your cart.")
+        messages.success(request, f'Added {quantity} units to your cart.')
         return redirect(request.META.get('HTTP_REFERER', 'plants-list'))
+
+    def test_func(self):
+        """
+        Ensures the user is in the 'Customer' group.
+        """
+        return self.request.user.groups.filter(name='Customer').exists()
+
+    def handle_no_permission(self):
+        """
+        Customizes the behavior for unauthorized access.
+        """
+        messages.error(self.request, 'You do not have permission to perform this action.')
+        return redirect('plants-list')
