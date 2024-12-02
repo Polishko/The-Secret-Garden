@@ -46,6 +46,7 @@ class Order(models.Model):
 
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    is_active = models.BooleanField(default=True)
 
     def __str__(self):
         return f"Order #{self.id} by {self.user.username}"
@@ -83,6 +84,14 @@ class Order(models.Model):
                 product.save()
             self.status = 'completed'
             self.save()
+
+    def save(self, *args, **kwargs):
+        if not self.order_items.exists():
+            self.is_active = False
+        else:
+            self.is_active = True
+
+        super().save(*args, **kwargs)
 
 class OrderItem(models.Model):
     """
@@ -140,6 +149,9 @@ class OrderItem(models.Model):
         verbose_name='Total Price',
         help_text='The total price for this item.',
     )
+
+    class Meta:
+        ordering = ['id']
 
     def save(self, *args, **kwargs):
         """
