@@ -1,4 +1,6 @@
-from django.contrib import admin
+from django.contrib import admin, messages
+from django.contrib.auth.mixins import UserPassesTestMixin
+from django.shortcuts import redirect
 
 
 class StockManagementAdminMixin:
@@ -40,3 +42,15 @@ class DisableFieldMixin:
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.make_fields_readonly()
+
+
+class CustomPermissionMixin(UserPassesTestMixin):
+    permission_denied_message = "You do not have permission to access this page."
+    redirect_url = "plant-list"
+
+    def handle_no_permission(self):
+        messages.error(self.request, self.permission_denied_message)
+        return redirect(self.redirect_url)
+
+    def test_func(self):
+        raise NotImplementedError("You must define the `test_func` method.")
