@@ -3,12 +3,6 @@ from django.contrib.auth.mixins import UserPassesTestMixin
 from django.shortcuts import redirect
 
 
-class StockManagementAdminMixin:
-    @admin.action(description='Mark as out of stock')
-    def mark_as_out_of_stock(model, request, queryset):
-        queryset.update(stock=0)
-
-
 class PlaceHolderMixin:
     def add_placeholder(self):
         if hasattr(self, 'fields') and hasattr(self, 'initial'):
@@ -44,13 +38,59 @@ class DisableFieldMixin:
         self.make_fields_readonly()
 
 
+class StockManagementAdminMixin:
+    @admin.action(description='Mark as out of stock')
+    def mark_as_out_of_stock(self, request, queryset):
+        """
+        Marks selected items as out of stock, only if none are reserved.
+        """
+        for item in queryset:
+            if item.stock != item.get_available_stock():
+                self.message_user(
+                    request,
+                    f'Cannot mark items as out of stock, there are reserved items.',
+                    messages.ERROR
+                )
+                return
+
+        queryset.update(stock=0)
+        self.message_user(
+            request,
+            f'{queryset.count()} items successfully marked as out of stock.',
+            messages.SUCCESS
+        )
+
+    def has_delete_permission(self, request, obj=None):
+        """
+        Prevent deletion of reserved items.
+        """
+        if obj:
+            if obj.stock != obj.get_available_stock():
+                item_name = getattr(obj, 'brand_name', getattr(obj, 'name', 'this item'))
+                self.message_user(
+                    request,
+                    f"Reminder: {item_name} cannot be deleted as it is reserved.",
+                    messages.ERROR
+                )
+                return False
+        return super().has_delete_permission(request, obj)
+
+    def available_stock(self, obj):
+        return obj.get_available_stock()
+    available_stock.short_description = 'Available Stock'
+
+    def reserved_stock(self, obj):
+        return obj.stock - obj.get_available_stock()
+    reserved_stock.short_description = 'Reserved Stock'
+
+
 class CustomPermissionMixin(UserPassesTestMixin):
-    permission_denied_message = "You do not have permission to access this page."
-    redirect_url = "plant-list"
+    permission_denied_message = 'You do not have permission to access this page.'
+    redirect_url = 'plant-list'
 
     def handle_no_permission(self):
         messages.error(self.request, self.permission_denied_message)
         return redirect(self.redirect_url)
 
     def test_func(self):
-        raise NotImplementedError("You must define the `test_func` method.")
+        raise NotImplementedError('You must define the `test_func` method.')
