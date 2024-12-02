@@ -9,6 +9,7 @@ $link-decoration: none;
 @import "reset";
 @import "recommended-products";
 @import "custom-buttons";
+@import "messages";
 
 // Import Bootstrap after variable overrides
 @import '../../node_modules/bootstrap/scss/bootstrap';

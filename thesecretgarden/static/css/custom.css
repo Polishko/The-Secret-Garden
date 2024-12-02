@@ -274,6 +274,30 @@ a.btn-warning-subtle:hover {
   color: #0b3c26 !important;
 }
 
+.success-message {
+  background-color: #d4edda;
+  color: #155724;
+  border: 1px solid #c3e6cb;
+  border-radius: 0.5em;
+  padding: 0.8em;
+  max-width: 50%;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.success-message i {
+  margin-right: 0.5em;
+  font-size: 1.2em;
+}
+
+.success-message p,
+.alert p {
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
 /*!
  * Bootstrap  v5.3.3 (https://getbootstrap.com/)
  * Copyright 2011-2024 The Bootstrap Authors
