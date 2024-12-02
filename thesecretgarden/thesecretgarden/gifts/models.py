@@ -59,12 +59,15 @@ class Gift(Product):
             raise ValidationError('This product is already registered in stock!')
 
     def save(self, *args, **kwargs):
-        if self.photo and isinstance(self.photo.file, InMemoryUploadedFile):
+        if self.photo and isinstance(self.photo, InMemoryUploadedFile):
+            # Handle new photo uploads
             upload_result = upload(
-                self.photo.file,  # Pass the file to Cloudinary
+                self.photo,  # Pass the file to Cloudinary
             )
             # Assign the public_id to the CloudinaryField
             self.photo = upload_result['public_id']
+
+        self.full_clean()
         super().save(*args, **kwargs)
 
     class Meta:

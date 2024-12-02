@@ -43,9 +43,10 @@ class Plant(Product):
         if self.description:
             self.description = ' '.join(strip_tags(self.description).split())
 
-        if self.photo and isinstance(self.photo.file, InMemoryUploadedFile):
+        if self.photo and isinstance(self.photo, InMemoryUploadedFile):
+            # Handle new photo uploads
             upload_result = upload(
-                self.photo.file,  # Pass the file to Cloudinary
+                self.photo,  # Pass the file to Cloudinary
             )
             # Assign the public_id to the CloudinaryField
             self.photo = upload_result['public_id']
