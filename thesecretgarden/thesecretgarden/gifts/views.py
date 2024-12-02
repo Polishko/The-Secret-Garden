@@ -8,6 +8,7 @@ from django.views.generic import ListView, CreateView, DetailView, UpdateView, D
 from thesecretgarden.common.views import BaseBulkCreateView
 from thesecretgarden.gifts.forms import GiftBulkCreateForm, GiftCreateForm, GiftEditForm, GiftDeleteForm
 from thesecretgarden.gifts.models import Gift
+from thesecretgarden.mixins import CustomPermissionMixin
 
 
 class GiftsListView(ListView):
@@ -23,7 +24,7 @@ class GiftsListView(ListView):
         return context
 
 
-class GiftBulkCreateView(BaseBulkCreateView, UserPassesTestMixin):
+class GiftBulkCreateView(BaseBulkCreateView, CustomPermissionMixin):
     template_name = 'gifts/gift-bulk-create.html'
     form_class = GiftBulkCreateForm
     model = Gift
@@ -31,18 +32,11 @@ class GiftBulkCreateView(BaseBulkCreateView, UserPassesTestMixin):
     def test_func(self):
         return self.request.user.is_staff or self.request.user.is_superuser
 
-    def handle_no_permission(self):
-        """
-        Customizes the behavior for unauthorized access.
-        """
-        messages.error(self.request, 'You do not have permission to perform this action.')
-        return redirect('plants-list')
-
     def get_success_url(self):
         return reverse_lazy('gifts-list')
 
 
-class GiftCreateView(CreateView, UserPassesTestMixin):
+class GiftCreateView(CreateView, CustomPermissionMixin):
     model = Gift
     form_class = GiftCreateForm
     template_name = 'gifts/gift-create-edit.html'
@@ -50,13 +44,6 @@ class GiftCreateView(CreateView, UserPassesTestMixin):
 
     def test_func(self):
         return self.request.user.is_staff or self.request.user.is_superuser
-
-    def handle_no_permission(self):
-        """
-        Customizes the behavior for unauthorized access.
-        """
-        messages.error(self.request, 'You do not have permission to perform this action.')
-        return redirect('plants-list')
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -72,7 +59,7 @@ class GiftDetailView(DetailView):
     slug_url_kwarg = 'slug'
 
 
-class GiftEditView(UpdateView, UserPassesTestMixin):
+class GiftEditView(UpdateView, CustomPermissionMixin):
     model = Gift
     form_class = GiftEditForm
     template_name = 'gifts/gift-create-edit.html'
@@ -81,13 +68,6 @@ class GiftEditView(UpdateView, UserPassesTestMixin):
 
     def test_func(self):
         return self.request.user.is_staff or self.request.user.is_superuser
-
-    def handle_no_permission(self):
-        """
-        Customizes the behavior for unauthorized access.
-        """
-        messages.error(self.request, 'You do not have permission to perform this action.')
-        return redirect('plants-list')
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -100,7 +80,7 @@ class GiftEditView(UpdateView, UserPassesTestMixin):
         return reverse_lazy('gift-detail', kwargs={'slug': self.object.slug})
 
 
-class GiftDeleteView(DeleteView, UserPassesTestMixin):
+class GiftDeleteView(DeleteView, CustomPermissionMixin):
     model = Gift
     template_name = 'gifts/gift-delete.html'
     slug_field = 'slug'
@@ -109,13 +89,6 @@ class GiftDeleteView(DeleteView, UserPassesTestMixin):
 
     def test_func(self):
         return self.request.user.is_staff or self.request.user.is_superuser
-
-    def handle_no_permission(self):
-        """
-        Customizes the behavior for unauthorized access.
-        """
-        messages.error(self.request, 'You do not have permission to perform this action.')
-        return redirect('plants-list')
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)

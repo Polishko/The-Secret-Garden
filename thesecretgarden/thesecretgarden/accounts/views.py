@@ -4,11 +4,12 @@ from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.contrib.auth.views import LoginView
 from django.http import HttpResponseRedirect
 from django.shortcuts import redirect, get_object_or_404, render
-from django.urls import reverse_lazy, reverse
+from django.urls import reverse_lazy
 from django.views.generic import CreateView, DetailView, UpdateView, View
 
 from thesecretgarden.accounts.forms import AppUserCreateForm, AppUserLoginForm, ProfileEditForm
 from thesecretgarden.accounts.models import Profile
+from thesecretgarden.mixins import CustomPermissionMixin
 
 UserModel = get_user_model()
 
@@ -47,20 +48,12 @@ class AppUserRegisterView(CreateView):
         return redirect(self.get_success_url())
 
 
-class ProfileDetailsView(LoginRequiredMixin, UserPassesTestMixin, DetailView):
+class ProfileDetailsView(LoginRequiredMixin, CustomPermissionMixin, DetailView):
     model = Profile
     template_name = 'accounts/profile-details.html'
 
     def test_func(self):
         return self.request.user.slug == self.kwargs['slug']
-
-
-    def handle_no_permission(self):
-        """
-        Customizes the behavior for unauthorized access.
-        """
-        messages.error(self.request, 'You do not have permission to perform this action.')
-        return redirect('plants-list')
 
     def get_object(self, queryset=None):
         profile = get_object_or_404(Profile, user__slug=self.kwargs['slug'], is_active=True)

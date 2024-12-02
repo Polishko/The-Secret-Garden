@@ -9,6 +9,7 @@ from django.views.generic import ListView, CreateView, UpdateView, DetailView, D
 from thesecretgarden.common.views import BaseBulkCreateView
 from thesecretgarden.flowers.forms import PlantBulkCreateForm, PlantCreateForm, PlantEditForm, PlantDeleteForm
 from thesecretgarden.flowers.models import Plant
+from thesecretgarden.mixins import CustomPermissionMixin
 
 
 class PlantsListView(ListView):
@@ -24,7 +25,7 @@ class PlantsListView(ListView):
         return context
 
 
-class PlantBulkCreateView(BaseBulkCreateView, UserPassesTestMixin):
+class PlantBulkCreateView(BaseBulkCreateView, CustomPermissionMixin):
     template_name = 'flowers/plant-bulk-create.html'
     form_class = PlantBulkCreateForm
     model = Plant
@@ -32,18 +33,11 @@ class PlantBulkCreateView(BaseBulkCreateView, UserPassesTestMixin):
     def test_func(self):
         return self.request.user.is_staff or self.request.user.is_superuser
 
-    def handle_no_permission(self):
-        """
-        Customizes the behavior for unauthorized access.
-        """
-        messages.error(self.request, 'You do not have permission to perform this action.')
-        return redirect('plants-list')
-
     def get_success_url(self):
         return reverse_lazy('plants-list')
 
 
-class PlantCreateView(CreateView, UserPassesTestMixin):
+class PlantCreateView(CreateView, CustomPermissionMixin):
     model = Plant
     form_class = PlantCreateForm
     template_name = 'flowers/plant-create-edit.html'
@@ -51,13 +45,6 @@ class PlantCreateView(CreateView, UserPassesTestMixin):
 
     def test_func(self):
         return self.request.user.is_staff or self.request.user.is_superuser
-
-    def handle_no_permission(self):
-        """
-        Customizes the behavior for unauthorized access.
-        """
-        messages.error(self.request, 'You do not have permission to perform this action.')
-        return redirect('plants-list')
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -73,7 +60,7 @@ class PlantDetailView(DetailView):
     slug_url_kwarg = 'slug'
 
 
-class PlantEditView(UpdateView, UserPassesTestMixin):
+class PlantEditView(UpdateView, CustomPermissionMixin):
     model = Plant
     form_class = PlantEditForm
     template_name = 'flowers/plant-create-edit.html'
@@ -82,13 +69,6 @@ class PlantEditView(UpdateView, UserPassesTestMixin):
 
     def test_func(self):
         return self.request.user.is_staff or self.request.user.is_superuser
-
-    def handle_no_permission(self):
-        """
-        Customizes the behavior for unauthorized access.
-        """
-        messages.error(self.request, 'You do not have permission to perform this action.')
-        return redirect('plants-list')
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -101,7 +81,7 @@ class PlantEditView(UpdateView, UserPassesTestMixin):
         return reverse_lazy('plant-detail', kwargs={'slug': self.object.slug})
 
 
-class PLantDeleteView(DeleteView, UserPassesTestMixin):
+class PLantDeleteView(DeleteView, CustomPermissionMixin):
     model = Plant
     template_name = 'flowers/plant-delete.html'
     slug_field = 'slug'
@@ -110,13 +90,6 @@ class PLantDeleteView(DeleteView, UserPassesTestMixin):
 
     def test_func(self):
         return self.request.user.is_staff or self.request.user.is_superuser
-
-    def handle_no_permission(self):
-        """
-        Customizes the behavior for unauthorized access.
-        """
-        messages.error(self.request, 'You do not have permission to perform this action.')
-        return redirect('plants-list')
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)

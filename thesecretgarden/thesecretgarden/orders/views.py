@@ -7,10 +7,11 @@ from django.views.generic import View
 
 from thesecretgarden.flowers.models import Plant
 from thesecretgarden.gifts.models import Gift
+from thesecretgarden.mixins import CustomPermissionMixin
 from thesecretgarden.orders.models import Order, OrderItem
 
 
-class AddToCardView(LoginRequiredMixin, UserPassesTestMixin, View):
+class AddToCardView(LoginRequiredMixin, CustomPermissionMixin, View):
     def post(self, request, *args, **kwargs):
         """
         Handles adding items to the cart (pending orders).
@@ -48,10 +49,3 @@ class AddToCardView(LoginRequiredMixin, UserPassesTestMixin, View):
         Ensures the user is in the 'Customer' group.
         """
         return self.request.user.groups.filter(name='Customer').exists()
-
-    def handle_no_permission(self):
-        """
-        Customizes the behavior for unauthorized access.
-        """
-        messages.error(self.request, 'You do not have permission to perform this action.')
-        return redirect('plants-list')
