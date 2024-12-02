@@ -102,4 +102,16 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     });
+
+    // Pagination: remember scroll position
+    const urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.has('page')) {
+        const paginationDiv = document.querySelector('.pagination');
+        if (paginationDiv) {
+            console.log("Pagination element found, scrolling...");
+            requestAnimationFrame(() => {
+                paginationDiv.scrollIntoView({ behavior: 'smooth' });
+            });
+        }
+    }
 });
