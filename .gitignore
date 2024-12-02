@@ -173,3 +173,4 @@ thesecretgarden/code_tests.py
 
 thesecretgarden/image_mappings.xls
 *.csv
+/thesecretgarden/mediafiles/
