@@ -41,7 +41,7 @@ class AddToCardView(LoginRequiredMixin, CustomPermissionMixin, View):
             messages.error(request, e.message_dict.get('quantity', 'An error occurred.'))
             return redirect(request.META.get('HTTP_REFERER', 'plants-list'))
 
-        messages.success(request, f'Added {quantity} units to your cart.')
+        messages.success(request, f'Added {quantity} items to your cart.')
         return redirect(request.META.get('HTTP_REFERER', 'plants-list'))
 
     def test_func(self):
