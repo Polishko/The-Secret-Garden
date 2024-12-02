@@ -39,7 +39,7 @@
                                         {% csrf_token %}
                                         <div class="input-group mb-3">
                                             <input type="number" name="quantity" class="form-control" placeholder="Quantity" 
-                                                   min="1" max="{{ gift.get_available_stock }}" value="1" 
+                                                   min="1" max="{{ gift.get_available_stock }}" value="0" 
                                                    {% if gift.get_available_stock <= 0 %}disabled{% endif %}>
                                             <button class="btn btn-primary-subtle btn-lg fs-6" type="submit" 
                                                     {% if gift.get_available_stock <= 0 %}disabled{% endif %}>
