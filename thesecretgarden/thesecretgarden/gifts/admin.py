@@ -8,24 +8,18 @@ from thesecretgarden.mixins import StockManagementAdminMixin
 
 
 @admin.register(Gift)
-class GiftAdmin(admin.ModelAdmin, StockManagementAdminMixin):
+class GiftAdmin(StockManagementAdminMixin, admin.ModelAdmin):
 
-    list_display = ('brand_name', 'short_name', 'short_description', 'type', 'price', 'stock', 'slug')
+    list_display = ('brand_name', 'short_name', 'short_description',
+                    'type', 'price', 'stock', 'available_stock', 'reserved_stock', 'slug')
     list_filter = ('type', 'price', 'stock')
     search_fields = ('brand_name', 'short_name')
     ordering = ('brand_name',)
-    readonly_fields = ('slug',)
+    readonly_fields = ('slug', 'available_stock', 'reserved_stock',)
 
     fieldsets = (
         (None, {'fields': ('brand_name', 'type', 'slug')}),
         ('Details', {'fields': ('short_name', 'short_description', 'price', 'stock', 'photo')}),
     )
 
-    actions = ['mark_as_out_of_stock']
-
-    def delete_model(self, request, obj):
-        try:
-            obj.delete()
-        except IntegrityError:
-            messages.error(request, "This gift cannot be deleted as it is associated with an order.")
-            return redirect('admin:gifts_gift_changelist')  # Redirect to the Gift list in admin
+    actions = ['mark_as_out_of_stock',]

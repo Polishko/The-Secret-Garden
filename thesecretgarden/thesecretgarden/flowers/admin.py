@@ -7,24 +7,17 @@ from thesecretgarden.mixins import StockManagementAdminMixin
 
 
 @admin.register(Plant)
-class PlantAdmin(admin.ModelAdmin, StockManagementAdminMixin):
+class PlantAdmin(StockManagementAdminMixin, admin.ModelAdmin):
 
-    list_display = ('name', 'type', 'price', 'stock', 'slug')
+    list_display = ('name', 'type', 'price', 'stock', 'available_stock', 'reserved_stock', 'slug')
     list_filter = ('type', 'price', 'stock')
     search_fields = ('name', 'description')
     ordering = ('name',)
-    readonly_fields = ('slug',)
+    readonly_fields = ('slug', 'available_stock', 'reserved_stock',)
 
     fieldsets = (
         (None, {'fields': ('name', 'type', 'slug')}),
         ('Details', {'fields': ('description', 'price', 'stock', 'photo')}),
     )
 
-    actions = ['mark_as_out_of_stock']
-
-    def delete_model(self, request, obj):
-        try:
-            obj.delete()
-        except IntegrityError:
-            messages.error(request, "This plant cannot be deleted as it is associated with an order.")
-            return redirect('admin:flowers_plant_changelist')  # Redirect to the Plant list in admin
+    actions = ['mark_as_out_of_stock',]
