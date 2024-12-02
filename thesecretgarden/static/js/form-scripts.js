@@ -15,7 +15,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // Prevent user entering more than necessary digits and set cursor correctly
+    // Prevent user entering more than necessary digits than allowed and set cursor correctly
     const numberInputs = document.querySelectorAll('input[type="number"]');
 
     numberInputs.forEach(input => {
@@ -75,5 +75,31 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             });
         }
+    });
+
+    // Quantity handling
+    const quantityInputs = document.querySelectorAll('input[name*="quantity"]');
+
+    quantityInputs.forEach(input => {
+        input.addEventListener('input', (event) => {
+            const max = parseInt(input.getAttribute('max'), 10);
+            const value = parseInt(event.target.value, 10);
+
+            // Enforce range
+            if (value > max) {
+                event.target.value = max;
+                event.target.setSelectionRange(String(max).length, String(max).length); // Adjust cursor position
+            } else if (value < 1 || isNaN(value)) {
+                event.target.value = 1;
+                event.target.setSelectionRange(1, 1);
+            }
+        });
+
+        // Prevent "-" or "." during typing for quantity fields
+        input.addEventListener('keydown', (event) => {
+            if (event.key === '.' || event.key === '-' || event.key === 'e') {
+                event.preventDefault();
+            }
+        });
     });
 });
