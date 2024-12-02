@@ -1,8 +1,8 @@
 from django.contrib import messages
-from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.contenttypes.models import ContentType
 from django.core.exceptions import ValidationError
-from django.shortcuts import redirect
+from django.shortcuts import redirect, render
 from django.views.generic import View
 
 from thesecretgarden.flowers.models import Plant
@@ -12,6 +12,12 @@ from thesecretgarden.orders.models import Order, OrderItem
 
 
 class AddToCardView(LoginRequiredMixin, CustomPermissionMixin, View):
+    def test_func(self):
+        """
+        Ensures the user is in the 'Customer' group.
+        """
+        return self.request.user.groups.filter(name='Customer').exists()
+
     def post(self, request, *args, **kwargs):
         """
         Handles adding items to the cart (pending orders).
@@ -19,6 +25,8 @@ class AddToCardView(LoginRequiredMixin, CustomPermissionMixin, View):
         product_type = kwargs.get('product_type')
         product_id = kwargs.get('product_id')
         quantity = int(request.POST.get('quantity', 1))
+
+        print(f"DEBUG: Received quantity: {quantity}")
 
         model = Plant if product_type == 'plant' else Gift
         product = model.objects.get(pk=product_id)
@@ -38,14 +46,63 @@ class AddToCardView(LoginRequiredMixin, CustomPermissionMixin, View):
         try:
             order_item.save()
         except ValidationError as e:
-            messages.error(request, e.message_dict.get('quantity', 'An error occurred.'))
             return redirect(request.META.get('HTTP_REFERER', 'plants-list'))
 
-        messages.success(request, f'Added {quantity} items to your cart.')
         return redirect(request.META.get('HTTP_REFERER', 'plants-list'))
+
+
+class CartView(LoginRequiredMixin, CustomPermissionMixin, View):
+    template_name = 'orders/shopping_cart.html'
 
     def test_func(self):
         """
         Ensures the user is in the 'Customer' group.
         """
         return self.request.user.groups.filter(name='Customer').exists()
+
+    def get(self, request, *args, **kwargs):
+        order = Order.objects.filter(user=request.user, status='pending').first()
+        order_items = []
+
+        if order:
+            for item in order.order_items.all():
+                product = item.product
+                product_type = 'plant' if isinstance(product, Plant) else 'gift'
+                order_items.append({
+                    'id': item.id,
+                    'product': product,
+                    'quantity': item.quantity,
+                    'product_type': product_type,
+                    'product_id': product.id,
+                })
+
+        context = {
+            'order': order,
+            'order_items': order_items,
+            'total_cost': sum(item['product'].price * item['quantity'] for item in order_items) if order else 0,
+        }
+
+        return  render(request, self.template_name, context)
+
+
+class RemoveCartItemView(LoginRequiredMixin, CustomPermissionMixin, View):
+    def test_func(self):
+        """
+        Ensures the user is in the 'Customer' group.
+        """
+        return self.request.user.groups.filter(name='Customer').exists()
+    
+    def post(self, request, *args, **kwargs):
+        item_id = kwargs.get('item_id')
+        order_item = OrderItem.objects.filter(id=item_id, order__user=request.user, order__status='pending').first()
+
+        if not order_item:
+            messages.error(request, "Item not found or unauthorized access.")
+            return redirect('shopping-cart')
+
+        order_item.delete()
+        messages.success(request, f"Removed item from your cart.")
+
+        order_item.order.save()
+
+        return redirect('shopping-cart')
