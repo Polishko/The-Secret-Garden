@@ -141,57 +141,16 @@ class OrderItem(models.Model):
         help_text='The total price for this item.',
     )
 
-    # def clean(self):
-    #     """
-    #         Validates that the requested quantity does not exceed available stock.
-    #     """
-    #     super().clean()
-    #
-    #     if not self.product:
-    #         raise ValidationError('The referenced product does not exist.')
-    #
-    #     if hasattr(self.product, 'get_available_stock'):
-    #         # Get available stock from product
-    #         available_stock = self.product.get_available_stock()
-    #
-    #         # Adjust available stock only for existing items
-    #         if self.pk and self.quantity > 0:
-    #             available_stock += self.quantity  # Add back the current item's reserved quantity
-    #
-    #         print(f"Quantity being checked: {self.quantity}")
-    #         print(f"Adjusted available stock: {available_stock}")
-    #
-    #         if self.quantity > available_stock:
-    #             raise ValidationError({
-    #                 'quantity': f"Requested quantity exceeds available stock ({available_stock} items available)."
-    #             })
-
-    def clean(self):
-        """
-        Validates that the requested quantity does not exceed available stock.
-        """
-        super().clean()
-
-        if not self.product:
-            raise ValidationError('The referenced product does not exist.')
-
-        if hasattr(self.product, 'get_available_stock'):
-            # Exclude the current item from the available stock calculation
-            available_stock = self.product.get_available_stock(exclude_order_item=self)
-
-            print(f"Quantity being checked: {self.quantity}")
-            print(f"Adjusted available stock: {available_stock}")
-
-            if self.quantity > available_stock:
-                raise ValidationError({
-                    'quantity': f"Requested quantity exceeds available stock ({available_stock} items available)."
-                })
-
     def save(self, *args, **kwargs):
         """
-            Calculates total price during save.
+            Calculates total price during save. Checks stock for new items
         """
-        if not self.pk:  # Get price during creation only
+        if not self.pk:
+            available_stock = self.product.get_available_stock()
+            if self.quantity > available_stock:
+                raise ValidationError(
+                    {'quantity': f"Requested quantity exceeds available stock ({available_stock} available)."}
+                )
             self.price_per_unit = self.product.price
             self.current_stock = self.product.stock
 
