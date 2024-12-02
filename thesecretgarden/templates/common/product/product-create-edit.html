@@ -36,12 +36,12 @@
                                     {% endif %}
                                     {# Check if editing and this is the stock field #}
                                     {% if is_edit and field.name == "stock" %}
-                                        <div class="mt-2">
+                                        <div class="d-flex justify-content-start gap-3 mt-2">
                                             <p>
-                                                <strong>Reserved Stock:</strong> {{ reserved_stock }}
+                                                <strong class="text-danger">Reserved Stock:</strong> {{ reserved_stock }}
                                             </p>
                                             <p>
-                                                <strong>Available Stock:</strong> {{ available_stock }}
+                                                <strong class="text-success">Available Stock:</strong> {{ available_stock }}
                                             </p>
                                         </div>
                                     {% endif %}
