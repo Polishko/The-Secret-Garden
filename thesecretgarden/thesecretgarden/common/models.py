@@ -12,7 +12,7 @@ from thesecretgarden.orders.models import OrderItem
 
 
 class Product(models.Model):
-    MAX_FILE_SIZE = 5
+    # MAX_FILE_SIZE = 5
 
     name = models.CharField(
         null=False,
