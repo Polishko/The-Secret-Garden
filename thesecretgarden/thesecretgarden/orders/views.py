@@ -26,8 +26,6 @@ class AddToCardView(LoginRequiredMixin, CustomPermissionMixin, View):
         product_id = kwargs.get('product_id')
         quantity = int(request.POST.get('quantity', 1))
 
-        print(f"DEBUG: Received quantity: {quantity}")
-
         model = Plant if product_type == 'plant' else Gift
         product = model.objects.get(pk=product_id)
 
@@ -68,12 +66,16 @@ class CartView(LoginRequiredMixin, CustomPermissionMixin, View):
             for item in order.order_items.all():
                 product = item.product
                 product_type = 'plant' if isinstance(product, Plant) else 'gift'
+                product_name = 'name' if isinstance(product, Plant) else 'brand_name'
+                product_page = 'plant-detail' if isinstance(product, Plant) else 'gift-detail'
                 order_items.append({
                     'id': item.id,
                     'product': product,
                     'quantity': item.quantity,
                     'product_type': product_type,
                     'product_id': product.id,
+                    'product_name': product_name,
+                    'product_page': product_page,
                 })
 
         context = {
