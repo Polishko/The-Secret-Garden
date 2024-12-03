@@ -2,8 +2,8 @@ from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.contenttypes.models import ContentType
 from django.core.exceptions import ValidationError
-from django.shortcuts import redirect, render
-from django.views.generic import View
+from django.shortcuts import redirect, render, get_object_or_404
+from django.views.generic import View, ListView, DetailView
 
 from thesecretgarden.flowers.models import Plant
 from thesecretgarden.gifts.models import Gift
@@ -23,7 +23,9 @@ class AddToCardView(LoginRequiredMixin, IsUserCustomerMixin, View):
         model = Plant if product_type == 'plant' else Gift
         product = model.objects.get(pk=product_id)
 
-        order, _ = Order.objects.get_or_create(user=request.user, status='pending')
+        order, created = Order.objects.get_or_create(user=request.user, status='pending')
+
+        print(f"Order created: {created}, Order ID: {order.id}")
 
         content_type = ContentType.objects.get_for_model(model)
         order_item, item_created = OrderItem.objects.get_or_create(
@@ -44,7 +46,7 @@ class AddToCardView(LoginRequiredMixin, IsUserCustomerMixin, View):
 
 
 class CartView(LoginRequiredMixin, IsUserCustomerMixin, View):
-    template_name = 'orders/shopping_cart.html'
+    template_name = 'orders/shopping-cart.html'
 
     def get(self, request, *args, **kwargs):
         order = Order.objects.filter(user=request.user, status='pending').first()
@@ -84,7 +86,7 @@ class CartView(LoginRequiredMixin, IsUserCustomerMixin, View):
                 return redirect('plants-list')
 
         else:
-            messages.info(request, "You have no active orders.")
+            # messages.info(request, "You have no active orders.")
             context = {
                 'order': None,
                 'order_items': [],
@@ -109,5 +111,114 @@ class RemoveCartItemView(LoginRequiredMixin, IsUserCustomerMixin, View):
 
         return redirect('shopping-cart')
 
+
+class OrderCheckOutView(LoginRequiredMixin, IsUserCustomerMixin, View):
+    template_name = 'orders/order-checkout.html'
+
+    def get(self, request, *args, **kwargs):
+        order = Order.objects.filter(user=request.user, status='pending').first()
+
+        if not order:
+            messages.error(request, "Order not found or unauthorized access.")
+            return redirect('shopping-cart')
+
+        try:
+            if order.total_price == 0 or order.total_price != order.calculate_total():
+                order.calculate_total()
+            context = {'order_sum': order.total_price}
+        except Exception as e:
+            messages.error(request, f"An error occurred while calculating your order: {str(e)}")
+            return redirect('shopping-cart')
+
+        return render(request, self.template_name, context)
+
 class OrderConfirmView(LoginRequiredMixin, IsUserCustomerMixin, View):
-    pass
+    def post(self, request, *args, **kwargs):
+        order = Order.objects.filter(user=request.user, status='pending').first()
+
+        if not order:
+            messages.error(request, "Order not found or unauthorized access.")
+            return redirect('shopping-cart')
+
+        profile = request.user.profile
+        if not profile.address:
+            messages.error(
+                request,
+                'You must provide an address to place an order. Please update your profile.'
+            )
+
+            return redirect('profile-edit', slug=request.user.slug)
+
+        try:
+            order.complete_order()
+            order.save()
+            messages.success(request, "Your order has been successfully completed!")
+            return redirect('completed-orders')
+        except ValidationError as e:
+            messages.error(request, f"Order could not be completed: {str(e)}")
+        except Exception as e:
+            messages.error(request, f"An unexpected error occurred: {str(e)}")
+
+        return redirect('shopping-cart')
+
+
+class OrderCancelView(LoginRequiredMixin, IsUserCustomerMixin, View):
+    def post(self, request, *args, **kwargs):
+        order = get_object_or_404(Order, user=request.user, status='pending')
+
+        try:
+            order.cancel()
+            order.save()
+            messages.success(request, "Your order has been canceled!")
+        except ValidationError as e:
+            messages.error(request, f"Order could not be canceled: {str(e)}")
+        except Exception as e:
+            messages.error(request, f"An unexpected error occurred: {str(e)}")
+
+        return redirect('plants-list')
+
+
+class CompletedOrdersView(LoginRequiredMixin, IsUserCustomerMixin, ListView):
+    model = Order
+    template_name = 'orders/orders-list.html'
+    context_object_name = 'orders'
+
+    def get_queryset(self):
+        return Order.objects.filter(user=self.request.user, status='completed', is_active=False)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = 'Your Completed Orders'
+        context['empty_message'] = 'completed orders'
+        return context
+
+
+class CompletedOrderDetailView(LoginRequiredMixin, IsUserCustomerMixin, DetailView):
+    model = Order
+    template_name = 'orders/completed-order-detail.html'
+    context_object_name = 'order'
+
+    def get_object(self, queryset=None):
+        order_id = self.kwargs.get('pk')
+        return get_object_or_404(Order, pk=order_id, user=self.request.user, status='completed', is_active=False)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        order = self.get_object()
+
+        order_items = []
+        for item in order.order_items.all():
+            product_type = 'plant' if item.content_type == ContentType.objects.get_for_model(Plant) else 'gift'
+            product_name = item.product.name if item.content_type == ContentType.objects.get_for_model(Plant) \
+                else f'{item.product.brand_name} {item.product.short_name}'
+            order_items.append({
+                'product': item.product,
+                'quantity': item.quantity,
+                'price_per_unit': item.price_per_unit,
+                'total_price': item.total_price,
+                'product_type': product_type,
+                'product_name': product_name
+            })
+
+        context['order_items'] = order_items
+        return context
