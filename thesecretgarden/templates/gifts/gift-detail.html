@@ -33,6 +33,7 @@
                             </p>
                             <p class="card-text">{{ gift.short_description }}</p>
                             <div class="d-flex justify-content-center align-items-end gap-3">
+                            {% if user.is_authenticated %}
                                 <!-- Add to Cart Button -->
                                 {% if user|in_group:'Customer' %}
                                     <form action="{% url 'add-to-cart' 'gift' gift.id %}" method="post">
@@ -69,6 +70,14 @@
                                         </a>
                                     </div>
                                 {% endif %}
+                            {% else %}
+                                <div class="alert alert-info mt-3">
+                                    <p>
+                                        <i class="fa-solid fa-sign-in-alt"></i>
+                                        <a href="{% url 'login' %}" class="alert-link">Log in</a> to add items to your cart and shop!
+                                    </p>
+                                </div>
+                            {% endif %}
                             </div>
                         </div>
                     </div>
