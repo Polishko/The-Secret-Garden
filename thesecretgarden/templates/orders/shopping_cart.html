@@ -9,15 +9,17 @@
             {% for item in order_items %}
                 <div class="cart-item row flex-md-row flex-column align-items-center m-3 mx-auto w-75">
                     <!-- Image Column -->
-                     <div class="col-2 text-center">
-                        <img src="{{ item.product.photo.url }}" alt="{{ item.product.name }}"
-                             class="img-thumbnail mx-auto d-block" 
-                             style="width: 100px; height: 100px; object-fit: cover;">
+                    <div class="col-3 text-center">
+                        <a href="{% url item.product_page item.product_slug %}">
+                            <img src="{{ item.product.photo.url }}" alt="{{ item.product.name }}"
+                                 class="img-thumbnail mx-auto d-block" 
+                                 style="width: 100%; height: auto; object-fit: cover;">
+                        </a>
                     </div>
                 
                     <!-- Name and Price Column -->
-                    <div class="col-5 text-center">
-                        {% if product_type == 'plant' %}
+                    <div class="col-4 text-center">
+                        {% if item.product_type == 'plant' %}
                             <p class="mb-1"><strong>{{ item.product.name }}</strong></p>
                         {% else %}
                             <p class="mb-1"><strong>{{ item.product.brand_name }} {{ item.product.short_name }}</strong></p>
