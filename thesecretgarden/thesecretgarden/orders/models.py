@@ -10,8 +10,8 @@ UserModel = get_user_model()
 
 class Order(models.Model):
     """
-        Represents the overarching transaction.
-        It ties the user to their purchase and includes details like total cost, status, and timestamps.
+    Represents the overarching transaction.
+    It ties the user to their purchase and includes details like total cost, status, and timestamps.
     """
 
     STATUS_CHOICES = [
@@ -53,50 +53,48 @@ class Order(models.Model):
 
     def calculate_total(self):
         """
-            Calculates and updates the total price for the order.
+        Calculates and updates the total price for the order.
         """
         self.total_price = sum(
             item.total_price for item in self.order_items.all()
         )
         self.save()
+        return self.total_price
 
     def cancel(self):
         """
-            Cancels the order without modifying stock since stock is not deducted for pending orders.
+        Cancels the order without modifying stock since stock is not deducted for pending orders.
         """
         self.status = 'canceled'
-        self.save()
+        self.is_active = False
 
     def complete_order(self):
         """
-           Completes the order and deducts stock for all items atomically.
+        Completes the order by deducting stock and updating the status and is_active fields.
         """
-
         with transaction.atomic():
             for item in self.order_items.all():
-                product = item.product  # This works with GenericForeignKey
-                if item.quantity > product.get_available_stock():
+                product = item.product
+                available_stock = product.get_available_stock()
+
+                effective_available_stock = available_stock + item.quantity
+
+                if item.quantity > effective_available_stock:
                     raise ValidationError(
-                        f"Not enough stock for {product}. Available: {product.get_available_stock()}."
+                        f"Not enough stock for {product}. Available: {available_stock}."
                     )
-                # Deduct stock only if sufficient stock is available
+
                 product.stock -= item.quantity
                 product.save()
+
             self.status = 'completed'
-            self.save()
-
-    def save(self, *args, **kwargs):
-        if not self.order_items.exists():
             self.is_active = False
-        else:
-            self.is_active = True
 
-        super().save(*args, **kwargs)
 
 class OrderItem(models.Model):
     """
-        Represents each individual product in the order.
-        It keeps track of the quantity and price for each item.
+    Represents each individual product in the order.
+    It keeps track of the quantity and price for each item.
     """
 
     content_type = models.ForeignKey(
@@ -155,7 +153,7 @@ class OrderItem(models.Model):
 
     def save(self, *args, **kwargs):
         """
-            Calculates total price during save. Checks stock for new items
+        Calculates total price during save.
         """
         if not self.pk:
             available_stock = self.product.get_available_stock()
