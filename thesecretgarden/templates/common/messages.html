@@ -1,15 +1,12 @@
 {% if messages %}
-    {% for message in messages %}
-        {% if message.tags == "success" %}
-            <div class="success-message mt-3 px-3">
-                <i class="fa-solid fa-circle-check"></i> 
-                <p>{{ message }}</p>
+    <div id="messages-container" class="w-75">
+        {% for message in messages %}
+            <div class="alert {% if message.tags %}alert-{{ message.tags }}{% else %}alert-info{% endif %}">
+                {{ message }}
+                {% if "You must provide an address to place an order." in message|safe %}
+                    Please <a href="{% url 'profile-edit' slug=request.user.slug %}" class="alert-link">update your profile</a>.
+                {% endif %}
             </div>
-        {% else %}
-            <div class="alert alert-danger mt-3 px-3" role="alert">
-                <i class="fa-solid fa-circle-exclamation"></i>
-                <p>{{ message }}</p>
-            </div>
-        {% endif %}
-    {% endfor %}
+        {% endfor %}
+    </div>
 {% endif %}
