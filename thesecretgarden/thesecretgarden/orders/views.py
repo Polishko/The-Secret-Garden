@@ -63,28 +63,46 @@ class CartView(LoginRequiredMixin, CustomPermissionMixin, View):
         order_items = []
 
         if order:
-            for item in order.order_items.all():
-                product = item.product
-                product_type = 'plant' if isinstance(product, Plant) else 'gift'
-                product_name = 'name' if isinstance(product, Plant) else 'brand_name'
-                product_page = 'plant-detail' if isinstance(product, Plant) else 'gift-detail'
-                order_items.append({
-                    'id': item.id,
-                    'product': product,
-                    'quantity': item.quantity,
-                    'product_type': product_type,
-                    'product_id': product.id,
-                    'product_name': product_name,
-                    'product_page': product_page,
-                })
+            try:
+                order.save()
 
-        context = {
-            'order': order,
-            'order_items': order_items,
-            'total_cost': sum(item['product'].price * item['quantity'] for item in order_items) if order else 0,
-        }
+                for item in order.order_items.all():
+                    product = item.product
+                    product_type = 'plant' if isinstance(product, Plant) else 'gift'
+                    product_name = 'name' if isinstance(product, Plant) else 'brand_name'
+                    product_page = 'plant-detail' if isinstance(product, Plant) else 'gift-detail'
 
-        return  render(request, self.template_name, context)
+                    order_items.append({
+                        'id': item.id,
+                        'product': product,
+                        'quantity': item.quantity,
+                        'product_type': product_type,
+                        'product_id': product.id,
+                        'product_name': product_name,
+                        'product_page': product_page,
+                        'product_slug': product.slug,
+                    })
+
+                context = {
+                    'order': order,
+                    'order_items': order_items,
+                    'total_cost': sum(item['product'].price * item['quantity'] for item in order_items),
+                }
+
+                return render(request, self.template_name, context)
+
+            except AttributeError as e:
+                messages.error(request, "An error occurred while loading your cart.")
+                return redirect('plants-list')
+
+        else:
+            messages.info(request, "You have no active orders.")
+            context = {
+                'order': None,
+                'order_items': [],
+                'total_cost': 0,
+            }
+            return render(request, self.template_name, context)
 
 
 class RemoveCartItemView(LoginRequiredMixin, CustomPermissionMixin, View):
@@ -98,13 +116,13 @@ class RemoveCartItemView(LoginRequiredMixin, CustomPermissionMixin, View):
         item_id = kwargs.get('item_id')
         order_item = OrderItem.objects.filter(id=item_id, order__user=request.user, order__status='pending').first()
 
-        if not order_item:
+        if order_item:
+            try:
+                order_item.delete()
+                order_item.order.save()
+            except Exception as e:
+                messages.error(request, "An error occurred while updating your cart.")
+        else:
             messages.error(request, "Item not found or unauthorized access.")
-            return redirect('shopping-cart')
-
-        order_item.delete()
-        messages.success(request, f"Removed item from your cart.")
-
-        order_item.order.save()
 
         return redirect('shopping-cart')
