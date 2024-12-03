@@ -15,10 +15,9 @@
                                 <a href="{% url 'profile-edit' slug=user.slug %}" class="text-decoration-none">Update Profile</a>
                             </li>
                             <li class="list-group-item">
-                                <a href="" class="text-decoration-none">Previous Orders</a>
-    {#                            <a href="{% url 'orders-history' %}" class="text-decoration-none">Previous Orders</a>#}
+                                <a href="#completed-orders" class="text-decoration-none">Completed Orders</a>
                             </li>
-                            <li style="list-style-type: none; ">
+                            <li style="list-style-type: none;">
                                 <form method="get" action="{% url 'profile-deactivate' slug=user.slug %}" style="display: inline;">
                                     <button type="submit" 
                                             style="color: #dc3545; background-color: #f8d7da;
@@ -32,7 +31,7 @@
                     </div>
                 </div>
             </div>
-    
+
             <!-- Right Content -->
             <div class="col-lg-9">
                 <div class="card shadow-sm">
@@ -43,7 +42,7 @@
                             <h3 class="card-title text-warning">Your profile is incomplete!</h3>
                             <p class="text-muted">Please <a href="{% url 'profile-edit' slug=user.slug %}" class="text-decoration-none">update your profile</a> to enjoy full features.</p>
                         {% endif %}
-    
+
                         <h5 class="mt-4">Profile Details</h5>
                         <ul class="list-group list-group-flush">
                             <li class="list-group-item">
@@ -79,12 +78,33 @@
                         </ul>
                     </div>
                 </div>
+                
+                <!-- Completed Orders Section -->
+                <div class="card shadow-sm mt-4" id="completed-orders">
+                    <div class="card-body">
+                        <h5 class="card-title">Completed Orders</h5>
+                        {% if completed_orders %}
+                            <ul class="list-group">
+                                {% for order in completed_orders %}
+                                    <li class="list-group-item">
+                                        Order #{{ order.id }} 
+                                        - <strong>Total:</strong> {{ order.total_price|floatformat:2 }} EUR 
+                                        - <strong>Date:</strong> {{ order.created_at|date:"d M Y" }}
+                                        <a href="{% url 'completed-order-detail' order.id %}" class="btn btn-sm btn-outline-primary float-end">View Details</a>
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                        {% else %}
+                            <p class="text-center text-muted">You have no completed orders.</p>
+                        {% endif %}
+                    </div>
+                </div>
             </div>
         </div>
     {% else %}
-        <li class="list-group-item text-muted">
+        <div class="alert alert-warning">
             Your profile is deactivated.
-        </li>
+        </div>
     {% endif %}
 </div>
 {% endblock %}
