@@ -14,24 +14,16 @@
     {% block head %}
     {% endblock %}
 </head>
-<body>
-<!-- Message Consumer -->
-    {% if messages %}
-        <div id="messages-container">
-            {% for message in messages %}
-                <div class="alert {% if message.tags %}alert-{{ message.tags }}{% else %}alert-info{% endif %}">
-                    {{ message }}
-                </div>
-            {% endfor %}
-        </div>
-    {% endif %}
-    
+<body> 
     <div class="{{ is_landing_page|default:False|yesno:'container-fluid,container p-lg-5 mt-5 page-wrapper' }}">
         
         <div class="{{ is_landing_page|default:False|yesno:'container-fluid p-0,container p-0' }}">
             {% block header %}
                 {% include 'common/nav.html' %}
             {% endblock %}
+        </div>
+        <div>
+            {% include 'common/messages.html' %}
         </div>
     
         {% if recommended_plants and user.is_authenticated and product %}
