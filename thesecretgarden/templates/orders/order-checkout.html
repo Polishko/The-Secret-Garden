@@ -1,0 +1,30 @@
+{% extends 'common/base.html' %}
+
+{% block content %}
+<div class="container my-5">
+    <h2 class="text-center">Confirm Your Order</h2>
+    
+    {% if order_sum and order_sum > 0 %}
+        <p class="text-center">Your order total is: <strong>{{ order_sum|floatformat:2 }} EUR</strong></p>
+        
+        <div class="d-flex justify-content-center gap-3 mt-4">
+            <!-- Confirm Order Button -->
+            <form action="{% url 'order-confirm' %}" method="post">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-success btn-lg">Confirm Order</button>
+            </form>
+
+            <!-- Cancel Order Button (Optional, Placeholder for Now) -->
+            <form action="{% url 'order-cancel' %}" method="post">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-danger btn-lg">Cancel</button>
+            </form>
+        </div>
+    {% else %}
+        <p class="text-center text-danger">There is no active order to confirm.</p>
+        <div class="text-center mt-4">
+            <a href="{% url 'plants-list' %}" class="btn btn-primary btn-lg">Continue Shopping</a>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}
