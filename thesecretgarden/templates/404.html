@@ -1,0 +1,9 @@
+{% extends 'common/base.html' %}
+
+{% block content %}
+<div class="container text-center mt-5">
+    <h1>Oops! Page Not Found</h1>
+    <p>The page or resource you were looking for doesn’t exist.</p>
+    <a href="{% url 'plants-list' %}" class="btn btn-primary">Return to Home</a>
+</div>
+{% endblock %}
