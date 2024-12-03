@@ -1,50 +1,70 @@
 {% extends 'common/base.html' %}
 
 {% block content %}
-<div class="container my-5">
-    {% if not order_items %}
-        <p>Your cart is empty. <a href="{% url 'plants-list' %}">Continue shopping</a>.</p>
-    {% else %}
-        <h2>Your Shopping Cart</h2>
-        {% for item in order_items %}
-            <div class="cart-item d-flex align-items-center my-3">
-                <img src="{{ item.product.photo.url }}" alt="{{ item.product.name }}"
-                     class="img-thumbnail me-3" style="width: 75px; height: 75px; object-fit: cover;">
-                <div >
-                    <p><strong>{{ item.product.name }}</strong></p>
-                    <p>Price: {{ item.product.price|floatformat:2 }} EUR</p>
-                    <div class="quantity-control d-flex align-items-center">
-                        <form action="{% url 'add-to-cart' item.product_type item.product_id %}" method="post" class="me-2">
-                            {% csrf_token %}
-                            <input type="hidden" name="quantity" value="-1">
-                            <button type="submit" class="btn btn-sm btn-outline-danger"
-                            {% if item.quantity <= 0 %}disabled{% endif %}>
-                                -
-                            </button>
-                        </form>
-                        <span>{{ item.quantity }}</span>
-                        <form action="{% url 'add-to-cart' item.product_type item.product_id %}" method="post" class="ms-2">
-                            {% csrf_token %}
-                            <input type="hidden" name="quantity" value="1">
-                            <button type="submit" class="btn btn-sm btn-outline-success"
-                            {% if item.quantity >= item.product.get_available_stock %}disabled{% endif %}>
-                                +
-                            </button>
-
-                        </form>
-                        <form action="{% url 'remove-item' item.id %}" method="post" class="ms-3">
-                            {% csrf_token %}
-                            <button type="submit" class="btn btn-sm btn-danger" data-bs-toggle="tooltip" data-bs-placement="top" title="Remove">
-                                <i class="fa-solid fa-trash"></i>
-                            </button>
-                        </form>
+    <div class="container my-5">
+        {% if not order_items %}
+            <p>Your cart is empty. <a href="{% url 'plants-list' %}">Continue shopping</a>.</p>
+        {% else %}
+            <h2 class="text-center">Your Shopping Cart</h2>
+            {% for item in order_items %}
+                <div class="cart-item row flex-md-row flex-column align-items-center m-3 mx-auto w-75">
+                    <!-- Image Column -->
+                     <div class="col-2 text-center">
+                        <img src="{{ item.product.photo.url }}" alt="{{ item.product.name }}"
+                             class="img-thumbnail mx-auto d-block" 
+                             style="width: 100px; height: 100px; object-fit: cover;">
+                    </div>
+                
+                    <!-- Name and Price Column -->
+                    <div class="col-5 text-center">
+                        {% if product_type == 'plant' %}
+                            <p class="mb-1"><strong>{{ item.product.name }}</strong></p>
+                        {% else %}
+                            <p class="mb-1"><strong>{{ item.product.brand_name }} {{ item.product.short_name }}</strong></p>
+                        {% endif %}
+                        <p class="mb-0">Price: {{ item.product.price|floatformat:2 }} EUR</p>
+                    </div>
+                
+                    <!-- Buttons Column -->
+                    <div class="col-5">
+                        <div class="quantity-control d-flex align-items-center justify-content-center">
+                            <!-- Decrease Button -->
+                            <form action="{% url 'add-to-cart' item.product_type item.product_id %}" method="post" class="me-2">
+                                {% csrf_token %}
+                                <input type="hidden" name="quantity" value="-1">
+                                <button type="submit" class="btn btn-sm btn-outline-danger"
+                                        {% if item.quantity <= 0 %}disabled{% endif %}>
+                                    -
+                                </button>
+                            </form>
+                
+                            <!-- Quantity -->
+                            <span>{{ item.quantity }}</span>
+                
+                            <!-- Increase Button -->
+                            <form action="{% url 'add-to-cart' item.product_type item.product_id %}" method="post" class="ms-2">
+                                {% csrf_token %}
+                                <input type="hidden" name="quantity" value="1">
+                                <button type="submit" class="btn btn-sm btn-outline-success"
+                                        {% if item.quantity >= item.product.get_available_stock %}disabled{% endif %}>
+                                    +
+                                </button>
+                            </form>
+                
+                            <!-- Remove Button -->
+                            <form action="{% url 'remove-item' item.id %}" method="post" class="ms-3">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-sm btn-danger" data-bs-toggle="tooltip" data-bs-placement="top" title="Remove">
+                                    <i class="fa-solid fa-trash"></i>
+                                </button>
+                            </form>
+                        </div>
                     </div>
                 </div>
+            {% endfor %}
+            <div class="mt-4 text-end w-75">
+                <p><strong>Total:</strong> {{ total_cost|floatformat:2 }} EUR</p>
             </div>
-        {% endfor %}
-        <div class="mt-4">
-            <p><strong>Total:</strong> {{ total_cost|floatformat:2 }} EUR</p>
-        </div>
-    {% endif %}
-</div>
+        {% endif %}
+    </div>
 {% endblock %}
