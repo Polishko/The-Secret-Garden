@@ -1,0 +1,30 @@
+{% extends 'common/base.html' %}
+
+{% block content %}
+<div class="container my-5">
+    <h2 class="text-center">Order #{{ order.id }} Details</h2>
+    <p class="text-center">Date: {{ order.created_at|date:"d M Y" }}</p>
+    <p class="text-center">Total: <strong>{{ order.total_price|floatformat:2 }} EUR</strong></p>
+
+    {% if order_items %}
+        <h4 class="mt-4">Order Items:</h4>
+        <ul class="list-group mt-3">
+            {% for item in order_items %}
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                    <span>
+                        {{ item.product_name }} ({{ item.quantity }} x {{ item.price_per_unit|floatformat:2 }} EUR)
+                        <small class="text-muted">[{{ item.product_type|title }}]</small>
+                    </span>
+                    <span>Total: {{ item.total_price|floatformat:2 }} EUR</span>
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p class="text-center text-danger">This order has no items.</p>
+    {% endif %}
+
+    <div class="text-center mt-4">
+        <a href="{% url 'completed-orders' %}" class="btn btn-primary">Back to Completed Orders</a>
+    </div>
+</div>
+{% endblock %}
