@@ -9,6 +9,7 @@ from django.views.generic import CreateView, DetailView, UpdateView, View
 from thesecretgarden.accounts.forms import AppUserCreateForm, AppUserLoginForm, ProfileEditForm
 from thesecretgarden.accounts.models import Profile
 from thesecretgarden.mixins import IsUserProfileOwnerMixin
+from thesecretgarden.orders.models import Order
 
 UserModel = get_user_model()
 
@@ -50,6 +51,17 @@ class AppUserRegisterView(CreateView):
 class ProfileDetailsView(LoginRequiredMixin, IsUserProfileOwnerMixin, DetailView):
     model = Profile
     template_name = 'accounts/profile-details.html'
+
+    context_object_name = 'profile'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['completed_orders'] = Order.objects.filter(
+            user=self.request.user,
+            status='completed',
+            is_active=False
+        )
+        return context
 
 
 class ProfileEditView(LoginRequiredMixin, IsUserProfileOwnerMixin, UpdateView):
