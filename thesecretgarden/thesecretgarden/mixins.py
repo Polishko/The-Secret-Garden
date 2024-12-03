@@ -1,5 +1,6 @@
 from django.contrib import admin, messages
 from django.contrib.auth.mixins import UserPassesTestMixin
+from django.core.exceptions import PermissionDenied
 from django.shortcuts import redirect, get_object_or_404
 
 from thesecretgarden.accounts.models import Profile
@@ -94,8 +95,7 @@ class BasePermissionMixin(UserPassesTestMixin):
     redirect_url = 'plants-list'  # Default redirection
 
     def handle_no_permission(self):
-        messages.error(self.request, self.permission_denied_message)
-        return redirect(self.redirect_url)
+        raise PermissionDenied(self.permission_denied_message)
 
 class IsUserProfileOwnerMixin(BasePermissionMixin):
     """
