@@ -1,5 +1,5 @@
 from django.contrib import messages
-from django.contrib.auth.mixins import UserPassesTestMixin
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db import IntegrityError
 from django.shortcuts import redirect
 from django.urls import reverse_lazy
@@ -8,7 +8,7 @@ from django.views.generic import ListView, CreateView, DetailView, UpdateView, D
 from thesecretgarden.common.views import BaseBulkCreateView
 from thesecretgarden.gifts.forms import GiftBulkCreateForm, GiftCreateForm, GiftEditForm, GiftDeleteForm
 from thesecretgarden.gifts.models import Gift
-from thesecretgarden.mixins import CustomPermissionMixin
+from thesecretgarden.mixins import IsUserStaffMixin
 
 
 class GiftsListView(ListView):
@@ -24,26 +24,20 @@ class GiftsListView(ListView):
         return context
 
 
-class GiftBulkCreateView(BaseBulkCreateView, CustomPermissionMixin):
+class GiftBulkCreateView(LoginRequiredMixin, IsUserStaffMixin, BaseBulkCreateView):
     template_name = 'gifts/gift-bulk-create.html'
     form_class = GiftBulkCreateForm
     model = Gift
-
-    def test_func(self):
-        return self.request.user.is_staff or self.request.user.is_superuser
 
     def get_success_url(self):
         return reverse_lazy('gifts-list')
 
 
-class GiftCreateView(CreateView, CustomPermissionMixin):
+class GiftCreateView(LoginRequiredMixin, IsUserStaffMixin, CreateView):
     model = Gift
     form_class = GiftCreateForm
     template_name = 'gifts/gift-create-edit.html'
     success_url = reverse_lazy('gifts-list')
-
-    def test_func(self):
-        return self.request.user.is_staff or self.request.user.is_superuser
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -66,25 +60,34 @@ class GiftDetailView(DetailView):
         return context
 
 
-class GiftEditView(UpdateView, CustomPermissionMixin):
+class GiftEditView(LoginRequiredMixin, IsUserStaffMixin, UpdateView):
     model = Gift
     form_class = GiftEditForm
     template_name = 'gifts/gift-create-edit.html'
     slug_field = 'slug'
     slug_url_kwarg = 'slug'
 
-    def test_func(self):
-        return self.request.user.is_staff or self.request.user.is_superuser
-
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        available_stock = self.object.get_available_stock()
-        reserved_stock = self.object.stock - available_stock
+
+        try:
+            available_stock = self.object.get_available_stock()
+            reserved_stock = self.object.stock - available_stock
+            context['available_stock'] = available_stock
+            context['reserved_stock'] = reserved_stock
+
+        except AttributeError as e:
+            context['available_stock'] = 0
+            context['reserved_stock'] = 0
+            messages.error(self.request, "Unable to calculate stock information.")
+
+        except Exception as e:
+            context['available_stock'] = 0
+            context['reserved_stock'] = 0
+            messages.error(self.request, "An unexpected error occurred while loading stock information.")
 
         context['is_edit'] = True
         context['item'] = 'Gift'
-        context['available_stock'] = available_stock
-        context['reserved_stock'] = reserved_stock
         context['cancel_return_view'] = reverse_lazy('gift-detail', kwargs={'slug': self.object.slug})
         return context
 
@@ -92,15 +95,12 @@ class GiftEditView(UpdateView, CustomPermissionMixin):
         return reverse_lazy('gift-detail', kwargs={'slug': self.object.slug})
 
 
-class GiftDeleteView(DeleteView, CustomPermissionMixin):
+class GiftDeleteView(LoginRequiredMixin, IsUserStaffMixin, DeleteView):
     model = Gift
     template_name = 'gifts/gift-delete.html'
     slug_field = 'slug'
     slug_url_kwarg = 'slug'
     success_url = reverse_lazy('gifts-list')
-
-    def test_func(self):
-        return self.request.user.is_staff or self.request.user.is_superuser
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)

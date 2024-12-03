@@ -7,17 +7,11 @@ from django.views.generic import View
 
 from thesecretgarden.flowers.models import Plant
 from thesecretgarden.gifts.models import Gift
-from thesecretgarden.mixins import CustomPermissionMixin
+from thesecretgarden.mixins import IsUserCustomerMixin
 from thesecretgarden.orders.models import Order, OrderItem
 
 
-class AddToCardView(LoginRequiredMixin, CustomPermissionMixin, View):
-    def test_func(self):
-        """
-        Ensures the user is in the 'Customer' group.
-        """
-        return self.request.user.groups.filter(name='Customer').exists()
-
+class AddToCardView(LoginRequiredMixin, IsUserCustomerMixin, View):
     def post(self, request, *args, **kwargs):
         """
         Handles adding items to the cart (pending orders).
@@ -49,14 +43,8 @@ class AddToCardView(LoginRequiredMixin, CustomPermissionMixin, View):
         return redirect(request.META.get('HTTP_REFERER', 'plants-list'))
 
 
-class CartView(LoginRequiredMixin, CustomPermissionMixin, View):
+class CartView(LoginRequiredMixin, IsUserCustomerMixin, View):
     template_name = 'orders/shopping_cart.html'
-
-    def test_func(self):
-        """
-        Ensures the user is in the 'Customer' group.
-        """
-        return self.request.user.groups.filter(name='Customer').exists()
 
     def get(self, request, *args, **kwargs):
         order = Order.objects.filter(user=request.user, status='pending').first()
@@ -105,13 +93,7 @@ class CartView(LoginRequiredMixin, CustomPermissionMixin, View):
             return render(request, self.template_name, context)
 
 
-class RemoveCartItemView(LoginRequiredMixin, CustomPermissionMixin, View):
-    def test_func(self):
-        """
-        Ensures the user is in the 'Customer' group.
-        """
-        return self.request.user.groups.filter(name='Customer').exists()
-    
+class RemoveCartItemView(LoginRequiredMixin, IsUserCustomerMixin, View):
     def post(self, request, *args, **kwargs):
         item_id = kwargs.get('item_id')
         order_item = OrderItem.objects.filter(id=item_id, order__user=request.user, order__status='pending').first()
@@ -126,3 +108,6 @@ class RemoveCartItemView(LoginRequiredMixin, CustomPermissionMixin, View):
             messages.error(request, "Item not found or unauthorized access.")
 
         return redirect('shopping-cart')
+
+class OrderConfirmView(LoginRequiredMixin, IsUserCustomerMixin, View):
+    pass
