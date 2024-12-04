@@ -25,7 +25,7 @@ class AddToCardView(LoginRequiredMixin, IsUserCustomerMixin, View):
 
         order, created = Order.objects.get_or_create(user=request.user, status='pending')
 
-        print(f"Order created: {created}, Order ID: {order.id}")
+        # print(f"Order created: {created}, Order ID: {order.id}")
 
         content_type = ContentType.objects.get_for_model(model)
         order_item, item_created = OrderItem.objects.get_or_create(
