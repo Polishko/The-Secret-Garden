@@ -9,16 +9,11 @@
     align-items: center;
 }
 
-.navbar-brand {
-    margin-bottom: 1rem;
-}
-
 // Landing page
 .hero {
     position: relative;
     z-index: 10;
 }
-
 
 .bg-fade-wrapper {
     position: relative;
@@ -85,6 +80,16 @@
         transform: scale(1.1);
     }
 }
+
+// Landing page social icons
+.social-icons a {
+    transition: color 0.3s ease;
+}
+
+.social-icons a:hover {
+    color: #6c757d; /* Change to a slightly darker gray on hover */
+}
+
 
 // Products list
 .products-section {

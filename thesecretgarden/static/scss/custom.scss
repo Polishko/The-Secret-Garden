@@ -10,6 +10,8 @@ $link-decoration: none;
 @import "recommended-products";
 @import "custom-buttons";
 @import "messages";
+@import "footers";
+@import "contact";
 
 // Import Bootstrap after variable overrides
 @import '../../node_modules/bootstrap/scss/bootstrap';
