@@ -15,3 +15,19 @@ class ProductBaseForm(forms.ModelForm):
 
         if 'DELETE' in self.fields:
             self.fields['DELETE'].label = 'Disable form if not needed'
+
+
+class SearchForm(forms.Form):
+    query = forms.CharField(
+        label='',
+        required=False,
+        error_messages= {
+            'max_length': 'You can only enter 100 characters!'
+        },
+        max_length=100,
+        widget=forms.TextInput(
+            attrs={
+                'placeholder': 'Search for a product...'
+            }
+        )
+    )
