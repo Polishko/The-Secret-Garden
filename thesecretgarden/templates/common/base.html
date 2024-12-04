@@ -16,7 +16,11 @@
 </head>
 <body> 
     <div class="{{ is_landing_page|default:False|yesno:'container-fluid,container p-lg-5 mt-5 page-wrapper' }}">
-        
+        {% if 'flowers' in request.path or 'gifts' in request.path or 'events' in request.path or 'about-us' in request.path%}
+            <div>
+                {% include 'common/top-footer.html' %}
+            </div>
+        {% endif %}
         <div class="{{ is_landing_page|default:False|yesno:'container-fluid p-0,container p-0' }}">
             {% block header %}
                 {% include 'common/nav.html' %}
@@ -35,11 +39,13 @@
             {% endblock %}
         </div>
         
-        <div class="container">
-            {% block footer %}
-                {% include 'common/footer.html' %}
-            {% endblock %}
-        </div>
+        {% if 'flowers' in request.path or 'gifts' in request.path or 'events' in request.path or 'about-us' in request.path %}
+            <div class="container">
+                {% block footer %}
+                    {% include 'common/footer.html' %}
+                {% endblock %}
+            </div>
+        {% endif %}
     
     </div>
     {% block scripts %}
