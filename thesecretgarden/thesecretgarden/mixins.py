@@ -1,7 +1,9 @@
 from django.contrib import admin, messages
 from django.contrib.auth.mixins import UserPassesTestMixin
 from django.core.exceptions import PermissionDenied
+from django.http import HttpResponseRedirect
 from django.shortcuts import redirect, get_object_or_404
+from django.urls import reverse
 
 from thesecretgarden.accounts.models import Profile
 
@@ -85,6 +87,36 @@ class StockManagementAdminMixin:
     def reserved_stock(self, obj):
         return obj.stock - obj.get_available_stock()
     reserved_stock.short_description = 'Reserved Stock'
+
+    def save_model(self, request, obj, form, change):
+        """
+        Prevent saving stock values lower than reserved stock.
+        """
+        if change:
+            reserved_stock = obj.stock - obj.get_available_stock()
+            if obj.stock < reserved_stock:
+                return
+
+        super().save_model(request, obj, form, change)
+
+    def response_change(self, request, obj):
+        """
+        Customizes the response after a stock update.
+        Suppresses the default success message for invalid stock changes.
+        """
+        reserved_stock = obj.stock - obj.get_available_stock()
+
+        if obj.stock < reserved_stock:
+            self.message_user(
+                request,
+                f"Stock cannot be less than reserved stock ({reserved_stock}).",
+                level=messages.ERROR
+            )
+            return HttpResponseRedirect(
+                reverse(f'admin:{self.model._meta.app_label}_{self.model._meta.model_name}_change', args=[obj.pk])
+            )
+
+        return super().response_change(request, obj)
 
 # Permission mixins
 class BasePermissionMixin(UserPassesTestMixin):
