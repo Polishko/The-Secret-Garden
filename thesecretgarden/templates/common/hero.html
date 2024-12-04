@@ -1,12 +1,30 @@
 <a href="{% url 'landing-page' %}" class="text-decoration-none">
     <div class="hero container-fluid text-center overlay-content d-flex flex-column justify-content-center align-items-center {% if is_landing_page %}vh-100{% endif %}">
-        <h1 class="main-page-title {% if is_landing_page %}landing-hero{% endif %}">SECRET GARDEN</h1>
+        <!-- Main Title -->
+        <h1 class="main-page-title mt-5 {% if is_landing_page %}landing-hero{% endif %}">
+            SECRET GARDEN
+        </h1>
+
+        <!-- Links for Flowers, Gifts, and Events -->
         {% if is_landing_page %}
-        <h3 class="main-page-heading">
-            <a class="text-decoration-none" href="{% url 'plants-list' %}">FLOWERS</a> |
-            <a class="text-decoration-none" href="{% url 'gifts-list' %}">GIFTS</a> |
-            <a class="text-decoration-none" href="{% url 'events-coming-soon' %}">EVENTS</a>
-        </h3>
+            <h3 class="main-page-heading mt-3">
+                <a class="text-decoration-none" href="{% url 'plants-list' %}">FLOWERS</a> |
+                <a class="text-decoration-none" href="{% url 'gifts-list' %}">GIFTS</a> |
+                <a class="text-decoration-none" href="{% url 'events-coming-soon' %}">EVENTS</a>
+            </h3>
+    
+            <!-- Social Media Icons -->
+            <div class="social-icons mt-5 d-flex justify-content-center gap-4">
+                <a href="#" class="text-muted" aria-label="Instagram">
+                    <i class="fab fa-instagram fa-2x"></i>
+                </a>
+                <a href="#" class="text-muted" aria-label="Facebook">
+                    <i class="fab fa-facebook fa-2x"></i>
+                </a>
+                <a href="#" class="text-muted" aria-label="LinkedIn">
+                    <i class="fab fa-linkedin fa-2x"></i>
+                </a>
+            </div>
         {% endif %}
     </div>
 </a>
