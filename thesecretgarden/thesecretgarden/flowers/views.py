@@ -57,7 +57,7 @@ class PlantDetailView(DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
 
-        is_reserved = self.object.get_available_stock != self.object.stock
+        is_reserved = self.object.get_available_stock() != self.object.stock
         context['is_reserved'] = is_reserved
         return context
 
