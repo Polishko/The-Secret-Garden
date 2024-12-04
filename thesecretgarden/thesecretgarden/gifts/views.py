@@ -1,10 +1,11 @@
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.db import IntegrityError
+from django.db import IntegrityError, models
 from django.shortcuts import redirect
 from django.urls import reverse_lazy
 from django.views.generic import ListView, CreateView, DetailView, UpdateView, DeleteView
 
+from thesecretgarden.common.forms import SearchForm
 from thesecretgarden.common.views import BaseBulkCreateView
 from thesecretgarden.gifts.forms import GiftBulkCreateForm, GiftCreateForm, GiftEditForm, GiftDeleteForm
 from thesecretgarden.gifts.models import Gift
@@ -12,15 +13,28 @@ from thesecretgarden.mixins import IsUserStaffMixin
 
 
 class GiftsListView(ListView):
+    ITEMS_PER_PAGE = 6
+
     model = Gift
     template_name = 'gifts/gifts-list.html'
     context_object_name = 'items'
-    paginate_by = 6
+    paginate_by = ITEMS_PER_PAGE
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        query = self.request.GET.get('query')
+        if query:
+            queryset = queryset.filter(
+                models.Q(brand_name__icontains=query) | models.Q(short_name__icontains=query)
+            )
+        return queryset
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['product'] = 'Gifts'
         context['detail_url_name'] = 'gift-detail'
+        context['form'] = SearchForm(self.request.GET)
+        context['items_per_page'] = self.ITEMS_PER_PAGE
         return context
 
 

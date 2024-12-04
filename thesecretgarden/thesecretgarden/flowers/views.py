@@ -6,6 +6,7 @@ from django.shortcuts import redirect
 from django.urls import reverse_lazy
 from django.views.generic import ListView, CreateView, UpdateView, DetailView, DeleteView
 
+from thesecretgarden.common.forms import SearchForm
 from thesecretgarden.common.views import BaseBulkCreateView
 from thesecretgarden.flowers.forms import PlantBulkCreateForm, PlantCreateForm, PlantEditForm, PlantDeleteForm
 from thesecretgarden.flowers.models import Plant
@@ -13,15 +14,26 @@ from thesecretgarden.mixins import IsUserStaffMixin
 
 
 class PlantsListView(ListView):
+    ITEMS_PER_PAGE = 6
+
     model = Plant
     template_name = 'flowers/plants-list.html'
     context_object_name = 'items'
-    paginate_by = 6
+    paginate_by = ITEMS_PER_PAGE
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        query = self.request.GET.get('query')
+        if query:
+            queryset = queryset.filter(name__icontains=query)
+        return queryset
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['product'] = 'Flowers'
         context['detail_url_name'] = 'plant-detail'
+        context['form'] = SearchForm(self.request.GET)
+        context['items_per_page'] = self.ITEMS_PER_PAGE
         return context
 
 
