@@ -1,7 +1,4 @@
-from django.contrib import admin, messages
-from django.db import IntegrityError
-from django.shortcuts import redirect
-
+from django.contrib import admin
 
 from thesecretgarden.gifts.models import Gift
 from thesecretgarden.mixins import StockManagementAdminMixin
