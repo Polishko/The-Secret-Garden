@@ -2,7 +2,7 @@ from django.core.exceptions import ValidationError
 from django.forms import formset_factory
 from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
-from django.views.generic import FormView
+from django.views.generic import FormView, TemplateView
 
 
 def landing_page(request):
@@ -81,3 +81,10 @@ class BaseBulkCreateView(FormView):
             recreated_formset.forms[i] = form
 
         return self.render_to_response({'formset': recreated_formset})
+
+
+class ContactUsView(TemplateView):
+    template_name = 'common/contact-us.html'
+
+class AboutUs(TemplateView):
+    template_name = 'common/about-us.html'
