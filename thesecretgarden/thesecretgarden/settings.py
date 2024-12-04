@@ -25,6 +25,7 @@ MY_APPS = [
     'thesecretgarden.flowers',
     'thesecretgarden.gifts',
     'thesecretgarden.orders',
+    'thesecretgarden.events',
 ]
 
 THIRD_PARTY_APPS = [
