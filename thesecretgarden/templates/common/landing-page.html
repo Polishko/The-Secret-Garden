@@ -1,13 +1,30 @@
 {% extends 'common/base.html' %}
+
 {% block head %}
-    <link rel="preload" href="https://res.cloudinary.com/dissmiwiq/image/upload/v1730401574/joanna-kosinska-ToV0rS9nTYs-unsplash_rf9cxa.jpg" as="image">
+    <!-- Preload images for smooth animation -->
     <link rel="preload" href="https://res.cloudinary.com/dissmiwiq/image/upload/v1730486602/irina-HP9_dGIQEik-unsplash_ijtxvl.jpg" as="image">
+    <link rel="preload" href="https://res.cloudinary.com/dissmiwiq/image/upload/v1730401574/joanna-kosinska-ToV0rS9nTYs-unsplash_rf9cxa.jpg" as="image">
     <link rel="preload" href="https://res.cloudinary.com/dissmiwiq/image/upload/v1730486604/freestocks-k-Rp0V0XWWU-unsplash_jsziui.jpg" as="image">
 {% endblock %}
 
 {% block header %}
     <div class="bg-fade-wrapper">
         {% include 'common/hero.html' %}
-        {% include 'common/landing-background.html' %}
+        
+        <!-- Background images with fade and zoom animation -->
+        <div class="bg-fade img-1">
+            <img src="https://res.cloudinary.com/dissmiwiq/image/upload/v1730486602/irina-HP9_dGIQEik-unsplash_ijtxvl.jpg" alt="Background Image 1">
+        </div>
+        <div class="bg-fade img-2">
+            <img src="https://res.cloudinary.com/dissmiwiq/image/upload/v1730401574/joanna-kosinska-ToV0rS9nTYs-unsplash_rf9cxa.jpg" alt="Background Image 2">
+        </div>
+        <div class="bg-fade img-3">
+            <img src="https://res.cloudinary.com/dissmiwiq/image/upload/v1730486604/freestocks-k-Rp0V0XWWU-unsplash_jsziui.jpg" alt="Background Image 3">
+        </div>
+        <div class="bg-fade img-1">
+            <img src="https://res.cloudinary.com/dissmiwiq/image/upload/v1730486602/irina-HP9_dGIQEik-unsplash_ijtxvl.jpg" alt="Background Image 1">
+        </div>
     </div>
 {% endblock %}
+
+
