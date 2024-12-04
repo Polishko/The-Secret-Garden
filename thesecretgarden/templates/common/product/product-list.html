@@ -36,9 +36,15 @@
                      alt="No products available"
                      class="img-fluid mb-4 no-products-img"
                      style="max-width: 400px; border-radius: 10px;">
-                <h1 class="h4 text-muted">
-                    We are sorry, there are no {{ product|lower }} in our stock at the moment!
-                </h1>
+                {% if request.GET.query %}
+                    <h1 class="h4 text-muted">
+                        There are no products matching your search criteria in our stock at the moment!
+                    </h1>
+                {% else %}
+                    <h1 class="h4 text-muted">
+                        We are sorry, there are no {{ product|lower }} in our stock at the moment!
+                    </h1>
+                {% endif %}
             </div>
         {% endfor%}
         
