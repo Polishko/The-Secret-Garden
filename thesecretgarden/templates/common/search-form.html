@@ -1,0 +1,27 @@
+<div class="search-bar col-lg-12 col-md-10 col-sm-12 mx-auto">
+    <form class="d-flex align-items-center" action="{{ request.path }}" method="get">
+        <input
+            class="form-control me-2"
+            type="search"
+            name="query"
+            placeholder="Search..."
+            aria-label="Search"
+            value="{{ request.GET.query|default:'' }}"
+        >
+        <button class="search-btn btn btn-outline-primary" type="submit">Search</button>
+    </form>
+
+    {% if request.GET.query %}
+        <p class="mt-2 ms-2" style="color: cadetblue">
+            {% with items|length as item_count %}
+                {% if item_count == 0 %}
+                    No items found matching your search.
+                {% elif item_count == 1 %}
+                    Found {{ item_count }} item.
+                {% else %}
+                    Found {{ item_count }} items.
+                {% endif %}
+            {% endwith %}
+        </p>
+    {% endif %}
+</div>
