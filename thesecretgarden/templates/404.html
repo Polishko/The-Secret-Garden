@@ -1,9 +1,23 @@
-{% extends 'common/base.html' %}
+{% load static %}
 
-{% block content %}
-<div class="container text-center mt-5">
-    <h1>Oops! Page Not Found</h1>
-    <p>The page or resource you were looking for doesn’t exist.</p>
-    <a href="{% url 'plants-list' %}" class="btn btn-primary">Return to Home</a>
-</div>
-{% endblock %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Page Not Found</title>
+    <link rel="stylesheet" href="{% static 'css/custom.css' %}">
+</head>
+<body>
+    <div class="container text-center" style="padding: 50px;">
+        <h1>Oops! Page Not Found</h1>
+        <p>The page you’re looking for doesn’t exist or has been moved.</p>
+        <p>
+            <a href="{% url 'landing-page' %}" class="btn btn-primary">Back to Landing Page</a>
+        </p>
+        <img src="https://res.cloudinary.com/dissmiwiq/image/upload/v1733412324/james-kelly-smith-D2KCi3AzRQ8-unsplash_zd4dwi.jpg" 
+             alt="404 Not Found" 
+             style="max-width: 100%; height: auto; margin: 20px 0;">
+    </div>
+</body>
+</html>
