@@ -31,6 +31,7 @@ MY_APPS = [
 THIRD_PARTY_APPS = [
     'cloudinary',
     'cloudinary_storage',
+    'rest_framework',
 ]
 
 INSTALLED_APPS = [
@@ -44,6 +45,7 @@ INSTALLED_APPS = [
 
 # Middleware
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -151,3 +153,7 @@ cloudinary.config(
 
 MEDIA_URL = '/media/'
 DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
+
+CORS_ALLOWED_ORIGINS = [
+    "http://127.0.0.1:5500",
+]
