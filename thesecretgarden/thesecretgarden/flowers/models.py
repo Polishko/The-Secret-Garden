@@ -7,7 +7,6 @@ from django.db import models
 from django.utils.html import strip_tags
 
 from thesecretgarden.common.models import Product
-from thesecretgarden.flowers.validators import PlantDescriptionValidator
 
 
 class Plant(Product):
@@ -31,9 +30,8 @@ class Plant(Product):
         null=False,
         blank=False,
         validators=(
-            PlantDescriptionValidator(),
-            MinLengthValidator(10, message='Description should be at least 10 characters.'),
-            MaxLengthValidator(300, message='Description should not exceed 1000 characters.'),
+            MinLengthValidator(10, message="Description should be at least 10 characters."),
+            MaxLengthValidator(300, message="Description should not exceed 300 characters."),
         ),
         verbose_name='Description',
         help_text = 'Provide a description for the plant product.'
