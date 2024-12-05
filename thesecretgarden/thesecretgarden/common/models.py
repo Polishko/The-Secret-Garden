@@ -3,16 +3,20 @@ from decimal import Decimal
 from cloudinary.models import CloudinaryField
 from django.contrib.contenttypes.models import ContentType
 from django.core.exceptions import ValidationError
+from django.core.validators import MinLengthValidator
 
 from django.db import models
 from django.utils.text import slugify
 
-from thesecretgarden.common.validators import ProductNameValidator, ProductPriceValidator, ProductStockValidator
+from thesecretgarden.common.validators import ProductNameValidator, ProductPriceValidator, ProductStockValidator, \
+    ContactNameValidator, ContactMessageValidator
 from thesecretgarden.orders.models import OrderItem
 
 
 class Product(models.Model):
-    # MAX_FILE_SIZE = 5
+    """
+    Provides the common fields and methods of the Plant and Gift models.
+    """
 
     name = models.CharField(
         null=False,
@@ -135,3 +139,45 @@ class Product(models.Model):
 
     def __str__(self):
         return f'{self.name}'
+
+
+class ContactMessage(models.Model):
+    """
+    Stores the contact messages sent my customers
+    """
+    name = models.CharField(
+        max_length=100,
+        null=False,
+        blank=False,
+        validators=(
+            ContactNameValidator(),
+            MinLengthValidator(3),
+        ),
+        verbose_name='Name',
+        help_text='Please enter your name.',
+    )
+
+    email = models.EmailField(
+        null=False,
+        blank=False,
+        verbose_name='Email',
+        help_text='Please provide an email.',
+    )
+
+    message = models.TextField(
+        null=False,
+        blank=False,
+        validators=(
+            ContactMessageValidator(),
+        ),
+        verbose_name='Your message',
+        help_text='Please enter your message.',
+    )
+
+    created_at = models.DateTimeField(
+        auto_now_add=True,
+        verbose_name='Created at',
+    )
+
+    def __str__(self):
+        return f"Message from {self.name}"
