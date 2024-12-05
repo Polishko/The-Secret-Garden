@@ -71,21 +71,28 @@ class Order(models.Model):
     def complete_order(self):
         """
         Completes the order by deducting stock and updating the status and is_active fields.
+        Locks products to prevent concurrent modifications
         """
         with transaction.atomic():
             for item in self.order_items.all():
-                product = item.product
-                available_stock = product.get_available_stock()
+                # product = item.product
+                model_class = item.content_type.model_class() # new, testing it
 
+                locked_product = model_class.objects.select_for_update().get(pk=item.product.pk) #new
+                # available_stock = product.get_available_stock()
+                available_stock = locked_product.get_available_stock() # new
                 effective_available_stock = available_stock + item.quantity
 
                 if item.quantity > effective_available_stock:
                     raise ValidationError(
-                        f"Not enough stock for {product}. Available: {available_stock}."
+                        # f"Not enough stock for {product}. Available: {available_stock}."
+                        f"Not enough stock for {locked_product}. Available: {available_stock}."
                     )
 
-                product.stock -= item.quantity
-                product.save()
+                # product.stock -= item.quantity
+                locked_product.stock -= item.quantity # new
+                # product.save()
+                locked_product.save() # new
 
             self.status = 'completed'
             self.is_active = False
