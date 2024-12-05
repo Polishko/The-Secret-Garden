@@ -103,3 +103,8 @@ class ContactMessageApiView(APIView):
             return Response({'success': 'Message sent successfully!'}, status=status.HTTP_201_CREATED)
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+# Temporary view simulating custom 404
+def custom_404_view(request, exception=None):
+    return render(request, '404.html', status=404)
