@@ -71,6 +71,7 @@ class PlantDetailView(DetailView):
 
         is_reserved = self.object.get_available_stock() != self.object.stock
         context['is_reserved'] = is_reserved
+        context['product_type'] = 'plant'
         return context
 
 
