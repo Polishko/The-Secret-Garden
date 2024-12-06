@@ -5,6 +5,9 @@
 {% block content %}
 <div class="container my-5">
     <div class="row justify-content-center">
+        
+        {% include 'common/product/related-products.html' %}
+    
         <!-- Card Container -->
         <div class="col-md-8">
             <div class="card shadow-sm">
@@ -85,4 +88,7 @@
         </div>
     </div>
 </div>
+{% endblock %}
+{% block extra_js %}
+<script src="{% static 'js/related-products.js' %}"></script>
 {% endblock %}
