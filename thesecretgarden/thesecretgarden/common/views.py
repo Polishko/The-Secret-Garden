@@ -130,7 +130,7 @@ async def related_products(request, product_type):
 
     products = []
     async for product in query:
-        products.append({ 
+        products.append({
             'slug': product.slug,
             'name': product.name if product_type == 'plant' else f'{product.short_name}',
             'price': product.price,
@@ -138,25 +138,3 @@ async def related_products(request, product_type):
         })
 
     return JsonResponse({'products': products})
-
-# async def related_products(request, product_type):
-#     """
-#     Fetches related products dynamically based on type.
-#     """
-#     if product_type == 'plant':
-#         query = Plant.objects.filter(~Q(stock=0)).order_by('-created_at')[:5]
-#     elif product_type == 'gift':
-#         query = Gift.objects.filter(~Q(stock=0)).order_by('-created_at')[:5]
-#     else:
-#         return JsonResponse({'error': 'Invalid product type'}, status=400)
-#
-#     products = []
-#     async for product in query:
-#         products.append({
-#             'slug': product.slug,
-#             'name': product.name if product_type == 'plant' else f'{product.short_name}',
-#             'price': product.price,
-#             'image': product.photo.url,
-#         })
-#
-#     return JsonResponse({'products': products})
