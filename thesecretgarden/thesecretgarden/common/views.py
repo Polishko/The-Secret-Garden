@@ -1,5 +1,7 @@
 from django.core.exceptions import ValidationError
+from django.db.models import Q
 from django.forms import formset_factory
+from django.http import JsonResponse
 from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
 from django.views.generic import FormView, TemplateView
@@ -8,6 +10,8 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from thesecretgarden.common.serializers import ContactMessageSerializer
+from thesecretgarden.flowers.models import Plant
+from thesecretgarden.gifts.models import Gift
 
 
 def landing_page(request):
@@ -105,6 +109,31 @@ class ContactMessageApiView(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-# Temporary view simulating custom 404
 def custom_404_view(request, exception=None):
+    """
+    Used to simulate the custom 404 during development
+    """
     return render(request, '404.html', status=404)
+
+
+async def related_products(request, product_type):
+    """
+    Fetches related products dynamically based on type.
+    """
+    if product_type == 'plant':
+        query = Plant.objects.filter(~Q(stock=0)).order_by('-created_at')[:5]
+    elif product_type == 'gift':
+        query = Gift.objects.filter(~Q(stock=0)).order_by('-created_at')[:5]
+    else:
+        return JsonResponse({'error': 'Invalid product type'}, status=400)
+
+    products = []
+    async for product in query:
+        products.append({
+            'slug': product.slug,
+            'name': product.name if product_type == 'plant' else f'{product.short_name}',
+            'price': product.price,
+            'image': product.photo.url,
+        })
+
+    return JsonResponse({'products': products})
