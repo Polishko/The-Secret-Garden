@@ -44,3 +44,4 @@ def add_to_group_based_on_role(sender, instance, created, **kwargs):
             # Assign to 'Customer' group
             customer_group, _ = Group.objects.get_or_create(name='Customer')
             instance.groups.add(customer_group)
+
