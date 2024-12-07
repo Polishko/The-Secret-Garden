@@ -11,6 +11,40 @@ from thesecretgarden.mixins import IsUserCustomerMixin
 from thesecretgarden.orders.models import Order, OrderItem
 
 
+# class AddToCardView(LoginRequiredMixin, IsUserCustomerMixin, View):
+#     def post(self, request, *args, **kwargs):
+#         """
+#         Handles adding items to the cart (pending orders).
+#         """
+#         product_type = kwargs.get('product_type')
+#         product_id = kwargs.get('product_id')
+#         quantity = int(request.POST.get('quantity', 1))
+#
+#         model = Plant if product_type == 'plant' else Gift
+#         product = model.objects.get(pk=product_id)
+#
+#         order, created = Order.objects.get_or_create(user=request.user, status='pending')
+#
+#         content_type = ContentType.objects.get_for_model(model)
+#         order_item, item_created = OrderItem.objects.get_or_create(
+#             order=order,
+#             content_type=content_type,
+#             object_id=product.pk,
+#             defaults={'quantity': 0, 'price_per_unit': product.price}
+#         )
+#
+#         order_item.quantity += quantity
+#
+#         try:
+#             order_item.save()
+#         except ValidationError as e:
+#             return redirect(request.META.get('HTTP_REFERER', 'plants-list'))
+#
+#         return redirect(request.META.get('HTTP_REFERER', 'plants-list'))
+
+from django.db import transaction
+from django.shortcuts import redirect
+
 class AddToCardView(LoginRequiredMixin, IsUserCustomerMixin, View):
     def post(self, request, *args, **kwargs):
         """
@@ -23,24 +57,23 @@ class AddToCardView(LoginRequiredMixin, IsUserCustomerMixin, View):
         model = Plant if product_type == 'plant' else Gift
         product = model.objects.get(pk=product_id)
 
-        order, created = Order.objects.get_or_create(user=request.user, status='pending')
-
-        # print(f"Order created: {created}, Order ID: {order.id}")
-
-        content_type = ContentType.objects.get_for_model(model)
-        order_item, item_created = OrderItem.objects.get_or_create(
-            order=order,
-            content_type=content_type,
-            object_id=product.pk,
-            defaults={'quantity': 0, 'price_per_unit': product.price}
-        )
-
-        order_item.quantity += quantity
-
-        try:
-            order_item.save()
-        except ValidationError as e:
+        available_stock = product.get_available_stock()
+        if quantity > available_stock:
             return redirect(request.META.get('HTTP_REFERER', 'plants-list'))
+
+        with transaction.atomic():
+            order, created = Order.objects.get_or_create(user=request.user, status='pending')
+
+            content_type = ContentType.objects.get_for_model(model)
+            order_item, item_created = OrderItem.objects.get_or_create(
+                order=order,
+                content_type=content_type,
+                object_id=product.pk,
+                defaults={'quantity': 0, 'price_per_unit': product.price}
+            )
+
+            order_item.quantity += quantity
+            order_item.save()
 
         return redirect(request.META.get('HTTP_REFERER', 'plants-list'))
 
