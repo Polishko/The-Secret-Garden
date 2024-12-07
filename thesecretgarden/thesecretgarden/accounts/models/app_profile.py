@@ -1,4 +1,5 @@
 from django.core.exceptions import ValidationError
+from django.core.validators import MinLengthValidator
 from django.utils import timezone
 
 from django.db import models
@@ -32,6 +33,7 @@ class Profile(models.Model):
         blank=False,
         validators=(
             NameValidator(field_name='first name'),
+            MinLengthValidator(3),
         ),
         verbose_name='First Name',
     )
@@ -42,6 +44,7 @@ class Profile(models.Model):
         blank=False,
         validators=(
             NameValidator(field_name='last name'),
+            MinLengthValidator(3),
         ),
         verbose_name='Last Name',
     )
