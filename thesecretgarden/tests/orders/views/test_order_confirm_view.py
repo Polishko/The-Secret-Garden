@@ -1,9 +1,6 @@
-from unittest.mock import patch
-
 from django.contrib.auth import get_user_model
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.messages import get_messages
-from django.core.exceptions import ValidationError
 from django.test import TestCase, Client
 from django.urls import reverse
 from thesecretgarden.orders.models import Order, OrderItem
