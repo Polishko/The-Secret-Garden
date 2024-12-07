@@ -105,4 +105,3 @@ class AddToCartViewTest(TestCase):
             'product_id': self.plant.pk
         })}"
         self.assertRedirects(response, expected_url)
-
