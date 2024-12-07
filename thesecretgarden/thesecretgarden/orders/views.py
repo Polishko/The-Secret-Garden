@@ -187,7 +187,8 @@ class OrderConfirmView(LoginRequiredMixin, IsUserCustomerMixin, View):
             messages.success(request, "Your order has been successfully completed!")
             return redirect('completed-orders')
         except ValidationError as e:
-            messages.error(request, f"Order could not be completed: {str(e)}")
+            error_message = ', '.join(e.messages)
+            messages.error(request, f"Order could not be completed: {error_message}")
         except Exception as e:
             messages.error(request, f"An unexpected error occurred: {str(e)}")
 
