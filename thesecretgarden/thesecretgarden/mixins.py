@@ -127,6 +127,9 @@ class BasePermissionMixin(UserPassesTestMixin):
     redirect_url = 'plants-list'  # Default redirection
 
     def handle_no_permission(self):
+        if not self.request.user.is_authenticated:
+            return redirect(f"{reverse('login')}?next={self.request.path}")
+
         raise PermissionDenied(self.permission_denied_message)
 
 class IsUserProfileOwnerMixin(BasePermissionMixin):
@@ -136,6 +139,8 @@ class IsUserProfileOwnerMixin(BasePermissionMixin):
     permission_denied_message = 'Only content owners can perform this action.'
 
     def test_func(self):
+        if not self.request.user.is_authenticated:
+            return False
         return self.request.user.slug == self.kwargs['slug']
 
     def get_object(self, queryset=None):
@@ -149,6 +154,8 @@ class IsUserStaffMixin(BasePermissionMixin):
     permission_denied_message = 'Only staff members can access this page.'
 
     def test_func(self):
+        if not self.request.user.is_authenticated:
+            return False
         return (self.request.user.groups.filter(name='Staff').exists()
                 or self.request.user.is_staff or self.request.user.is_superuser)
 
@@ -160,4 +167,6 @@ class IsUserCustomerMixin(BasePermissionMixin):
     permission_denied_message = 'Only customers can access this page.'
 
     def test_func(self):
+        if not self.request.user.is_authenticated:
+            return False
         return self.request.user.groups.filter(name='Customer').exists()
