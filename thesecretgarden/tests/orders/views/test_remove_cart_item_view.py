@@ -8,7 +8,7 @@ from thesecretgarden.gifts.models import Gift
 
 UserModel = get_user_model()
 
-class CartViewTest(TestCase):
+class RemoveCartItemViewTest(TestCase):
 
     def setUp(self):
         self.user = UserModel.objects.create_user(
