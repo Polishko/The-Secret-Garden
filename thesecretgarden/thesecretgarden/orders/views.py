@@ -144,7 +144,7 @@ class OrderConfirmView(LoginRequiredMixin, IsUserCustomerMixin, View):
         if not profile.address:
             messages.error(
                 request,
-                'You must provide an address to place an order. Please update your profile.'
+                'You must provide an address to place an order.'
             )
 
             return redirect('profile-edit', slug=request.user.slug)
