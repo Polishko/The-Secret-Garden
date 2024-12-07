@@ -119,7 +119,6 @@ class CartView(LoginRequiredMixin, IsUserCustomerMixin, View):
                 return redirect('plants-list')
 
         else:
-            # messages.info(request, "You have no active orders.")
             context = {
                 'order': None,
                 'order_items': [],
