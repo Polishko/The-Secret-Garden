@@ -93,3 +93,16 @@ class AddToCartViewTest(TestCase):
         self.plant.refresh_from_db()
         self.assertEqual(self.plant.stock, 10)
 
+
+    def test_add_to_cart__for_not_logged_in_user__redirects_to_login(self):
+        response = self.client.post(reverse('add-to-cart', kwargs={
+            'product_type': 'plant',
+            'product_id': self.plant.pk
+        }), data={'quantity': 1})
+
+        expected_url = f"{reverse('login')}?next={reverse('add-to-cart', kwargs={
+            'product_type': 'plant',
+            'product_id': self.plant.pk
+        })}"
+        self.assertRedirects(response, expected_url)
+
