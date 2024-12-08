@@ -6,7 +6,9 @@ from thesecretgarden.orders.models import Order, OrderItem
 from thesecretgarden.flowers.models import Plant
 from thesecretgarden.gifts.models import Gift
 
+
 UserModel = get_user_model()
+
 
 class RemoveCartItemViewTest(TestCase):
 
@@ -54,18 +56,28 @@ class RemoveCartItemViewTest(TestCase):
             price_per_unit=self.plant.price,
         )
 
-        response = self.client.post(reverse('remove-item', kwargs={'item_id': order_item.id}))
+        response = self.client.post(reverse('remove-item', kwargs={
+            'user_slug': self.user.slug,
+            'item_id': order_item.id
+        }))
 
-        self.assertRedirects(response, reverse('shopping-cart'))
+        self.assertRedirects(response, reverse('shopping-cart', kwargs={
+            'user_slug': self.user.slug,
+        }))
         self.assertFalse(OrderItem.objects.filter(id=order_item.id).exists())
 
 
     def test_remove_cart_item__nonexistent_item__shows_error(self):
         self.login_user()
 
-        response = self.client.post(reverse('remove-item', kwargs={'item_id': 0}))
+        response = self.client.post(reverse('remove-item', kwargs={
+            'user_slug': self.user.slug,
+            'item_id': 0
+        }))
 
-        self.assertRedirects(response, reverse('shopping-cart'))
+        self.assertRedirects(response, reverse('shopping-cart', kwargs={
+            'user_slug': self.user.slug,
+        }))
         messages = list(response.wsgi_request._messages)
         self.assertEqual(len(messages), 1)
         self.assertEqual(str(messages[0]), "Item not found or unauthorized access.")
@@ -89,9 +101,14 @@ class RemoveCartItemViewTest(TestCase):
 
         self.login_user()
 
-        response = self.client.post(reverse('remove-item', kwargs={'item_id': order_item.id}))
+        response = self.client.post(reverse('remove-item', kwargs={
+            'user_slug': self.user.slug,
+            'item_id': order_item.id
+        }))
 
-        self.assertRedirects(response, reverse('shopping-cart'))
+        self.assertRedirects(response, reverse('shopping-cart', kwargs={
+            'user_slug': self.user.slug,
+        }))
         self.assertTrue(OrderItem.objects.filter(id=order_item.id).exists())
         messages = list(response.wsgi_request._messages)
         self.assertEqual(len(messages), 1)

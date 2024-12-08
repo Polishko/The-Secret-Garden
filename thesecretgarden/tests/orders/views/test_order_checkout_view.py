@@ -33,9 +33,13 @@ class OrderCheckOutViewTest(TestCase):
 
 
     def test_checkout__with_no_pending_order__redirects_and_shows_error(self):
-        response = self.client.get(reverse('order-checkout'))
+        response = self.client.get(reverse('order-checkout', kwargs={
+            'user_slug': self.user.slug,
+        }))
 
-        self.assertRedirects(response, reverse('shopping-cart'))
+        self.assertRedirects(response, reverse('shopping-cart', kwargs={
+            'user_slug': self.user.slug,
+        }))
 
         messages = list(get_messages(response.wsgi_request))
         self.assertEqual(len(messages), 1)
@@ -53,7 +57,9 @@ class OrderCheckOutViewTest(TestCase):
             price_per_unit=self.plant.price,
         )
 
-        response = self.client.get(reverse('order-checkout'))
+        response = self.client.get(reverse('order-checkout', kwargs={
+            'user_slug': self.user.slug,
+        }))
 
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'orders/order-checkout.html')
@@ -72,7 +78,9 @@ class OrderCheckOutViewTest(TestCase):
             price_per_unit=self.plant.price,
         )
 
-        response = self.client.get(reverse('order-checkout'))
+        response = self.client.get(reverse('order-checkout', kwargs={
+            'user_slug': self.user.slug,
+        }))
 
         order.refresh_from_db()
         self.assertEqual(order.total_price, 40.00)
@@ -87,9 +95,13 @@ class OrderCheckOutViewTest(TestCase):
 
         # Mock calculate_total to raise an exception
         with patch.object(Order, 'calculate_total', side_effect=Exception("Calculation failed")):
-            response = self.client.get(reverse('order-checkout'))
+            response = self.client.get(reverse('order-checkout', kwargs={
+            'user_slug': self.user.slug,
+        }))
 
-            self.assertRedirects(response, reverse('shopping-cart'))
+            self.assertRedirects(response, reverse('shopping-cart', kwargs={
+            'user_slug': self.user.slug,
+        }))
 
             messages = list(get_messages(response.wsgi_request))
             self.assertEqual(len(messages), 1)

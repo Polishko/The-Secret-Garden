@@ -61,7 +61,9 @@ class CartViewTest(TestCase):
             price_per_unit=self.gift.price,
         )
 
-        response = self.client.get(reverse('shopping-cart'))
+        response = self.client.get(reverse('shopping-cart', kwargs={
+            'user_slug': self.user.slug,
+        }))
 
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'orders/shopping-cart.html')
@@ -75,7 +77,9 @@ class CartViewTest(TestCase):
     def test_cart_view_without_pending_order__shows_correct_content(self):
         self.login_user()
 
-        response = self.client.get(reverse('shopping-cart'))
+        response = self.client.get(reverse('shopping-cart', kwargs={
+            'user_slug': self.user.slug,
+        }))
 
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'orders/shopping-cart.html')
@@ -87,9 +91,13 @@ class CartViewTest(TestCase):
 
 
     def test_cart_view__unauthenticated_user__redirects_to_login(self):
-        response = self.client.get(reverse('shopping-cart'))
+        response = self.client.get(reverse('shopping-cart', kwargs={
+            'user_slug': self.user.slug,
+        }))
         self.assertEqual(response.status_code, 302)
-        self.assertRedirects(response, f"{reverse('login')}?next={reverse('shopping-cart')}")
+        self.assertRedirects(response, f"{reverse('login')}?next={reverse('shopping-cart', kwargs={
+            'user_slug': self.user.slug,
+        })}")
 
 
     def test_cart_view_handles_attribute_error(self):
@@ -106,7 +114,9 @@ class CartViewTest(TestCase):
 
         self.plant.delete()
 
-        response = self.client.get(reverse('shopping-cart'))
+        response = self.client.get(reverse('shopping-cart', kwargs={
+            'user_slug': self.user.slug,
+        }))
 
         self.assertRedirects(response, reverse('plants-list'))
         messages = list(response.wsgi_request._messages)

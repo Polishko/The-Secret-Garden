@@ -45,9 +45,13 @@ class OrderConfirmViewTest(TestCase):
     def test_confirm_order__with_no_pending_order__redirects_and_shows_error(self):
         self.login_user()
 
-        response = self.client.post(reverse('order-confirm'))
+        response = self.client.post(reverse('order-confirm', kwargs={
+            'user_slug': self.user.slug,
+        }))
 
-        self.assertRedirects(response, reverse('shopping-cart'))
+        self.assertRedirects(response, reverse('shopping-cart', kwargs={
+            'user_slug': self.user.slug,
+        }))
 
         messages = list(get_messages(response.wsgi_request))
         self.assertEqual(len(messages), 1)
@@ -61,9 +65,13 @@ class OrderConfirmViewTest(TestCase):
         self.user.profile.address = ''
         self.user.profile.save()
 
-        response = self.client.post(reverse('order-confirm'))
+        response = self.client.post(reverse('order-confirm', kwargs={
+            'user_slug': self.user.slug,
+        }))
 
-        self.assertRedirects(response, reverse('profile-edit', kwargs={'slug': self.user.slug}))
+        self.assertRedirects(response, reverse('profile-edit', kwargs={
+            'slug': self.user.slug
+        }))
 
         messages = list(get_messages(response.wsgi_request))
         self.assertEqual(len(messages), 1)
@@ -86,12 +94,17 @@ class OrderConfirmViewTest(TestCase):
             price_per_unit=self.plant.price,
         )
 
-        response = self.client.post(reverse('order-confirm'))
+        response = self.client.post(reverse('order-confirm', kwargs={
+            'user_slug': self.user.slug,
+        }))
 
         order.refresh_from_db()
         self.assertEqual(order.status, 'completed')
 
-        self.assertRedirects(response, reverse('completed-orders'))
+        self.assertRedirects(response, reverse('completed-order-detail', kwargs={
+            'user_slug': self.user.slug,
+            'pk': order.pk,
+        }))
 
         messages = list(get_messages(response.wsgi_request))
         self.assertEqual(len(messages), 1)
