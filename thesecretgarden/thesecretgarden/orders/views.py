@@ -225,7 +225,8 @@ class OrderCancelView(LoginRequiredMixin, IsUserCustomerMixin, View):
             order.save()
             messages.success(request, "Your order has been canceled!")
         except ValidationError as e:
-            messages.error(request, f"Order could not be canceled: {str(e)}")
+            error_message = ', '.join(e.messages)  # Extract messages from ValidationError
+            messages.error(request, f"Order could not be canceled: {error_message}")
         except Exception as e:
             messages.error(request, f"An unexpected error occurred: {str(e)}")
 
