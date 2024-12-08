@@ -1,4 +1,6 @@
+from cloudinary.exceptions import Error
 from cloudinary.uploader import upload
+from django.core.exceptions import ValidationError
 
 from django.core.files.uploadedfile import InMemoryUploadedFile
 
@@ -42,12 +44,15 @@ class Plant(Product):
             self.description = ' '.join(strip_tags(self.description).split())
 
         if self.photo and isinstance(self.photo, InMemoryUploadedFile):
-            # Handle new photo uploads
-            upload_result = upload(
-                self.photo,  # Pass the file to Cloudinary
-            )
-            # Assign the public_id to the CloudinaryField
-            self.photo = upload_result['public_id']
+            try:
+                # Handle new photo uploads
+                upload_result = upload(
+                    self.photo,  # Pass the file to Cloudinary
+                )
+                # Assign the public_id to the CloudinaryField
+                self.photo = upload_result['public_id']
+            except Error as e:
+                raise ValidationError(f"Invalid file type: {str(e)}")
 
         self.full_clean()
         super().save(*args, **kwargs)
