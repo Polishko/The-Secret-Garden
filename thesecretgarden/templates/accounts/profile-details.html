@@ -15,7 +15,7 @@
                                 <a href="{% url 'profile-edit' slug=user.slug %}" class="text-decoration-none">Update Profile</a>
                             </li>
                             <li class="list-group-item">
-                                <a href="#completed-orders" class="text-decoration-none">Completed Orders</a>
+                                <a href="{% url 'completed-orders' request.user.slug order.pk %}" class="text-decoration-none">Completed Orders</a>
                             </li>
                             <li style="list-style-type: none;">
                                 <form method="get" action="{% url 'profile-deactivate' slug=user.slug %}" style="display: inline;">
@@ -90,7 +90,7 @@
                                         Order #{{ order.id }} 
                                         - <strong>Total:</strong> {{ order.total_price|floatformat:2 }} EUR 
                                         - <strong>Date:</strong> {{ order.created_at|date:"d M Y" }}
-                                        <a href="{% url 'completed-order-detail' order.id %}" class="btn btn-sm btn-outline-primary float-end">View Details</a>
+                                        <a href="{% url 'completed-order-detail' request.user.slug order.id %}" class="btn btn-sm btn-outline-primary float-end">View Details</a>
                                     </li>
                                 {% endfor %}
                             </ul>
