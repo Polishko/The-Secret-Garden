@@ -11,7 +11,7 @@
                     <h3>Confirm Delete {{ product }}</h3>
                 </div>
                 <div class="card-body">
-                <!-- Delete Confirmation Form -->
+
                     <form method="post">
                         {% csrf_token %}
                         {% for field in form %}
@@ -22,7 +22,7 @@
                                 {{ field|add_class:"form-control" }}
                             </div>
                         {% endfor %}
-                        <!-- Action Buttons -->
+
                         <div class="d-flex justify-content-between">
                             <a href="{{ cancel_return_view }}" class="btn btn-secondary">Cancel</a>
                             <button type="submit" class="btn btn-danger">Confirm Delete</button>

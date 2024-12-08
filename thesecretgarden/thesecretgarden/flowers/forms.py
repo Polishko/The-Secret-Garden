@@ -35,4 +35,3 @@ class PlantEditForm(PlantBaseForm):
 
 class PlantDeleteForm(DisableFieldMixin, PlantBaseForm):
     readonly_fields = ['name', 'price', 'type', 'stock', 'description', 'photo']
-

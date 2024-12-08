@@ -13,7 +13,6 @@
                 <li class="list-group-item d-flex justify-content-between align-items-center">
                     <span>
                         {{ item.product_name }} ({{ item.quantity }} x {{ item.price_per_unit|floatformat:2 }} EUR)
-                        <small class="text-muted">[{{ item.product_type|title }}]</small>
                     </span>
                     <span>Total: {{ item.total_price|floatformat:2 }} EUR</span>
                 </li>
@@ -24,7 +23,7 @@
     {% endif %}
 
     <div class="text-center mt-4">
-        <a href="{% url 'completed-orders' request.user.slug %}" class="btn btn-primary">Back to Completed Orders</a>
+        <a href="{% url 'completed-orders' request.user.slug %}" class="btn btn-primary">To Completed Orders</a>
     </div>
 </div>
 {% endblock %}

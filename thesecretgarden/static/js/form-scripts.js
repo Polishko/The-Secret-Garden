@@ -108,7 +108,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (urlParams.has('page')) {
         const paginationDiv = document.querySelector('.pagination');
         if (paginationDiv) {
-            console.log("Pagination element found, scrolling...");
+            // console.log("Pagination element found, scrolling...");
             requestAnimationFrame(() => {
                 paginationDiv.scrollIntoView({ behavior: 'smooth' });
             });

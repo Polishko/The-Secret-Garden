@@ -125,7 +125,6 @@ def get_products(product_type):
         return []
 
 async def related_products(request, product_type):
-    # Use sync_to_async to call the synchronous function
     query = await sync_to_async(get_products)(product_type)
 
     products = []
