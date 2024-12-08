@@ -220,6 +220,10 @@ class OrderCancelView(LoginRequiredMixin, IsUserCustomerMixin, View):
     def post(self, request, *args, **kwargs):
         order = get_object_or_404(Order, user=request.user, status='pending')
 
+        user_slug = kwargs.get('user_slug')
+        if user_slug != request.user.slug:
+            return redirect('plants-list')
+
         try:
             order.cancel()
             order.save()
