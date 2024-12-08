@@ -43,6 +43,7 @@ class AddToCartViewTest(TestCase):
         self.client.login(username='testuser', password='testpass')
 
         response = self.client.post(reverse('add-to-cart', kwargs={
+            'user_slug': self.user.slug,
             'product_type': 'plant',
             'product_id': self.plant.pk
         }), data={'quantity': 2})
@@ -62,6 +63,7 @@ class AddToCartViewTest(TestCase):
         self.client.login(username='testuser', password='testpass')
 
         response = self.client.post(reverse('add-to-cart', kwargs={
+            'user_slug': self.user.slug,
             'product_type': 'gift',
             'product_id': self.gift.pk
         }), data={'quantity': 3})
@@ -81,6 +83,7 @@ class AddToCartViewTest(TestCase):
         self.client.login(username='testuser', password='testpass')
 
         response = self.client.post(reverse('add-to-cart', kwargs={
+            'user_slug': self.user.slug,
             'product_type': 'plant',
             'product_id': self.plant.pk
         }), data={'quantity': 15})
@@ -96,11 +99,13 @@ class AddToCartViewTest(TestCase):
 
     def test_add_to_cart__for_not_logged_in_user__redirects_to_login(self):
         response = self.client.post(reverse('add-to-cart', kwargs={
+            'user_slug': self.user.slug,
             'product_type': 'plant',
             'product_id': self.plant.pk
         }), data={'quantity': 1})
 
         expected_url = f"{reverse('login')}?next={reverse('add-to-cart', kwargs={
+            'user_slug': self.user.slug,
             'product_type': 'plant',
             'product_id': self.plant.pk
         })}"
