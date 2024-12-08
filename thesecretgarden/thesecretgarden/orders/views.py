@@ -50,6 +50,10 @@ class AddToCardView(LoginRequiredMixin, IsUserCustomerMixin, View):
         """
         Handles adding items to the cart (pending orders).
         """
+        user_slug = kwargs.get('user_slug')
+        if user_slug != request.user.slug:
+            return redirect('plants-list')
+
         product_type = kwargs.get('product_type')
         product_id = kwargs.get('product_id')
         quantity = int(request.POST.get('quantity', 1))
