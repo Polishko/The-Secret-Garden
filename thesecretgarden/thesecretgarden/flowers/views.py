@@ -26,7 +26,7 @@ class PlantsListView(ListView):
         query = self.request.GET.get('query')
         if query:
             queryset = queryset.filter(name__icontains=query)
-        return queryset
+        return queryset.order_by('created_at')
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)

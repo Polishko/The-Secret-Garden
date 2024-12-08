@@ -27,7 +27,7 @@ class GiftsListView(ListView):
             queryset = queryset.filter(
                 models.Q(brand_name__icontains=query) | models.Q(short_name__icontains=query)
             )
-        return queryset
+        return queryset.order_by('created_at')
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
