@@ -38,7 +38,7 @@
                             {% if user.is_authenticated %}
                                 <!-- Add to Cart Button -->
                                 {% if user|in_group:'Customer' %}
-                                    <form action="{% url 'add-to-cart' 'gift' gift.id %}" method="post">
+                                    <form action="{% url 'add-to-cart' request.user.slug 'gift' gift.id %}" method="post">
                                         {% csrf_token %}
                                         <div class="input-group mb-3">
                                             <input type="number" name="quantity" class="form-control" placeholder="Quantity" 

@@ -31,7 +31,7 @@
                     <div class="col-5">
                         <div class="quantity-control d-flex align-items-center justify-content-center">
                             <!-- Decrease Button -->
-                            <form action="{% url 'add-to-cart' item.product_type item.product_id %}" method="post" class="me-2">
+                            <form action="{% url 'add-to-cart' request.user.slug item.product_type item.product_id %}" method="post" class="me-2">
                                 {% csrf_token %}
                                 <input type="hidden" name="quantity" value="-1">
                                 <button type="submit" class="btn btn-sm btn-outline-danger"
@@ -44,7 +44,7 @@
                             <span>{{ item.quantity }}</span>
                 
                             <!-- Increase Button -->
-                            <form action="{% url 'add-to-cart' item.product_type item.product_id %}" method="post" class="ms-2">
+                            <form action="{% url 'add-to-cart' request.user.slug item.product_type item.product_id %}" method="post" class="ms-2">
                                 {% csrf_token %}
                                 <input type="hidden" name="quantity" value="1">
                                 <button type="submit" class="btn btn-sm btn-outline-success"
