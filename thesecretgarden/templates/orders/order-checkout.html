@@ -9,13 +9,13 @@
         
         <div class="d-flex justify-content-center gap-3 mt-4">
             <!-- Confirm Order Button -->
-            <form action="{% url 'order-confirm' %}" method="post">
+            <form action="{% url 'order-confirm' request.user.slug %}" method="post">
                 {% csrf_token %}
                 <button type="submit" class="btn btn-success btn-lg">Confirm Order</button>
             </form>
 
             <!-- Cancel Order Button (Optional, Placeholder for Now) -->
-            <form action="{% url 'order-cancel' %}" method="post">
+            <form action="{% url 'order-cancel' request.user.slug %}" method="post">
                 {% csrf_token %}
                 <button type="submit" class="btn btn-danger btn-lg">Cancel</button>
             </form>
