@@ -24,7 +24,7 @@
     {% endif %}
 
     <div class="text-center mt-4">
-        <a href="{% url 'completed-orders' %}" class="btn btn-primary">Back to Completed Orders</a>
+        <a href="{% url 'completed-orders' request.user.slug %}" class="btn btn-primary">Back to Completed Orders</a>
     </div>
 </div>
 {% endblock %}
