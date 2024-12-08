@@ -54,7 +54,7 @@
                             </form>
                 
                             <!-- Remove Button -->
-                            <form action="{% url 'remove-item' item.id %}" method="post" class="ms-3">
+                            <form action="{% url 'remove-item' request.user.slug item.id %}" method="post" class="ms-3">
                                 {% csrf_token %}
                                 <button type="submit" class="btn btn-sm btn-danger" data-bs-toggle="tooltip" data-bs-placement="top" title="Remove">
                                     <i class="fa-solid fa-trash"></i>
@@ -70,7 +70,7 @@
 
             <!-- Go to Checkout Button -->
             <div class="mt-4 text-end w-75">
-                <a href="{% url 'order-checkout' %}" class="btn btn-success btn-lg">
+                <a href="{% url 'order-checkout' request.user.slug %}" class="btn btn-success btn-lg">
                     <i class="fa-solid fa-check"></i> Go to Checkout
                 </a>
             </div>
