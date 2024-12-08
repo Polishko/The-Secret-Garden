@@ -1,5 +1,8 @@
+from unittest.mock import patch
+
 from django.contrib.auth import get_user_model
 from django.contrib.messages import get_messages
+from django.core.exceptions import ValidationError
 from django.test import TestCase, Client
 from django.urls import reverse
 from thesecretgarden.orders.models import Order
@@ -29,7 +32,9 @@ class OrderCancelViewTest(TestCase):
 
         order = Order.objects.create(user=self.user, status='pending')
 
-        response = self.client.post(reverse('order-cancel'))
+        response = self.client.post(reverse('order-cancel', kwargs={
+            'user_slug': self.user.slug,
+        }))
 
         self.assertRedirects(response, reverse('plants-list'))
         messages = list(get_messages(response.wsgi_request))
@@ -48,25 +53,28 @@ class OrderCancelViewTest(TestCase):
             email='anotheruser@email.com'
         )
 
-        order = Order.objects.create(user=another_user, status='pending')
+        Order.objects.create(user=another_user, status='pending')
 
         self.login_user()
-        response = self.client.post(reverse('order-cancel'))
+        response = self.client.post(reverse('order-cancel', kwargs={
+            'user_slug': self.user.slug,
+        }))
 
         self.assertEqual(response.status_code, 404)
 
-    # def test_cancel_order_with_validation_error(self):
-    #     self.login_user()
-    #
-    #     order = Order.objects.create(user=self.user, status='pending')
-    #
-    #     # Mock a ValidationError during order.cancel()
-    #     with self.assertRaises(Exception):  # Replace with more specific mocks if needed
-    #         with patch('thesecretgarden.orders.models.Order.cancel', side_effect=ValidationError("Cancellation error")):
-    #             response = self.client.post(reverse('order-cancel', kwargs={'pk': order.pk}))
-    #
-    #             # Assert redirection and error message
-    #             self.assertRedirects(response, reverse('plants-list'))
-    #             messages = list(get_messages(response.wsgi_request))
-    #             self.assertEqual(len(messages), 1)
-    #             self.assertIn("Order could not be canceled: Cancellation error", str(messages[0]))
+    def test_cancel_order_with_validation_error(self):
+        self.login_user()
+
+        Order.objects.create(user=self.user, status='pending')
+
+        # Mock a ValidationError during order.cancel()
+        with patch('thesecretgarden.orders.models.Order.cancel', side_effect=ValidationError(["Cancellation error"])):
+            response = self.client.post(reverse('order-cancel', kwargs={'user_slug': self.user.slug}))
+
+            # Assert redirection and error message
+            self.assertRedirects(response, reverse('plants-list'))
+            messages = list(get_messages(response.wsgi_request))
+            self.assertEqual(len(messages), 1)
+            self.assertIn("Order could not be canceled: Cancellation error", str(messages[0]))
+
+
