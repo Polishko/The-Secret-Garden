@@ -1,6 +1,7 @@
 from django.contrib import admin, messages
 from django.contrib.auth.models import Group
 from django.contrib.admin import TabularInline
+from django.core.exceptions import ValidationError
 from django.http import HttpResponseRedirect
 from django.urls import reverse
 from django.utils.html import format_html
@@ -146,6 +147,16 @@ class OrderAdmin(admin.ModelAdmin):
                 reverse(f'admin:{self.model._meta.app_label}_{self.model._meta.model_name}_change', args=[obj.pk])
             )
 
+        if previous_instance.status == 'pending' and obj.status == 'completed' and obj.order_items.count() == 0:
+            self.message_user(
+                request,
+                f"Order #{obj.id} cannot be completed because it has no items.",
+                level=messages.ERROR
+            )
+            return HttpResponseRedirect(
+                reverse(f'admin:{self.model._meta.app_label}_{self.model._meta.model_name}_change', args=[obj.pk])
+            )
+
         if previous_instance.status == 'pending' and obj.status == 'completed' and not obj.user.profile.address:
             self.message_user(
                 request,
@@ -185,15 +196,18 @@ class OrderAdmin(admin.ModelAdmin):
                 product.save()
 
         elif previous_instance.status == 'pending' and obj.status == 'completed':
+            if obj.order_items.count() == 0:
+                return
+
             if not obj.user.profile.address:
                 return
 
-            for item in obj.order_items.all():
-                product = item.product
-                if product.get_available_stock() < item.quantity:
-                    messages.error(request, f"Not enough stock for {product}.")
-                    return
-                product.stock -= item.quantity
-                product.save()
+            try:
+                obj.complete_order()
+            except ValidationError as e:
+                messages.error(request, str(e))
+                return
+
+            obj.calculate_total()
 
         super().save_model(request, obj, form, change)
