@@ -89,6 +89,10 @@ class CartView(LoginRequiredMixin, IsUserCustomerMixin, View):
         order = Order.objects.filter(user=request.user, status='pending').first()
         order_items = []
 
+        user_slug = kwargs.get('user_slug')
+        if user_slug != request.user.slug:
+            return redirect('plants-list')
+
         if order:
             try:
                 order.save()
@@ -136,6 +140,10 @@ class RemoveCartItemView(LoginRequiredMixin, IsUserCustomerMixin, View):
         item_id = kwargs.get('item_id')
         order_item = OrderItem.objects.filter(id=item_id, order__user=request.user, order__status='pending').first()
 
+        user_slug = kwargs.get('user_slug')
+        if user_slug != request.user.slug:
+            return redirect('plants-list')
+
         if order_item:
             try:
                 order_item.delete()
@@ -145,7 +153,7 @@ class RemoveCartItemView(LoginRequiredMixin, IsUserCustomerMixin, View):
         else:
             messages.error(request, "Item not found or unauthorized access.")
 
-        return redirect('shopping-cart')
+        return redirect('shopping-cart', user_slug)
 
 
 class OrderCheckOutView(LoginRequiredMixin, IsUserCustomerMixin, View):
@@ -154,9 +162,13 @@ class OrderCheckOutView(LoginRequiredMixin, IsUserCustomerMixin, View):
     def get(self, request, *args, **kwargs):
         order = Order.objects.filter(user=request.user, status='pending').first()
 
+        user_slug = kwargs.get('user_slug')
+        if user_slug != request.user.slug:
+            return redirect('plants-list')
+
         if not order:
             messages.error(request, "Order not found or unauthorized access.")
-            return redirect('shopping-cart')
+            return redirect('shopping-cart', user_slug)
 
         try:
             if order.total_price == 0 or order.total_price != order.calculate_total():
@@ -164,17 +176,22 @@ class OrderCheckOutView(LoginRequiredMixin, IsUserCustomerMixin, View):
             context = {'order_sum': order.total_price}
         except Exception as e:
             messages.error(request, f"An error occurred while calculating your order: {str(e)}")
-            return redirect('shopping-cart')
+            return redirect('shopping-cart', user_slug)
 
         return render(request, self.template_name, context)
+
 
 class OrderConfirmView(LoginRequiredMixin, IsUserCustomerMixin, View):
     def post(self, request, *args, **kwargs):
         order = Order.objects.filter(user=request.user, status='pending').first()
 
+        user_slug = kwargs.get('user_slug')
+        if user_slug != request.user.slug:
+            return redirect('plants-list')
+
         if not order:
             messages.error(request, "Order not found or unauthorized access.")
-            return redirect('shopping-cart')
+            return redirect('shopping-cart', user_slug)
 
         profile = request.user.profile
         if not profile.address:
@@ -183,20 +200,20 @@ class OrderConfirmView(LoginRequiredMixin, IsUserCustomerMixin, View):
                 'You must provide an address to place an order.'
             )
 
-            return redirect('profile-edit', slug=request.user.slug)
+            return redirect('profile-edit', user_slug)
 
         try:
             order.complete_order()
             order.save()
             messages.success(request, "Your order has been successfully completed!")
-            return redirect('completed-orders')
+            return redirect('completed-order-detail', user_slug=user_slug, pk=order.pk)
         except ValidationError as e:
             error_message = ', '.join(e.messages)
             messages.error(request, f"Order could not be completed: {error_message}")
         except Exception as e:
             messages.error(request, f"An unexpected error occurred: {str(e)}")
 
-        return redirect('shopping-cart')
+        return redirect('shopping-cart', user_slug)
 
 
 class OrderCancelView(LoginRequiredMixin, IsUserCustomerMixin, View):
