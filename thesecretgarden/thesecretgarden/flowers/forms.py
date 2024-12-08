@@ -23,6 +23,14 @@ class PlantBaseForm(ProductBaseForm):
 
         return name
 
+    def clean_photo(self):
+        photo = self.cleaned_data.get('photo')
+        if photo:
+            valid_mime_types = ['image/jpeg', 'image/png', 'image/gif']
+            if photo.content_type not in valid_mime_types:
+                raise ValidationError("Unsupported file type. Please upload a valid image file (JPEG, PNG, GIF).")
+        return photo
+
 
 class PlantBulkCreateForm(PlantBaseForm):
     pass
