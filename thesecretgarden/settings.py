@@ -1,3 +1,4 @@
+import os
 from pathlib import Path
 
 import cloudinary
@@ -10,13 +11,15 @@ from django.urls import reverse_lazy
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 # Secret Key
-SECRET_KEY = config('SECRET_KEY')
+SECRET_KEY = os.getenv('SECRET_KEY', config('SECRET_KEY'))
 
 # Debug Mode
-DEBUG = True
+DEBUG=os.getenv('DEBUG', config('DEBUG')) == "True"
 
 # Allowed Hosts
-ALLOWED_HOSTS = ['localhost', '127.0.0.1']
+ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', config('ALLOWED_HOSTS')).split(',')
+
+CSRF_TRUSTED_ORIGINS = os.getenv('CSRF_TRUSTED_ORIGINS', config('CSRF_TRUSTED_ORIGINS')).split(',')
 
 # Installed Applications
 MY_APPS = [
@@ -84,11 +87,11 @@ WSGI_APPLICATION = 'thesecretgarden.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': config('DB_NAME'),
-        'USER': config('DB_USER'),
-        'PASSWORD': config('DB_PASSWORD'),
-        'HOST': config('DB_HOST', default='localhost'),
-        'PORT': config('DB_PORT', default='5432'),
+        'NAME': os.getenv('DB_NAME', config('DB_NAME')),
+        'USER': os.getenv('DB_USER', config('DB_USER')),
+        'PASSWORD': os.getenv('DB_PASSWORD', config('DB_PASSWORD')),
+        'HOST': os.getenv('DB_HOST', config('DB_HOST', default='localhost')),
+        'PORT': os.getenv('DB_PORT', config('DB_PORT')),
     },
 }
 
