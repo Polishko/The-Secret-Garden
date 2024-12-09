@@ -8,12 +8,12 @@ from django.views.generic import CreateView, DetailView, UpdateView, View
 
 from thesecretgarden.accounts.forms import AppUserCreateForm, AppUserLoginForm, ProfileEditForm
 from thesecretgarden.accounts.models import Profile
-from thesecretgarden.mixins import IsUserProfileOwnerMixin
+from thesecretgarden.mixins import IsUserProfileOwnerMixin, RedirectAuthenticatedUsersMixin
 from thesecretgarden.orders.models import Order
 
 UserModel = get_user_model()
 
-class AppUserLoginView(LoginView):
+class AppUserLoginView(RedirectAuthenticatedUsersMixin, LoginView):
     template_name = 'accounts/login-page.html'
     form_class = AppUserLoginForm
 
@@ -24,7 +24,7 @@ class AppUserLoginView(LoginView):
         return context
 
 
-class AppUserRegisterView(CreateView):
+class AppUserRegisterView(RedirectAuthenticatedUsersMixin, CreateView):
     model = UserModel
     form_class = AppUserCreateForm
     template_name = 'accounts/register-page.html'
