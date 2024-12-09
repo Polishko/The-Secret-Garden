@@ -118,7 +118,19 @@ class StockManagementAdminMixin:
 
         return super().response_change(request, obj)
 
-# Permission mixins
+
+# Permissions mixins
+class RedirectAuthenticatedUsersMixin:
+    """
+    Redirects already logged-in users trying to access register and log-in pages
+    """
+    def dispatch(self, request, *args, **kwargs):
+        if request.user.is_authenticated:
+            return redirect('plants-list')
+
+        return super().dispatch(self, request, *args, *kwargs)
+
+
 class BasePermissionMixin(UserPassesTestMixin):
     """
     Base mixin for handling permission denied cases with a standard message and redirect.
@@ -131,6 +143,7 @@ class BasePermissionMixin(UserPassesTestMixin):
             return redirect(f"{reverse('login')}?next={self.request.path}")
 
         raise PermissionDenied(self.permission_denied_message)
+
 
 class IsUserProfileOwnerMixin(BasePermissionMixin):
     """
@@ -146,6 +159,7 @@ class IsUserProfileOwnerMixin(BasePermissionMixin):
     def get_object(self, queryset=None):
         profile = get_object_or_404(Profile, user__slug=self.kwargs['slug'], is_active=True)
         return profile
+
 
 class IsUserStaffMixin(BasePermissionMixin):
     """
