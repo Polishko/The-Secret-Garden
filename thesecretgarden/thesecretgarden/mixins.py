@@ -128,7 +128,8 @@ class RedirectAuthenticatedUsersMixin:
         if request.user.is_authenticated:
             return redirect('plants-list')
 
-        return super().dispatch(self, request, *args, *kwargs)
+        return super().dispatch(request, *args, *kwargs)
+
 
 
 class BasePermissionMixin(UserPassesTestMixin):
