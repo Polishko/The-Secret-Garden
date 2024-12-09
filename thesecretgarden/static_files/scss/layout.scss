@@ -1,0 +1,135 @@
+// General
+
+.page-wrapper {
+    border: 0.15em solid #AA377A;
+}
+
+// Navigation
+.navbar {
+    align-items: center;
+}
+
+// Landing page
+.hero {
+    position: relative;
+    z-index: 10;
+}
+
+.bg-fade-wrapper {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    overflow: hidden; /* Prevents any overflow */
+}
+
+.bg-fade {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    animation-name: fade-zoom;
+    animation-duration: 18s; /* Total duration: 6s per image */
+    animation-iteration-count: infinite;
+    z-index: 1;
+}
+
+.bg-fade img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* Assign delays to ensure no overlap */
+.bg-fade.img-1 {
+    animation-delay: 0s;
+}
+
+.bg-fade.img-2 {
+    animation-delay: 6s; /* After the first image finishes */
+}
+
+.bg-fade.img-3 {
+    animation-delay: 12s; /* After the second image finishes */
+}
+
+/* Smooth fade-in and fade-out with zoom effect */
+@keyframes fade-zoom {
+    0% {
+        opacity: 0;
+        transform: scale(1);
+    }
+    16.66% { /* Fade-in starts */
+        opacity: 1;
+        transform: scale(1);
+    }
+    33.33% { /* Fully visible */
+        opacity: 1;
+        transform: scale(1.05);
+    }
+    49.99% { /* Fade-out starts */
+        opacity: 1;
+        transform: scale(1.1);
+    }
+    50% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 0;
+        transform: scale(1.1);
+    }
+}
+
+// Landing page social icons
+.social-icons a {
+    transition: color 0.3s ease;
+}
+
+.social-icons a:hover {
+    color: #6c757d; /* Change to a slightly darker gray on hover */
+}
+
+
+// Products list
+.products-section {
+    background-size: cover;
+    background-position: center;
+    color: #fff;
+    padding: 5rem 0;
+
+    &.flowers {
+        background-image: url('https://res.cloudinary.com/dissmiwiq/image/upload/v1733333706/flowers-nav-background_cggius.jpg');
+    }
+
+    &.gifts {
+        background-image: url('https://res.cloudinary.com/dissmiwiq/image/upload/v1733333752/gifts-nav-background_fum80u.jpg');
+    }
+
+    &.events {
+        background-image: url('https://res.cloudinary.com/dissmiwiq/image/upload/v1733332878/ian-schneider-PAykYb-8Er8-unsplash_xwqzlj.jpg');
+        background-position: center calc(50% - 30px);
+    }
+}
+
+@media (max-width: 615px) {
+    .no-products-img {
+        max-width: 80% !important;
+    }
+}
+
+// Images in product detail
+
+.product-image-container {
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+}
+
+.product-image-container img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
