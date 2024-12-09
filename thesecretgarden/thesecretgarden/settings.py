@@ -13,10 +13,10 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = config('SECRET_KEY')
 
 # Debug Mode
-DEBUG = True
+DEBUG=config('DEBUG', None) == 'True'
 
 # Allowed Hosts
-ALLOWED_HOSTS = ['localhost', '127.0.0.1']
+ALLOWED_HOSTS = config('ALLOWED_HOSTS').split(',')
 
 # Installed Applications
 MY_APPS = [
@@ -132,6 +132,10 @@ USE_TZ = True
 
 # Static Files
 STATIC_URL = 'static/'
+
+STATIC_ROOT = BASE_DIR / 'static_files'
+# executes python manage.py collectstatic
+
 STATICFILES_DIRS = [BASE_DIR / 'static']
 
 # Default Primary Key Field
