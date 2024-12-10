@@ -1,4 +1,6 @@
+from cloudinary import CloudinaryResource
 from django.core.exceptions import ValidationError
+from django.core.files.uploadedfile import InMemoryUploadedFile
 
 from thesecretgarden.common.forms import ProductBaseForm
 from thesecretgarden.gifts.models import Gift
@@ -26,11 +28,27 @@ class GiftBaseForm(ProductBaseForm):
 
     def clean_photo(self):
         photo = self.cleaned_data.get('photo')
+
         if photo:
-            valid_mime_types = ['image/jpeg', 'image/png', 'image/gif']
-            if photo.content_type not in valid_mime_types:
-                raise ValidationError("Unsupported file type. Please upload a valid image file (JPEG, PNG, GIF).")
+            if isinstance(photo, InMemoryUploadedFile):
+                valid_mime_types = ['image/jpeg', 'image/png', 'image/gif']
+                if photo.content_type not in valid_mime_types:
+                    raise ValidationError("Unsupported file type. Please upload a valid image file (JPEG, PNG, GIF).")
+            elif isinstance(photo, CloudinaryResource):
+                pass
+            else:
+                raise ValidationError("Unsupported photo type.")
         return photo
+
+    def clean_stock(self):
+        stock = self.cleaned_data.get('stock')
+        if self.instance.pk:
+            reserved_stock = self.instance.stock - self.instance.get_available_stock()
+            if stock < reserved_stock:
+                raise ValidationError(
+                    f"Stock cannot be less than reserved stock ({reserved_stock})."
+                )
+        return stock
 
 
 class GiftBulkCreateForm(GiftBaseForm):

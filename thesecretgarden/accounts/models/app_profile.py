@@ -106,6 +106,10 @@ class Profile(models.Model):
     def is_complete(self):
         return (self.first_name != 'Anonymous' and self.last_name != 'User')
 
+    def delete(self, *args, **kwargs):
+        raise ValidationError(
+            f"You cannot delete the profile directly. Delete the associated user.")
+
     def clean(self):
         super().clean()
 

@@ -86,6 +86,9 @@ class Product(models.Model):
         """
         Provides stock snapshot based on currently placed orders and stock status.
         """
+        if self.stock is None:
+            return 0
+
         product_content_type = ContentType.objects.get_for_model(self)
 
         reserved_stock = sum(

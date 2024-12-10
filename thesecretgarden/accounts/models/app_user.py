@@ -1,7 +1,5 @@
-import logging
-
 from django.contrib.auth.base_user import AbstractBaseUser
-from django.contrib.auth.models import PermissionsMixin, Group
+from django.contrib.auth.models import PermissionsMixin
 from django.core.exceptions import ValidationError
 from django.core.validators import MinLengthValidator
 
@@ -72,6 +70,14 @@ class AppUser(AbstractBaseUser, PermissionsMixin):
     USERNAME_FIELD = 'username'
     EMAIL_FIELD = 'email'
     REQUIRED_FIELDS = ['email']
+
+    def delete(self, *args, **kwargs):
+        """
+        Prevent deleting a user associated with orders.
+        """
+        if hasattr(self, 'orders') and self.orders.exists():
+            raise ValidationError(f"Cannot delete user '{self.username}' because they are associated with orders.")
+        super().delete(*args, **kwargs)
 
     def clean(self):
         super().clean()

@@ -20,19 +20,17 @@ class AppUserAdmin(UserAdmin):
     add_form = AppUserCreateForm
     form = AppUserChangeForm
 
-    list_display = ('username', 'email', 'role', 'is_staff', 'is_active', 'last_login',) # visualized fields
+    list_display = ('username', 'email', 'role', 'is_staff', 'is_active', 'last_login',)
     list_filter = ('role', 'is_staff', 'is_active')
     search_fields = ('username', 'email')
     ordering = ('username',)
 
-    # visualization categories
     fieldsets = (
         (None, {'fields': ('username', 'password')}),
         ('Personal Info', {'fields': ('email',)}),
         ('Permissions', {'fields': ('role', 'is_staff', 'is_active', 'is_superuser', 'groups', 'user_permissions')}),
     )
 
-    # what fields to show when creating a user
     add_fieldsets = (
         (None, {
             'classes': ('wide',),
@@ -57,6 +55,30 @@ class AppUserAdmin(UserAdmin):
         obj.is_staff = role_permissions['is_staff']
         obj.is_superuser = role_permissions['is_superuser']
 
+    def delete_queryset(self, request, queryset):
+        """
+        Prevent bulk deletion of users who are associated with orders.
+        """
+        restricted_users = queryset.filter(orders__isnull=False)
+
+        if restricted_users.exists():
+            usernames = ', '.join(restricted_users.values_list('username', flat=True))
+            messages.error(
+                request,
+                f"Cannot delete the following users because they are associated with orders: {usernames}"
+            )
+            queryset = queryset.exclude(pk__in=restricted_users.values_list('pk', flat=True))
+
+        super().delete_queryset(request, queryset)
+
+    def message_user(self, request, message, level=messages.SUCCESS, extra_tags='', fail_silently=False):
+        """
+        Suppress the default success message after a blocked deletion.
+        """
+        if "Successfully deleted" in message and level == messages.SUCCESS:
+            return
+        super().message_user(request, message, level, extra_tags, fail_silently)
+
     def save_model(self, request, obj, form, change):
         """
         Automatically update is_staff and is_superuser based on role.
@@ -78,6 +100,24 @@ class ProfileAdmin(admin.ModelAdmin):
         ('Contact Info', {'fields': ('address', 'phone')}),
         ('Status', {'fields': ('is_active', 'created_at', 'updated_at')}),
     )
+
+    def delete_queryset(self, request, queryset):
+        """
+        Prevent bulk deletion of profiles.
+        """
+        messages.error(
+            request,
+            "Profiles cannot be deleted directly. Delete the associated users instead."
+        )
+        return
+
+    def message_user(self, request, message, level=messages.SUCCESS, extra_tags='', fail_silently=False):
+        """
+        Suppress the default success message after a blocked deletion.
+        """
+        if "Successfully deleted" in message and level == messages.SUCCESS:
+            return
+        super().message_user(request, message, level, extra_tags, fail_silently)
 
     def add_view(self, request, form_url='', extra_context=None):
         """
@@ -106,6 +146,4 @@ class ProfileAdmin(admin.ModelAdmin):
             user_admin_url = reverse('admin:accounts_appuser_change', args=[profile.user.pk])
             return HttpResponseRedirect(user_admin_url)
 
-        # Fallback to the default delete view if the profile is not found
         return super().delete_view(request, object_id, extra_context)
-
