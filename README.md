@@ -24,7 +24,8 @@ Install the required Python dependencies:
 pip install -r requirements.txt
 ```
 
-### **3. Install Node.js**
+### **3. Install Node.js and Dependencies**
+Make sure to have Node.js installed and then install the dependencies
 ```
 npm install
 ```
