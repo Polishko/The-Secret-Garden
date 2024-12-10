@@ -48,7 +48,7 @@
                                 {% csrf_token %}
                                 <input type="hidden" name="quantity" value="1">
                                 <button type="submit" class="btn btn-sm btn-outline-success"
-                                        {% if item.quantity >= item.product.get_available_stock %}disabled{% endif %}>
+                                        {% if item.quantity >= item.dynamic_stock %}disabled{% endif %}>
                                     +
                                 </button>
                             </form>
