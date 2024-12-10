@@ -19,7 +19,7 @@ DEBUG=os.getenv('DEBUG', config('DEBUG')) == "True"
 # Allowed Hosts
 ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', config('ALLOWED_HOSTS')).split(',')
 
-CSRF_TRUSTED_ORIGINS = os.getenv('CSRF_TRUSTED_ORIGINS', config('CSRF_TRUSTED_ORIGINS')).split(',')
+CSRF_TRUSTED_ORIGINS = os.getenv('CSRF_TRUSTED_ORIGINS', '').split(',')
 
 # Installed Applications
 MY_APPS = [
@@ -89,7 +89,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': os.getenv('DB_NAME', config('DB_NAME')),
         'USER': os.getenv('DB_USER', config('DB_USER')),
-        'PASSWORD': os.getenv('DB_PASSWORD', config('DB_PASSWORD')),
+        'PASSWORD': os.getenv('DB_PASS', config('DB_PASS')),
         'HOST': os.getenv('DB_HOST', config('DB_HOST', default='localhost')),
         'PORT': os.getenv('DB_PORT', config('DB_PORT')),
     },
