@@ -56,11 +56,16 @@ class ProfileDetailsView(LoginRequiredMixin, IsUserProfileOwnerMixin, DetailView
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['completed_orders'] = Order.objects.filter(
-            user=self.request.user,
-            status='completed',
-            is_active=False
-        )
+
+        if not self.request.user.is_staff:
+            context['completed_orders'] = Order.objects.filter(
+                user=self.request.user,
+                status='completed',
+                is_active=False
+            )
+        else:
+            context['completed_orders'] = []
+
         return context
 
 
