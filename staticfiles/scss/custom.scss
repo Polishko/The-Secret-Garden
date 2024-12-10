@@ -1,0 +1,17 @@
+// Overriding Bootstrap
+$headings-font-family: 'Plairfair Display';
+$headings-family-base: 'Nunito';
+$link-color: #212529;
+$link-decoration: none;
+
+@import 'typography';
+@import "layout";
+@import "reset";
+@import "recommended-products";
+@import "custom-buttons";
+@import "messages";
+@import "footers";
+@import "contact";
+
+// Import Bootstrap after variable overrides
+@import '../../node_modules/bootstrap/scss/bootstrap';

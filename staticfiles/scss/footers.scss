@@ -1,0 +1,29 @@
+.footer {
+    border-radius: 20px; /* Makes the corners round */
+    padding: 1rem; /* Reduces height */
+    margin: 1rem auto; /* Adds space around the footer */
+    max-width: 90%; /* Optional: Keeps footer compact */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3); /* Adds a subtle shadow for a lifted effect */
+}
+
+.footer p {
+    font-size: 1rem; /* Adjusts text size for better spacing */
+    margin-bottom: 0.5rem; /* Keeps text spacing balanced */
+}
+
+.social-icons a:hover {
+    color: #6c757d; /* Optional hover effect: Slightly lighter gray */
+}
+
+/* Top Footer */
+.top-footer {
+    margin: 1rem auto;
+    padding: 1rem;
+    max-width: 90%;
+    border-radius: 15px;
+    text-align: center;
+    background-color: #f8f9fa; /* Subtle gray background */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+
