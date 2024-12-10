@@ -1,5 +1,5 @@
 from django.contrib.auth import get_user_model
-from django.contrib.auth.models import Group
+from django.contrib.auth.models import Group, Permission
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from thesecretgarden.accounts.models import Profile
@@ -29,19 +29,45 @@ def sync_user_is_active(sender, instance, **kwargs):
         user.is_active = instance.is_active
         user.save()
 
-
 @receiver(post_save, sender=UserModel)
 def add_to_group_based_on_role(sender, instance, created, **kwargs):
     """
-    Automatically add users to the appropriate group based on their role.
+    Automatically add users to the appropriate group based on their role
+    and ensure groups have the correct permissions (only for staff).
     """
+    def ensure_group_permissions(group_name, permissions):
+        """
+        Ensure the group has the specified permissions.
+        """
+        group, _ = Group.objects.get_or_create(name=group_name)
+        for codename in permissions:
+            try:
+                permission = Permission.objects.get(codename=codename)
+                group.permissions.add(permission)
+            except Permission.DoesNotExist:
+                print(f"Permission with codename '{codename}' does not exist.")
+        return group
+
     if created:
         if instance.is_staff:
-            # Assign to 'Staff' group
-            staff_group, _ = Group.objects.get_or_create(name='Staff')
+            # Admin panel permissions for the Staff group
+            staff_permissions = [
+                'view_orderitem',      # Can view OrderItem
+                'view_order',          # Can view Order
+                'add_gift',            # Can add Gift
+                'change_gift',         # Can change Gift
+                'delete_gift',         # Can delete Gift
+                'view_gift',           # Can view Gift
+                'add_plant',           # Can add Plant
+                'change_plant',        # Can change Plant
+                'delete_plant',        # Can delete Plant
+                'view_plant',          # Can view Plant
+                'view_user',           # Can view User
+                'view_profile',        # Can view Profile
+                'view_contactmessage', # Can view ContactMessage
+            ]
+            staff_group = ensure_group_permissions('Staff', staff_permissions)
             instance.groups.add(staff_group)
         else:
-            # Assign to 'Customer' group
             customer_group, _ = Group.objects.get_or_create(name='Customer')
             instance.groups.add(customer_group)
-
