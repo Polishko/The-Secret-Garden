@@ -40,6 +40,16 @@ class GiftBaseForm(ProductBaseForm):
                 raise ValidationError("Unsupported photo type.")
         return photo
 
+    def clean_stock(self):
+        stock = self.cleaned_data.get('stock')
+        reserved_stock = self.instance.stock - self.instance.get_available_stock()
+
+        if stock < reserved_stock:
+            raise ValidationError(
+                f"Stock cannot be less than reserved stock ({reserved_stock})."
+            )
+        return stock
+
 
 class GiftBulkCreateForm(GiftBaseForm):
     pass
