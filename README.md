@@ -9,6 +9,7 @@ Follow these steps to set up and run the project on your local machine.
 Clone the repository to your local machine:
   ```git clone <repository_url>
   cd <project_folder>
+```
 
 ### **2. Set Up the Python Environment**
   python -m venv venv
