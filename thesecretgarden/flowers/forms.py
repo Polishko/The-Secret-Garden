@@ -1,6 +1,6 @@
 from cloudinary import CloudinaryResource
 from django.core.exceptions import ValidationError
-from django.core.files.uploadedfile import InMemoryUploadedFile
+from django.core.files.uploadedfile import InMemoryUploadedFile, TemporaryUploadedFile
 
 from thesecretgarden.common.forms import ProductBaseForm
 from thesecretgarden.flowers.models import Plant
@@ -29,7 +29,7 @@ class PlantBaseForm(ProductBaseForm):
         photo = self.cleaned_data.get('photo')
 
         if photo:
-            if isinstance(photo, InMemoryUploadedFile):
+            if isinstance(photo, (InMemoryUploadedFile, TemporaryUploadedFile)):
                 valid_mime_types = ['image/jpeg', 'image/png', 'image/gif']
                 if photo.content_type not in valid_mime_types:
                     raise ValidationError("Unsupported file type. Please upload a valid image file (JPEG, PNG, GIF).")
