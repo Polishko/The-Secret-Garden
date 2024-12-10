@@ -166,4 +166,5 @@ DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
 
 CORS_ALLOWED_ORIGINS = [
     "http://127.0.0.1:5500",
+    "https://thesecretgarden-bnf4g7hkcrdwajea.italynorth-01.azurewebsites.net"
 ]
