@@ -73,6 +73,14 @@ class AppUser(AbstractBaseUser, PermissionsMixin):
     EMAIL_FIELD = 'email'
     REQUIRED_FIELDS = ['email']
 
+    def delete(self, *args, **kwargs):
+        """
+        Prevent deleting a user associated with orders.
+        """
+        if hasattr(self, 'orders') and self.orders.exists():
+            raise ValidationError(f"Cannot delete user '{self.username}' because they are associated with orders.")
+        super().delete(*args, **kwargs)
+
     def clean(self):
         super().clean()
         if self.role == 'admin' and not self.is_superuser:
