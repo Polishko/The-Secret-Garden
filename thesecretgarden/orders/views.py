@@ -71,6 +71,8 @@ class CartView(LoginRequiredMixin, IsUserCustomerMixin, View):
                     product_name = 'name' if isinstance(product, Plant) else 'brand_name'
                     product_page = 'plant-detail' if isinstance(product, Plant) else 'gift-detail'
 
+                    dynamic_stock = product.get_available_stock() + item.quantity
+
                     order_items.append({
                         'id': item.id,
                         'product': product,
@@ -80,6 +82,7 @@ class CartView(LoginRequiredMixin, IsUserCustomerMixin, View):
                         'product_name': product_name,
                         'product_page': product_page,
                         'product_slug': product.slug,
+                        'dynamic_stock': dynamic_stock,
                     })
 
                 context = {
