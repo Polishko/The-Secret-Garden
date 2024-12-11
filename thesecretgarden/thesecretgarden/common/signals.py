@@ -7,7 +7,7 @@ from thesecretgarden.gifts.models import Gift
 
 @receiver(post_delete, sender=Plant)
 def delete_plant_photo(sender, instance, **kwargs):
-    print("Signal Triggered: Deleting Plant Photo")
+    # print("Signal Triggered: Deleting Plant Photo")
     if instance.photo:
         try:
             public_id = instance.photo
@@ -18,7 +18,7 @@ def delete_plant_photo(sender, instance, **kwargs):
 
 @receiver(post_delete, sender=Gift)
 def delete_gift_photo(sender, instance, **kwargs):
-    print("Signal Triggered: Deleting Gift Photo")
+    # print("Signal Triggered: Deleting Gift Photo")
     if instance.photo:
         try:
             public_id = instance.photo

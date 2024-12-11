@@ -146,7 +146,7 @@ class Product(models.Model):
 
 class ContactMessage(models.Model):
     """
-    Stores the contact messages sent my customers
+    Stores the contact messages sent by customers
     """
     name = models.CharField(
         max_length=100,

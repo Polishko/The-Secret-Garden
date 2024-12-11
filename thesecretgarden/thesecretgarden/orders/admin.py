@@ -11,7 +11,9 @@ from thesecretgarden.orders.models import Order, OrderItem
 
 class OrderItemInline(TabularInline):
     """
-    Items cannot be edited in canceled & completed orders
+    Admin inline for displaying and managing order items in a tabular format.
+    - Provides read-only fields for product details and prices to prevent editing in certain cases.
+    - Dynamically generates links to the admin pages of associated Plant or Gift products.
     """
     model = OrderItem
     extra = 0
@@ -34,16 +36,15 @@ class OrderItemInline(TabularInline):
     product_name.short_description = "Product Name"
 
     def get_readonly_fields(self, request, obj=None):
-        """
-        Dynamically sets readonly fields based on the order's status.
-        """
+        """Dynamically sets readonly fields based on the order's status."""
         if obj and obj.status in ['canceled', 'completed']:
             return self.fields
         return super().get_readonly_fields(request, obj)
 
     def get_formset(self, request, obj=None, **kwargs):
         """
-        Customizes the formset to disable the delete checkbox for canceled & completed orders.
+        Customizes the formset to disable the delete checkbox
+         for canceled & completed orders.
         """
         formset = super().get_formset(request, obj, **kwargs)
 
@@ -59,9 +60,7 @@ class OrderItemInline(TabularInline):
         return formset
 
     def has_add_permission(self, request, obj=None):
-        """
-        Disabled for the time being
-        """
+        """Disabled for the time being, to prevent inconsistent data and align with current business logic"""
         return False
 
     def has_change_permission(self, request, obj=None):
@@ -211,3 +210,5 @@ class OrderAdmin(admin.ModelAdmin):
             obj.calculate_total()
 
         super().save_model(request, obj, form, change)
+
+# Future improvement: Centralize repeating logic

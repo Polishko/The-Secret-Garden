@@ -52,9 +52,7 @@ class Order(models.Model):
         return f"Order #{self.id} by {self.user.username}"
 
     def calculate_total(self):
-        """
-        Calculates and updates the total price for the order.
-        """
+        """Calculates and updates the total price for the order."""
         self.total_price = sum(
             item.total_price for item in self.order_items.all()
         )
@@ -63,7 +61,8 @@ class Order(models.Model):
 
     def cancel(self):
         """
-        Cancels the order without modifying stock since stock is not deducted for pending orders.
+        Cancels the order without modifying stock
+         since stock is not deducted for pending orders.
         """
         self.status = 'canceled'
         self.is_active = False
@@ -153,9 +152,7 @@ class OrderItem(models.Model):
         ordering = ['id']
 
     def save(self, *args, **kwargs):
-        """
-        Calculates total price during save.
-        """
+        """Calculates total price during save."""
         if not self.pk:
             available_stock = self.product.get_available_stock()
             if self.quantity > available_stock:

@@ -9,6 +9,7 @@ from thesecretgarden.accounts.models import Profile
 
 # Form management mixins
 class PlaceHolderMixin:
+    """Mixin for adding placeholders"""
     def add_placeholder(self):
         if hasattr(self, 'fields') and hasattr(self, 'initial'):
             for field_name, field in self.fields.items():
@@ -22,6 +23,7 @@ class PlaceHolderMixin:
 
 
 class HideHelpTextMixin:
+    """Mixin for hiding help-text"""
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         if hasattr(self, 'fields'):
@@ -30,6 +32,7 @@ class HideHelpTextMixin:
 
 
 class DisableFieldMixin:
+    """Mixin for disabling fields"""
     def make_fields_readonly(self):
         readonly_fields = getattr(self, 'readonly_fields', [])
 
@@ -46,14 +49,12 @@ class DisableFieldMixin:
 class StockManagementAdminMixin:
     @admin.action(description='Mark as out of stock')
     def mark_as_out_of_stock(self, request, queryset):
-        """
-        Marks selected items as out of stock, only if none are reserved.
-        """
+        """Marks selected items as out of stock, only if none are reserved."""
         for item in queryset:
             if item.stock != item.get_available_stock():
                 self.message_user(
                     request,
-                    f'Cannot mark items as out of stock, there are reserved items.',
+                    f"Cannot mark items as out of stock, there are reserved items.",
                     messages.ERROR
                 )
                 return
@@ -61,20 +62,18 @@ class StockManagementAdminMixin:
         queryset.update(stock=0)
         self.message_user(
             request,
-            f'{queryset.count()} items successfully marked as out of stock.',
+            f"{queryset.count()} items successfully marked as out of stock.",
             messages.SUCCESS
         )
 
     def has_delete_permission(self, request, obj=None):
-        """
-        Prevent deletion of reserved items.
-        """
+        """Prevent deletion of reserved items."""
         if obj:
             if obj.stock != obj.get_available_stock():
                 item_name = getattr(obj, 'brand_name', getattr(obj, 'name', 'this item'))
                 self.message_user(
                     request,
-                    f'Reminder: {item_name} cannot be deleted as it is reserved. Remove order item first',
+                    f"Reminder: {item_name} cannot be deleted as it is reserved. Remove order item first",
                     messages.ERROR
                 )
                 return False
@@ -89,9 +88,7 @@ class StockManagementAdminMixin:
     reserved_stock.short_description = 'Reserved Stock'
 
     def save_model(self, request, obj, form, change):
-        """
-        Prevent saving stock values lower than reserved stock.
-        """
+        """Prevent saving stock values lower than reserved stock."""
         if change:
             reserved_stock = obj.stock - obj.get_available_stock()
             if obj.stock < reserved_stock:

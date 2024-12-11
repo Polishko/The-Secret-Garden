@@ -15,9 +15,7 @@ from django.shortcuts import redirect
 
 class AddToCardView(LoginRequiredMixin, IsUserCustomerMixin, View):
     def post(self, request, *args, **kwargs):
-        """
-        Handles adding items to the cart (pending orders).
-        """
+        """Handles adding items to the cart (pending orders)."""
         user_slug = kwargs.get('user_slug')
         if user_slug != request.user.slug:
             return redirect('plants-list')
@@ -51,6 +49,7 @@ class AddToCardView(LoginRequiredMixin, IsUserCustomerMixin, View):
 
 
 class CartView(LoginRequiredMixin, IsUserCustomerMixin, View):
+    """Displays current cart items"""
     template_name = 'orders/shopping-cart.html'
 
     def get(self, request, *args, **kwargs):
@@ -107,6 +106,7 @@ class CartView(LoginRequiredMixin, IsUserCustomerMixin, View):
 
 
 class RemoveCartItemView(LoginRequiredMixin, IsUserCustomerMixin, View):
+    """Removes items from shopping cart"""
     def post(self, request, *args, **kwargs):
         item_id = kwargs.get('item_id')
         order_item = OrderItem.objects.filter(id=item_id, order__user=request.user, order__status='pending').first()
@@ -128,6 +128,7 @@ class RemoveCartItemView(LoginRequiredMixin, IsUserCustomerMixin, View):
 
 
 class OrderCheckOutView(LoginRequiredMixin, IsUserCustomerMixin, View):
+    """Displays order checkout page"""
     template_name = 'orders/order-checkout.html'
 
     def get(self, request, *args, **kwargs):
@@ -153,6 +154,7 @@ class OrderCheckOutView(LoginRequiredMixin, IsUserCustomerMixin, View):
 
 
 class OrderConfirmView(LoginRequiredMixin, IsUserCustomerMixin, View):
+    """Confirms the order"""
     def post(self, request, *args, **kwargs):
         order = Order.objects.filter(user=request.user, status='pending').first()
 
@@ -188,6 +190,7 @@ class OrderConfirmView(LoginRequiredMixin, IsUserCustomerMixin, View):
 
 
 class OrderCancelView(LoginRequiredMixin, IsUserCustomerMixin, View):
+    """Cancel the order"""
     def post(self, request, *args, **kwargs):
         order = get_object_or_404(Order, user=request.user, status='pending')
 
@@ -209,6 +212,7 @@ class OrderCancelView(LoginRequiredMixin, IsUserCustomerMixin, View):
 
 
 class CompletedOrdersView(LoginRequiredMixin, IsUserCustomerMixin, ListView):
+    """Displays completed orders page"""
     model = Order
     template_name = 'orders/orders-list.html'
     context_object_name = 'orders'
@@ -224,6 +228,7 @@ class CompletedOrdersView(LoginRequiredMixin, IsUserCustomerMixin, ListView):
 
 
 class CompletedOrderDetailView(LoginRequiredMixin, IsUserCustomerMixin, DetailView):
+    """Displays completed order details"""
     model = Order
     template_name = 'orders/completed-order-detail.html'
     context_object_name = 'order'
@@ -252,3 +257,5 @@ class CompletedOrderDetailView(LoginRequiredMixin, IsUserCustomerMixin, DetailVi
 
         context['order_items'] = order_items
         return context
+
+# Future improvement: Consider and test moving address validation to dispatch for better flow and early validation.

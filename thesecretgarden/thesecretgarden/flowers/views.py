@@ -129,5 +129,8 @@ class PlantDeleteView(LoginRequiredMixin, IsUserStaffMixin, DeleteView):
         try:
             return super().delete(request, *args, **kwargs)
         except IntegrityError:
-            messages.error(request, 'This plant cannot be deleted as it is associated with an order.')
+            messages.error(request, "This plant cannot be deleted as it is associated with an order.")
             return redirect(reverse_lazy('plant-detail', kwargs={'slug': self.object.slug}))
+
+# Future improvement: Consider abstracting shared logic across views to reduce duplication.
+# Add non-form-related validations and more detailed error handling messages where applicable.
