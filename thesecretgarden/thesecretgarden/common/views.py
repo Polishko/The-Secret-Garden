@@ -116,7 +116,7 @@ class AboutUs(TemplateView):
     template_name = 'common/about-us.html'
 
 # Note: Added authentication permission requirement to the ContactMessageApiView
-# at last moment because of the following project requirement:
+# at the last moment because of the following project requirement:
 # Unauthenticated users (public part) have only 'get' permissions, e.g., landing page, details,
 # about page, and login/ register 'post' permissions.
 # Future improvement: Add relation to the logged user who sends the message and only allow for customers.
