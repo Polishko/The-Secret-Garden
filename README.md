@@ -1,5 +1,11 @@
 # The-Secret-Garden
-A flower shop app - My final project for the Python Web course of SoftUni
+A flower shop web app - My final project for the Python Web course of SoftUni
+
+![image](https://github.com/user-attachments/assets/04b5b2e4-6103-4581-b8dc-d73644ec1a38)
+
+## Deployed App
+[Visit the deployed app](https://thesecretgarden-bnf4g7hkcrdwajea.italynorth-01.azurewebsites.net/)
+- For project evaluators: Please contact me at nalanbilgin@gmail.com for the superuser credentials that you can use on the deployed site! I will write you back in no time :) Otherwise you can install the project locally following the instructions below.
 
 ## **Setup Instructions**
 
