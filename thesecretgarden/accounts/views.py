@@ -65,6 +65,7 @@ class ProfileDetailsView(LoginRequiredMixin, IsUserProfileOwnerMixin, DetailView
             )
         else:
             context['completed_orders'] = []
+
         return context
 
 
