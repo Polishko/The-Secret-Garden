@@ -122,4 +122,8 @@ python manage.py runserver
 - Adheres to OOP principles like **inheritance** and **abstraction**.
 - Ensures **strong cohesion** through well-defined roles of classes, models, views, etc., and **loose coupling** through the use of mixins and abstraction.
 
+## 🏷️ Credits
+
+Original image names from Unsplash are documented in the file `unsplash_original_image_references.xlsx`.
+
 
