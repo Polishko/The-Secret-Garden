@@ -16,9 +16,21 @@ from thesecretgarden.gifts.models import Gift
 
 
 def landing_page(request):
+    """Displays the landing page"""
     return render(request, 'common/landing-page.html', {'is_landing_page': True})
 
+
 class BaseBulkCreateView(FormView):
+    """
+    A base view for bulk creating instances of a model using a formset.
+
+    Features:
+    - Renders a formset with multiple forms for creating instances.
+    - Handles validation and displays errors per form.
+    - Supports marking forms for deletion via a `DELETE` field.
+    - Redirects to a success URL upon successful creation of all valid forms.
+    - Provides extensibility for specific models and form classes.
+    """
     template_name = ''
     form_class = None
     model = None
@@ -94,12 +106,24 @@ class BaseBulkCreateView(FormView):
 
 
 class ContactUsView(TemplateView):
+    """Displays the contact page"""
     template_name = 'common/contact-us.html'
 
+
 class AboutUs(TemplateView):
+    """Displays the about page"""
     template_name = 'common/about-us.html'
 
+
 class ContactMessageApiView(APIView):
+    """
+    API view for handling contact message submissions.
+
+    - Accepts POST requests with contact message data.
+    - Validates the data using `ContactMessageSerializer`.
+    - Saves the message if valid and returns a success response with HTTP 201.
+    - Returns validation errors with HTTP 400 if the data is invalid.
+    """
     def post(self, request):
         serializer = ContactMessageSerializer(data=request.data)
 
@@ -117,6 +141,9 @@ def custom_404_view(request, exception=None):
     return render(request, '404.html', status=404)
 
 def get_products(product_type):
+    """
+    Used in related_products view to retrieve related products based on model
+    """
     if product_type == 'plant':
         return Plant.objects.filter(~Q(stock=0)).order_by('-created_at')[:5]
     elif product_type == 'gift':
@@ -125,6 +152,13 @@ def get_products(product_type):
         return []
 
 async def related_products(request, product_type):
+    """
+    Asynchronously fetches and returns related products based on the given product type.
+    - Fetches products using the `get_products` function asynchronously.
+    - Iterates over the query results and constructs a list of product details,
+    including slug, name, price, and image URL.
+    - Returns the product data as a JSON response.
+    """
     query = await sync_to_async(get_products)(product_type)
 
     products = []

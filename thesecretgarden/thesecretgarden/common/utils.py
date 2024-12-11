@@ -1,7 +1,7 @@
 """
 Callable that uploads photo to specific local destination based on product model
 """
-# Used for development
+# Deprecated, used for development
 # def dynamic_upload_to(instance, filename):
 #     from thesecretgarden.flowers.models import Plant
 #     from thesecretgarden.gifts.models import Gift
