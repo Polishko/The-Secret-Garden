@@ -17,29 +17,31 @@
     <p class="text-muted">Bulgaria</p>
   </div>
 
-  <div class="contact-form-section mt-5">
-    <h3 class="text-center mb-3">Contact Us Here</h3>
-    <p class="text-muted text-center mb-4">Feel free to reach out to us using the form below. We’ll get back to you as soon as possible.</p>
-
-    <form id="contact-form" class="mx-auto" style="max-width: 600px;">
-        {% csrf_token %}
-      <div class="form-group mb-3">
-        <label for="name" class="form-label">Your Name</label>
-        <input type="text" id="name" class="form-control" placeholder="Enter your name" required>
+  {% if request.user.is_authenticated %}
+      <div class="contact-form-section mt-5">
+        <h3 class="text-center mb-3">Contact Us Here</h3>
+        <p class="text-muted text-center mb-4">Feel free to reach out to us using the form below. We’ll get back to you as soon as possible.</p>
+    
+        <form id="contact-form" class="mx-auto" style="max-width: 600px;">
+            {% csrf_token %}
+          <div class="form-group mb-3">
+            <label for="name" class="form-label">Your Name</label>
+            <input type="text" id="name" class="form-control" placeholder="Enter your name" required>
+          </div>
+          <div class="form-group mb-3">
+            <label for="email" class="form-label">Your Email</label>
+            <input type="email" id="email" class="form-control" placeholder="Enter your email address" required>
+          </div>
+          <div class="form-group mb-4">
+            <label for="message" class="form-label">Your Message</label>
+            <textarea id="message" class="form-control" placeholder="Write your message" rows="4" required></textarea>
+          </div>
+          <button type="submit" class="btn btn-primary btn-block">Send Message</button>
+        </form>
+          
+        <div id="response-message" class="mt-4 col-md-8 mx-auto"></div>
       </div>
-      <div class="form-group mb-3">
-        <label for="email" class="form-label">Your Email</label>
-        <input type="email" id="email" class="form-control" placeholder="Enter your email address" required>
-      </div>
-      <div class="form-group mb-4">
-        <label for="message" class="form-label">Your Message</label>
-        <textarea id="message" class="form-control" placeholder="Write your message" rows="4" required></textarea>
-      </div>
-      <button type="submit" class="btn btn-primary btn-block">Send Message</button>
-    </form>
-      
-    <div id="response-message" class="mt-4 col-md-8 mx-auto"></div>
-  </div>
+{% endif %}
 </div>
 {% endblock %}
 
