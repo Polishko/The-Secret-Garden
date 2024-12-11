@@ -117,6 +117,7 @@ python manage.py runserver
 - **Manages security**:
   - Prevents XSS, CSRF, and other vulnerabilities using Django's built-in mechanisms.
   - Makes use of uniquely generated slugs in URL patterns instead of exposing user IDs.
+  - Additionally, implements custom form validators to prevent script injection by restricting special characters like < and > in user inputs.
 - Adheres to OOP principles like **inheritance** and **abstraction**.
 - Ensures **strong cohesion** through well-defined roles of classes, models, views, etc., and **loose coupling** through the use of mixins and abstraction.
 
