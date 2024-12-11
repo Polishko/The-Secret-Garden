@@ -39,9 +39,7 @@ npm install
 ### **4. Configure Environment Variables**
 - Create a .env file.
 - Paste the privately provided credentials
-- Update the DB_HOST value based on your setup:
-  -On Linux: Use the IP address of your host machine. Run ip addr show to find it.
-  -On macOS/Windows: Use host.docker.internal. (if using  Docker)
+- Update the DB_HOST value based on your setup
 
 ### **5. Set Up the Database**
 - Run migrations to create the database schema:
