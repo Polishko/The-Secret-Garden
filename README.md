@@ -69,6 +69,7 @@ python manage.py createsuperuser
 ### **7. Run the Server**
 ```
 python manage.py runserver
+```
 
 ## 📋 General Requirements
 -Implemented using Django Framework with PostgreSQL as the database service.
