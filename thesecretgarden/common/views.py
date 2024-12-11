@@ -7,6 +7,7 @@ from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
 from django.views.generic import FormView, TemplateView
 from rest_framework import status
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
@@ -100,6 +101,8 @@ class AboutUs(TemplateView):
     template_name = 'common/about-us.html'
 
 class ContactMessageApiView(APIView):
+    permission_classes = [IsAuthenticated]
+
     def post(self, request):
         serializer = ContactMessageSerializer(data=request.data)
 
