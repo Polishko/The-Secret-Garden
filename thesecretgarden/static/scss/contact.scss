@@ -1,18 +1,18 @@
 .address-box {
-    background-color: #f8f9fa; /* Soft light background */
-    border: 1px solid #dee2e6; /* Light border for definition */
-    border-radius: 10px; /* Rounded corners */
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+    background-color: #f8f9fa;
+    border: 1px solid #dee2e6;
+    border-radius: 10px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
     padding: 1.5rem;
     text-align: center;
 }
 
 .address-box h5 {
-    color: #343a40; /* Darker heading for contrast */
+    color: #343a40;
     font-weight: bold;
 }
 
 .address-box p {
-    color: #6c757d; /* Muted gray text for address lines */
-    margin: 0.25rem 0; /* Small spacing for clean look */
+    color: #6c757d;
+    margin: 0.25rem 0;
 }
