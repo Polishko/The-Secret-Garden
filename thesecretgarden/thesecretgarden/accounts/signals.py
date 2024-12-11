@@ -11,6 +11,9 @@ UserModel = get_user_model()
 
 @receiver(post_save, sender=UserModel)
 def create_profile(sender, instance, created, **kwargs):
+    """
+    Automatically creates Profile for a User on instantiation
+    """
     if created:
         with transaction.atomic():
             Profile.objects.create(
@@ -22,7 +25,7 @@ def create_profile(sender, instance, created, **kwargs):
 @receiver(post_save, sender=Profile)
 def sync_user_is_active(sender, instance, **kwargs):
     """
-        Signal to update app user is_active status when user inactivates their profile
+    Udates app user is_active status when user inactivates their profile
     """
     user = instance.user
     if user.is_active != instance.is_active:
@@ -32,12 +35,12 @@ def sync_user_is_active(sender, instance, **kwargs):
 @receiver(post_save, sender=UserModel)
 def add_to_group_based_on_role(sender, instance, created, **kwargs):
     """
-    Automatically add users to the appropriate group based on their role
-    and ensure groups have the correct permissions (only for staff).
+    Automatically adds users to the appropriate group based on their role
+    and ensures groups have the correct permissions (only for staff).
     """
     def ensure_group_permissions(group_name, permissions):
         """
-        Ensure the group has the specified permissions.
+        Ensures the group has the specified permissions.
         """
         group, _ = Group.objects.get_or_create(name=group_name)
         for codename in permissions:

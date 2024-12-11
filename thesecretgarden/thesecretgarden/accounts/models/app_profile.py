@@ -12,6 +12,9 @@ UserModel = get_user_model()
 
 
 class Profile(models.Model):
+    """
+    Provides additional, profile related fields. One-to-one relation with extended User model
+    """
     FLOWER_CHOICES = (
         ('non-floral', 'Non Floral Plants'),
         ('floral', 'Floral Plants'),
@@ -114,7 +117,7 @@ class Profile(models.Model):
         super().clean()
 
         if self.first_name == self.last_name:
-            raise ValidationError('First name and last name cannot be the same!')
+            raise ValidationError("First name and last name cannot be the same!")
 
     def save(self, *args, **kwargs):
         if self.first_name:

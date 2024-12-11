@@ -49,7 +49,7 @@ class AppUserAdmin(UserAdmin):
 
     def update_permissions_based_on_role(self, obj):
         """
-        Update is_staff and is_superuser based on role using the ROLE_PERMISSIONS dict.
+        Updates is_staff and is_superuser based on role using the ROLE_PERMISSIONS dict. Called in save
         """
         role_permissions = self.ROLE_PERMISSIONS.get(obj.role, {'is_staff': False, 'is_superuser': False})
         obj.is_staff = role_permissions['is_staff']
@@ -57,7 +57,7 @@ class AppUserAdmin(UserAdmin):
 
     def delete_queryset(self, request, queryset):
         """
-        Prevent bulk deletion of users who are associated with orders.
+        Prevents bulk deletion of users who are associated with orders.
         """
         restricted_users = queryset.filter(orders__isnull=False)
 
@@ -73,7 +73,7 @@ class AppUserAdmin(UserAdmin):
 
     def message_user(self, request, message, level=messages.SUCCESS, extra_tags='', fail_silently=False):
         """
-        Suppress the default success message after a blocked deletion.
+        Suppresses the default success message after a blocked deletion.
         """
         if "Successfully deleted" in message and level == messages.SUCCESS:
             return
@@ -103,7 +103,7 @@ class ProfileAdmin(admin.ModelAdmin):
 
     def delete_queryset(self, request, queryset):
         """
-        Prevent bulk deletion of profiles.
+        Prevents bulk deletion of profiles.
         """
         messages.error(
             request,
@@ -113,7 +113,7 @@ class ProfileAdmin(admin.ModelAdmin):
 
     def message_user(self, request, message, level=messages.SUCCESS, extra_tags='', fail_silently=False):
         """
-        Suppress the default success message after a blocked deletion.
+        Suppresses the default success message after a blocked deletion.
         """
         if "Successfully deleted" in message and level == messages.SUCCESS:
             return
@@ -121,7 +121,7 @@ class ProfileAdmin(admin.ModelAdmin):
 
     def add_view(self, request, form_url='', extra_context=None):
         """
-        Prevent profile creation directly from the admin panel.
+        Prevents profile creation directly from the admin panel.
         """
         messages.error(
             request,
@@ -131,8 +131,8 @@ class ProfileAdmin(admin.ModelAdmin):
 
     def delete_view(self, request, object_id, extra_context=None):
         """
-        Override the default delete view to prevent direct Profile deletion
-        and guide the admin to delete the related User instead.
+        Overrides the default delete view to prevent direct Profile deletion
+        and guides the admin to delete the related User instead.
         """
         profile = self.get_object(request, object_id)
 

@@ -125,4 +125,3 @@ class ProfileEditForm(PlaceHolderMixin, forms.ModelForm):
                 'max': date.today().isoformat(),
             }),
         }
-

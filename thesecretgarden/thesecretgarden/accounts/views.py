@@ -89,3 +89,5 @@ class ProfileDeactivateView(LoginRequiredMixin, IsUserProfileOwnerMixin, View):
         profile.is_active = False
         profile.save()
         return HttpResponseRedirect(reverse_lazy('login'))
+
+#  Future improvements: Handle non-form related errors, other exceptions in post, form_valid methods, get_context_data; use logger
