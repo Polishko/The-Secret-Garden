@@ -73,7 +73,7 @@ python manage.py runserver
 
 - **Testing**: Comprehensive unit and integration tests are implemented, particularly covering order-related views and functionality.
 - **Asynchronous Views**:
-  - Implements an asynchronous view, `related_products`, that fetches and returns related product data as JSON.
+  - Implements an asynchronous REST API view, `related_products`, that fetches and returns related product data as JSON.
   - Uses Django's async capabilities and integrates with JavaScript for a seamless user experience.
 - **Django REST Capabilities**: Added REST API functionality through the `ContactMessageApiView`, allowing users to submit contact messages with proper validation and response handling.
 - **Extended Django User Model**: The Django user model has been extended to include additional fields (e.g., `role`, `slug`) and linked with a one-to-one Profile model for enhanced customization.
