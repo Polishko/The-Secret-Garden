@@ -40,6 +40,10 @@ class Plant(Product):
     )
 
     def save(self, *args, **kwargs):
+        """
+        Custom save method to sanitize the description, upload photos to Cloudinary,
+        and validate file type before saving the instance.
+        """
         if self.description:
             self.description = ' '.join(strip_tags(self.description).split())
 
@@ -62,3 +66,5 @@ class Plant(Product):
 
     def __str__(self):
         return f'Plant: {self.name} ({self.type})'
+
+# Future improvement: Refactor the save logic in the abstract Product class

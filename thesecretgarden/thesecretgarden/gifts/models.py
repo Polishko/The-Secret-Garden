@@ -60,6 +60,10 @@ class Gift(Product):
             raise ValidationError('This product is already registered in stock!')
 
     def save(self, *args, **kwargs):
+        """
+        Custom save method to sanitize the description, upload photos to Cloudinary,
+        and validate file type before saving the instance.
+        """
         if self.photo and isinstance(self.photo, InMemoryUploadedFile):
             try:
                 # Handle new photo uploads
@@ -79,3 +83,5 @@ class Gift(Product):
 
     def __str__(self):
         return f'Gift: {self.brand_name} ({self.type})'
+
+# Future improvement: Refactor the save logic in the abstract Product class

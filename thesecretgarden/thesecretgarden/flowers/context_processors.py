@@ -1,6 +1,11 @@
 from .models import Plant
 
 def recommended_products(request):
+    """
+    Context processor to provide recommended products for authenticated users
+    based on their preferred flower type.
+    """
+
     if request.user.is_authenticated:
         profile = getattr(request.user, 'profile', None)
         if profile and profile.preferred_flower_type:
