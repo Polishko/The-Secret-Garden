@@ -38,6 +38,7 @@ class GiftsListView(ListView):
         context['detail_url_name'] = 'gift-detail'
         context['form'] = SearchForm(self.request.GET)
         context['items_per_page'] = self.ITEMS_PER_PAGE
+        context['is_list_page'] = True
         return context
 
 
