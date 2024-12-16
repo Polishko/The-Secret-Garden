@@ -16,7 +16,14 @@
                     <div class="form-row formset-entry row g-3 mb-3 p-2 border border-danger">
                         {% for field in form %}
                             <div class="d-flex align-items-center justify-content-center form-group">
-                                {% if field.name == 'DELETE' %}
+                                 {% if field.label == 'Image' %}
+                                    <div class="image-field-container">
+                                        <label for="{{ field.id_for_label }}" class="form-label">{{ field.label }}</label>
+                                        <div>
+                                            {{ field }}
+                                        </div>
+                                    </div>
+                                {% elif field.name == 'DELETE' %}
                                     <div class="p-3 border rounded bg-primary bg-opacity-10 p-3 border rounded bg-primary bg-opacity-10">
                                         {{ field }}
                                         <label for="{{ field.id_for_label }}" class="ms-2 fw-bold mb-0">
@@ -27,10 +34,10 @@
                                     <label for="{{ field.id_for_label }}" class="form-label">
                                         {{ field.label }}
                                     </label>
-                                    
+
                                     {% block product-info %}
                                     {% endblock %}
-                                
+
                                 {% endif %}
                                 {% if field.errors %}
                                     <ul class="text-danger mt-1">

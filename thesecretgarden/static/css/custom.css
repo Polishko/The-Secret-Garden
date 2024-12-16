@@ -203,6 +203,23 @@
   object-fit: cover;
 }
 
+.image-field-container {
+  display: flex;
+  align-items: center;
+  gap: 0.2em;
+  flex-wrap: wrap;
+}
+
+.form-label {
+  margin-right: 0.5em;
+}
+
+@media (max-width: 410px) {
+  .image-field-container {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
 .slider-container {
   position: relative;
   width: 100%;
@@ -316,20 +333,20 @@ a.btn-warning-subtle:hover {
 }
 
 .footer {
-  border-radius: 20px; /* Makes the corners round */
-  padding: 1rem; /* Reduces height */
-  margin: 1rem auto; /* Adds space around the footer */
-  max-width: 90%; /* Optional: Keeps footer compact */
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3); /* Adds a subtle shadow for a lifted effect */
+  border-radius: 20px;
+  padding: 1rem;
+  margin: 1rem auto;
+  max-width: 90%;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
 }
 
 .footer p {
-  font-size: 1rem; /* Adjusts text size for better spacing */
-  margin-bottom: 0.5rem; /* Keeps text spacing balanced */
+  font-size: 1rem;
+  margin-bottom: 0.5rem;
 }
 
 .social-icons a:hover {
-  color: #6c757d; /* Optional hover effect: Slightly lighter gray */
+  color: #6c757d;
 }
 
 /* Top Footer */
@@ -339,27 +356,27 @@ a.btn-warning-subtle:hover {
   max-width: 90%;
   border-radius: 15px;
   text-align: center;
-  background-color: #f8f9fa; /* Subtle gray background */
+  background-color: #f8f9fa;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
 .address-box {
-  background-color: #f8f9fa; /* Soft light background */
-  border: 1px solid #dee2e6; /* Light border for definition */
-  border-radius: 10px; /* Rounded corners */
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+  background-color: #f8f9fa;
+  border: 1px solid #dee2e6;
+  border-radius: 10px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
   padding: 1.5rem;
   text-align: center;
 }
 
 .address-box h5, .address-box .h5 {
-  color: #343a40; /* Darker heading for contrast */
+  color: #343a40;
   font-weight: bold;
 }
 
 .address-box p {
-  color: #6c757d; /* Muted gray text for address lines */
-  margin: 0.25rem 0; /* Small spacing for clean look */
+  color: #6c757d;
+  margin: 0.25rem 0;
 }
 
 /*!
