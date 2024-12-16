@@ -42,9 +42,10 @@
                 {% endif %}
             </div>
 
-    
-        <!-- Search Bar -->
-        {% include 'common/search-form.html' %}
+            <!-- Search Bar -->
+            {% if is_list_page %}
+                {% include 'common/search-form.html' %}
+            {% endif %}
         </div>
     {% endif %}
 

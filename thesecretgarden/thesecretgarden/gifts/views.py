@@ -25,7 +25,10 @@ class GiftsListView(ListView):
         query = self.request.GET.get('query')
         if query:
             queryset = queryset.filter(
-                models.Q(brand_name__icontains=query) | models.Q(short_name__icontains=query)
+                models.Q(brand_name__icontains=query) |
+                models.Q(short_name__icontains=query) |
+                models.Q(short_description__icontains=query) |
+                models.Q(type__icontains=query)
             )
         return queryset.order_by('created_at')
 
@@ -35,6 +38,7 @@ class GiftsListView(ListView):
         context['detail_url_name'] = 'gift-detail'
         context['form'] = SearchForm(self.request.GET)
         context['items_per_page'] = self.ITEMS_PER_PAGE
+        context['is_list_page'] = True
         return context
 
 
@@ -68,7 +72,6 @@ class GiftDetailView(DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-
         is_reserved = self.object.get_available_stock() != self.object.stock
         context['is_reserved'] = is_reserved
         context['product_type'] = 'gift'

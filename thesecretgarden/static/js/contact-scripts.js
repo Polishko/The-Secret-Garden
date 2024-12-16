@@ -26,7 +26,7 @@ document.getElementById('contact-form').addEventListener('submit', async functio
     console.log('Form values:', { name, email, message }); // Debugging log
 
     try {
-        const response = await fetch('http://127.0.0.1:8000/api/contact/', {
+        const response = await fetch('/api/contact/', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
