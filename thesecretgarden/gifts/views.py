@@ -25,7 +25,10 @@ class GiftsListView(ListView):
         query = self.request.GET.get('query')
         if query:
             queryset = queryset.filter(
-                models.Q(brand_name__icontains=query) | models.Q(short_name__icontains=query)
+                models.Q(brand_name__icontains=query) |
+                models.Q(short_name__icontains=query) |
+                models.Q(short_description__icontains=query) |
+                models.Q(type__icontains=query)
             )
         return queryset.order_by('created_at')
 

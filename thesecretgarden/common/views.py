@@ -101,7 +101,6 @@ class AboutUs(TemplateView):
     template_name = 'common/about-us.html'
 
 class ContactMessageApiView(APIView):
-    permission_classes = [IsAuthenticated]
 
     def post(self, request):
         serializer = ContactMessageSerializer(data=request.data)

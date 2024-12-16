@@ -1,7 +1,7 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.messages.context_processors import messages
 from django.contrib import messages
-from django.db import IntegrityError
+from django.db import IntegrityError, models
 from django.shortcuts import redirect
 from django.urls import reverse_lazy
 from django.views.generic import ListView, CreateView, UpdateView, DetailView, DeleteView
@@ -25,7 +25,11 @@ class PlantsListView(ListView):
         queryset = super().get_queryset()
         query = self.request.GET.get('query')
         if query:
-            queryset = queryset.filter(name__icontains=query)
+            queryset = queryset.filter(
+                models.Q(name__icontains=query) |
+                models.Q(description__icontains=query) |
+                models.Q(type__icontains=query)
+            )
         return queryset.order_by('created_at')
 
     def get_context_data(self, **kwargs):
