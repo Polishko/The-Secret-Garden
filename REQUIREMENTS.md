@@ -1,0 +1,26 @@
+## 📋 General Requirements
+
+- **Implemented using Django Framework** with PostgreSQL as the database service.
+- Combines **Function-Based Views (FBV)** and **Class-Based Views (CBV)**, leveraging Django's generic CBVs extensively.
+- Includes **more than 10 web pages** and **5+ templates**, ensuring proper use of template inheritance for code reusability.
+- Extends the Django User model with a **Profile model** (1-to-1 relation) for additional fields beyond authentication.
+- Implements other domain-specific models such as **Plant, Gift, Order, OrderItem, and ContactMessage**.
+- Provides **5+ forms**, ensuring proper field validation and error messages for a good UX.
+- Uses Django Template Engine with additional **JavaScript** for specific interactive features.
+- Designed with **Bootstrap** and customized using **Sass** for styling. The design is fully responsive for improved UX.
+- Implements **login/register/logout functionality**:
+  - **Public pages** include: Landing page, lists (e.g., plants, gifts), detail pages, Contact Us, and a "Coming Soon" events page.
+  - **Private pages** include: Admin and staff-specific stock management pages, profile management pages, shopping cart, and checkout.
+- **Customized Admin Site**:
+  - Superusers have **full CRUD functionalities**.
+  - Staff have **restricted CRUD functionalities** (managed through roles and signals).
+- Prevents unauthorized actions like deleting products tied to pending orders, or users tied to orders, etc.
+- **Comprehensive exception handling and data validation**:
+  - Validations occur at multiple levels (models, forms, admin, and views).
+  - Appropriate error messages for invalid inputs.
+- **Manages security**:
+  - Prevents XSS, CSRF, and other vulnerabilities using Django's built-in mechanisms.
+  - Makes use of uniquely generated slugs in URL patterns instead of exposing user IDs.
+  - Additionally, implements custom form validators to prevent script injection by restricting special characters like < and > in user inputs.
+- Adheres to OOP principles like **inheritance** and **abstraction**.
+- Ensures **strong cohesion** through well-defined roles of classes, models, views, etc., and **loose coupling** through the use of mixins and abstraction.
