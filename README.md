@@ -8,7 +8,8 @@
 4. [General Requirements](#general-requirements)
 5. [Bonuses](#bonuses)
 6. [Additional Functionality](#additional-functionality)
-7. [Credits](#credits)
+7. [Lisence](#lisence)
+8. [Credits](#credits)
 
 ## <a name="about"></a>📚 About
 - A flower shop web app – my final project for the Python Web course at SoftUni. The shop offers houseplants, flowers, and a selection of gifts, including wine, chocolate, and candles. Public users can view the list of products and their details, and they can also send messages to make suggestions, ask questions, or raise any concerns.
