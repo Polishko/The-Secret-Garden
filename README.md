@@ -2,12 +2,12 @@
 ![image](https://github.com/user-attachments/assets/04b5b2e4-6103-4581-b8dc-d73644ec1a38)
 
 ## 📚 Table of Contents
-1. [About](#about)
-2. [Deployed App](#deployed-app)
-3. [Setup Instructions](#setup-instructions)
-4. [General Requirements](#general-requirements)
-5. [Bonuses](#bonuses)
-6. [Credits](#credits)
+1. [About](#️-about)
+2. [Deployed App](#️-deployed-app)
+3. [Setup Instructions](#️-setup-instructions)
+4. [General Requirements](#️-general-requirements)
+5. [Bonuses](#️-bonuses)
+6. [Credits](#️-credits)
 
 ## 🚀 About
 - A flower shop web app – my final project for the Python Web course at SoftUni. The shop offers houseplants, flowers, and a selection of gifts, including wine, chocolate, and candles. Public users can view the list of products and their details, and they can also send messages to make suggestions, ask questions, or raise any concerns.
@@ -16,6 +16,7 @@
 
 ## 🚀 Deployed App
 **[Visit the deployed app here](https://thesecretgarden-bnf4g7hkcrdwajea.italynorth-01.azurewebsites.net/)**
+
 
 ![image](https://github.com/user-attachments/assets/a8162777-7443-4037-afac-4254fea25aa0)
 
