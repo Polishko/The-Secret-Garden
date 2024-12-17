@@ -3,11 +3,11 @@
 
 ## 📚 Table of Contents
 1. [About](#about)
-2. [Deployed App](#rocket-deployed-app)
-3. [Setup Instructions](#️-setup-instructions)
-4. [Bonuses](#🌟-bonuses)
-5. [General Requirements](#📋-general-requirements)
-6. [Credits](#️-credits)
+2. [Deployed App](#deployed-app)
+3. [Setup Instructions](#setup-instructions)
+4. [General Requirements](#general-requirements)
+5. [Bonuses](#bonuses)
+6. [Credits](#credits)
 
 ## 🚀 About
 - A flower shop web app – my final project for the Python Web course at SoftUni. The shop offers houseplants, flowers, and a selection of gifts, including wine, chocolate, and candles. Public users can view the list of products and their details, and they can also send messages to make suggestions, ask questions, or raise any concerns.
